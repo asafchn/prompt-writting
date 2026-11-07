@@ -1,0 +1,4 @@
+{
+ "output": "Ticket #4811 is an account-access issue: the customer's reset link expired and their account now shows as locked. It doesn't meet the bar for urgent, since it's one customer's login problem with no outage, data loss, security incident, or money being lost right now. It isn't a billing or spam ticket, and a bug isn't clearly indicated.\n\nI haven't applied the tag in Zendesk. I don't have a Zendesk connection here, and you didn't give me a ticket URL. If you send the Zendesk URL for ticket #4811 and confirm I should add the tag through the browser, I'll do it.\n\nTags: account-access",
+ "mode": "system"
+}

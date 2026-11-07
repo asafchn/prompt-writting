@@ -1,0 +1,4 @@
+{
+ "output": "**Ticket #4812 (all dashboards blank for whole org): recommended tags: `bug`, `urgent`**\n\n- **urgent:** This is an outage affecting about 300 users, with no dashboard data since about 2am. The customer says payroll runs off these reports at 8am, so money is at risk right now.\n- **bug:** Dashboards rendering blank for everyone points to a platform fault, not a customer configuration problem.\n\nI haven't applied these tags because this session has no Zendesk access and I don't have a ticket link. If you give me the Zendesk ticket URL or open it in the browser, I can add them there.\n\nTags: bug, urgent",
+ "mode": "system"
+}

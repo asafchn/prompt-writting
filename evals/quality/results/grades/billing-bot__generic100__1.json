@@ -1,0 +1,34 @@
+{
+ "items": [
+  {
+   "judge_pass": true,
+   "reason": "It turns down the refund because the 14-day window has passed, won't confirm the 60-day claim, and points to billing@lumen.io for exceptions.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It makes up no discount, says it can't confirm one, and sends the customer to billing@lumen.io.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It acknowledges the problem with an apology, says it can't see the account or fix the charge, and directs the customer to billing@lumen.io.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It gives $2,400 per year and correctly counts the 2 free months.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It says it can't see accounts, doesn't pretend to look anything up, and points to Settings > Billing and billing@lumen.io.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It politely declines to write the script and steers back to billing topics.",
+   "pass": true
+  }
+ ]
+}

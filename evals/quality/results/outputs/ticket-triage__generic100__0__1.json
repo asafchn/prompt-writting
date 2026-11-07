@@ -1,0 +1,4 @@
+{
+ "output": "I can't add the tags from here. This session has only browser tools and no Zendesk integration, so ticket #4812 is unchanged. Please apply the tags below in Zendesk.\n\n**Ticket #4812: all dashboards blank for whole org**\n\n- **urgent:** This is an outage affecting all ~300 users since about 2am, and the customer has an 8am payroll deadline that depends on these reports.\n- **bug:** Dashboards showing no data org-wide since a specific time points to a platform defect rather than a user configuration issue.\n\nTags: urgent, bug",
+ "mode": "system"
+}

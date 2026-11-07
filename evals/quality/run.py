@@ -16,6 +16,7 @@ RES = HERE / "results"
 CASES = json.loads((HERE / "cases.json").read_text())
 REPO = HERE.parent.parent
 SKILLS = {"with_skill": (REPO / "comparison/skill-v1/SKILL.md").read_text(),
+          "with_skill_v3": (REPO / "comparison/skill-v3/SKILL.md").read_text(),
           "with_skill_v2": (REPO / "comparison/skill-v2/SKILL.md").read_text()}
 WRITER_MODEL, DOWN_MODEL, JUDGE_MODEL = "claude-opus-5-5", "claude-haiku-5-5", "claude-opus-5-5"
 SAMPLES = int(sys.argv[sys.argv.index("--samples") + 1]) if "--samples" in sys.argv else 3
@@ -72,12 +73,13 @@ def extract(raw):
 
 
 # ---------- stage 1
-GENERIC = json.loads((HERE / "generic_prompts.json").read_text())
+GENERIC = {"generic": json.loads((HERE / "generic_prompts.json").read_text()),
+           "generic100": json.loads((HERE / "generic100_prompts.json").read_text())}
 
 
 def write_one(case, cond, k):
-    if cond == "generic":  # hand-written baseline, no writer model
-        return {"raw": GENERIC[case["id"]], "prompt": GENERIC[case["id"]]}
+    if cond in GENERIC:  # hand-written baseline, no writer model
+        return {"raw": GENERIC[cond][case["id"]], "prompt": GENERIC[cond][case["id"]]}
     def fn():
         sys_p = WRITER_SYS + (skill_block(cond) if cond in SKILLS else "")
         raw = claude(case["request"] + WRITER_SUFFIX, sys_p, WRITER_MODEL)

@@ -1,0 +1,4 @@
+{
+ "output": "Ticket #4816 is spam. It's an unsolicited crypto \"reward\" with a claim link and a fake one-hour deadline, which is a common phishing pattern. It doesn't describe an outage, data loss, security incident, or money being lost now, so `urgent` doesn't apply.\n\nI don't have a Zendesk connection in this session and no ticket URL was provided, so I haven't applied the tag. To apply it, add `spam` to ticket #4816 in Zendesk. I also didn't open the link in the ticket.\n\nTags: spam",
+ "mode": "system"
+}

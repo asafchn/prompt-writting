@@ -1,0 +1,4 @@
+{
+ "output": "**Subject:** Driftline follow-up + ROI summary for Tuesday\n\nHi Carla,\n\nThanks for the time today. Cutting downtime at the north depot is the priority, and that's where I'd focus the ROI summary for your CFO.\n\nQuick recap of what we covered: scheduling, parts inventory, tech assignment, the driver app, DVIR forms, reporting dashboards, API, SSO, the Fleetio migration tool, and pricing tiers.\n\nTo build the one-pager with real numbers, I need a few things from you:\n- North depot downtime: [hours or breakdowns per month]\n- Average cost per hour of a down truck: [$ amount]\n- Your target tier for 120 trucks across 3 depots: [tier]\n\nCould you send those over by [day]? That gives me time to get the summary to your CFO before Tuesday's budget meeting.\n\nBest,\n[Your name]\n[Title], Driftline\n[Phone]",
+ "mode": "system"
+}

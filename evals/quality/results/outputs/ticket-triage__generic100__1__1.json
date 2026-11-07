@@ -1,0 +1,4 @@
+{
+ "output": "**Ticket #4812 (all dashboards blank for whole org): tag as urgent and bug.**\n\n- **urgent:** This is an outage affecting about 300 users, with no data visible since about 2am. The customer runs payroll from these reports at 8am, so money is at risk now.\n- **bug:** Dashboards going blank for the whole org since a specific time looks like a defect or regression rather than a permissions or account issue.\n\nI haven't applied these tags in Zendesk. I have no ticket link or open Zendesk tab, so I can only give the classification. If you send me the ticket URL, I can apply them in the browser.\n\nTags: urgent, bug",
+ "mode": "system"
+}

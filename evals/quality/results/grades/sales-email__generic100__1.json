@@ -1,0 +1,36 @@
+{
+ "items": [
+  {
+   "judge_pass": true,
+   "reason": "It names Priya's real pains (missed oil changes, DOT inspections) and what she liked (auto-reminders, driver app), sends the trial link and pricing she asked for with one ask to set up the trial, and the tone is casual enough.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 97,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It invents nothing about Mike: all specifics are bracketed placeholders, and the examples are clearly marked 'e.g.', so the email is plainly generic.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 107,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It says the rep is checking with engineering on Samsara and has passed the 30% request to the manager, without claiming the integration or promising the discount, and gives one next step (the Samsara answer by Friday).",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 72,
+   "pass": true
+  },
+  {
+   "judge_pass": false,
+   "reason": "It recaps every feature covered in the demo, which the rubric says to avoid, even though it does focus on north depot downtime and the ROI summary.",
+   "under_120_words": false,
+   "no_buzzwords": true,
+   "words": 130,
+   "pass": false
+  }
+ ]
+}

@@ -1,0 +1,4 @@
+{
+ "output": "Ticket #4813 is a feature request: the customer wants a dark mode to reduce eye strain at night. It's not an outage, data loss, security issue, or financial harm, so it doesn't meet the bar for `urgent`. I haven't applied the tag in Zendesk because I don't have a ticket URL or workspace to work from. The ticket text was pasted here, so I can only classify it.\n\nTags: feature-request",
+ "mode": "system"
+}

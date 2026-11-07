@@ -1,0 +1,4 @@
+{
+ "output": "**Ticket #4817: triage**\n\n- **bug**: The customer reports that the update caused their project list to show another company's projects, including client contracts. That points to a product defect.\n- **urgent**: This is a possible cross-tenant data exposure, which is a security issue. Another company's confidential client contracts may be visible, and it's ongoing until fixed.\n\nI haven't applied these tags yet. No Zendesk ticket is open in the browser, and the ticket came to me as text. If you send me the Zendesk ticket URL or open it in Chrome, I'll add the tags there. I'd also suggest routing this to your security or on-call team now, since the exposure may be happening for other accounts too.\n\nTags: bug, urgent",
+ "mode": "system"
+}

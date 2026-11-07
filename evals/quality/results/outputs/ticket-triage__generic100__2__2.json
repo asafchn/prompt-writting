@@ -1,0 +1,4 @@
+{
+ "output": "Ticket #4813 is a feature request for dark mode, so it gets `feature-request`. It isn't a bug, and nothing in it is an outage, data loss, security issue, or money loss, so `urgent` doesn't apply.\n\nI haven't applied the tag. I only have the ticket text you pasted and no connection to Zendesk from this session, so please add `feature-request` to #4813 in Zendesk.\n\nTags: feature-request",
+ "mode": "system"
+}

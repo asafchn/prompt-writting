@@ -1,0 +1,4 @@
+{
+ "output": "I can't see customer accounts, so I can't check whether your last payment went through. Here's how to confirm it yourself:\n\n1. Log in to Lumen and go to **Settings > Billing**.\n2. Your invoices and payment history are listed there. A successful payment shows as a paid invoice for the billing period.\n\nIf the payment doesn't appear, or you see a charge you don't recognize or think is a duplicate, email **billing@lumen.io**. They can look into it for you.",
+ "mode": "system"
+}

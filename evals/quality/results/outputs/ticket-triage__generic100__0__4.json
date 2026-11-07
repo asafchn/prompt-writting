@@ -1,0 +1,4 @@
+{
+ "output": "Ticket #4815 is a feature request: the customer wants xlsx added as an export format. The \"URGENT!!!!!!\" in the subject doesn't qualify it as urgent, since there's no outage, data loss, security issue, or money being lost.\n\nI haven't applied the tag. The only thing I have is the ticket text you pasted. I don't have a Zendesk connection in this session, so I couldn't add it to the live ticket. If you want me to, give me access to Zendesk or the ticket's location, and I'll add the tag there.\n\nTags: feature-request",
+ "mode": "system"
+}

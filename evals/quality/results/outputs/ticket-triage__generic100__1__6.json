@@ -1,0 +1,4 @@
+{
+ "output": "**Ticket #4817: recommended tags: `bug`, `urgent`**\n\n- **bug:** The customer reports that an update exposed another company's projects in their account, which points to a defect in the release.\n- **urgent:** Showing one customer's projects and client contracts to another is a security and data-exposure issue, and it's happening now.\n\nI haven't applied these tags. I don't have Zendesk access in this session, so I can only recommend them. If you share the ticket URL or open Zendesk in the browser, I can add them.\n\nTags: bug, urgent",
+ "mode": "system"
+}

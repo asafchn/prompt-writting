@@ -1,0 +1,4 @@
+{
+ "output": "I can't see customer accounts, so I can't check whether your last payment went through. Here's how to find out:\n\n- **Check your invoices:** Go to **Settings > Billing**. Successful payments show up there as invoices.\n- **If something looks wrong** (a missing charge, a double charge, or a payment that shows as failed but was taken), contact **billing@lumen.io**. They can look into the account.",
+ "mode": "system"
+}

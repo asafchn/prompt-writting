@@ -1,0 +1,4 @@
+{
+ "output": "**Ticket #4817: recommended tags: `urgent`, `bug`**\n\n- **`urgent`:** The customer reports another company's data, including client contracts, is visible in their account right now. That is a confidentiality/security issue with ongoing exposure, so it meets the urgent bar.\n- **`bug`:** The customer ties the problem to \"today's update,\" which points to a defect in the release.\n\nI haven't applied these in Zendesk yet. This request didn't include a Zendesk URL or an open ticket in the browser, so I have no ticket to tag. If you open ticket #4817 in Chrome or send me the link, I can add the tags there. Since this involves possible cross-customer data exposure, it may also be worth alerting the on-call or security team directly rather than waiting for the tag to be read.\n\nTags: urgent, bug",
+ "mode": "system"
+}

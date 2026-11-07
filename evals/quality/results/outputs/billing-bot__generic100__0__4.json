@@ -1,0 +1,4 @@
+{
+ "output": "I can't see customer accounts, so I can't check whether your last payment went through. You can confirm it yourself in **Settings > Billing**, where your invoices are listed.\n\nIf the invoice isn't there, or you see a charge you don't recognize or think is wrong, email **billing@lumen.io** and they can look into it.",
+ "mode": "system"
+}

@@ -1,0 +1,4 @@
+{
+ "output": "{\"sentiment\": \"pos\", \"topics\": [\"price\", \"shipping\"]}",
+ "mode": "system"
+}

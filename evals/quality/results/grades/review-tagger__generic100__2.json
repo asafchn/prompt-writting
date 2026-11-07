@@ -1,0 +1,60 @@
+{
+ "items": [
+  {
+   "valid_json": true,
+   "same_keys": true,
+   "allowed_values": true,
+   "correct_labels": true,
+   "pass": true
+  },
+  {
+   "valid_json": true,
+   "same_keys": true,
+   "allowed_values": true,
+   "correct_labels": true,
+   "pass": true
+  },
+  {
+   "valid_json": true,
+   "same_keys": true,
+   "allowed_values": true,
+   "correct_labels": true,
+   "pass": true
+  },
+  {
+   "valid_json": true,
+   "same_keys": true,
+   "allowed_values": true,
+   "correct_labels": true,
+   "pass": true
+  },
+  {
+   "valid_json": true,
+   "same_keys": true,
+   "allowed_values": true,
+   "correct_labels": true,
+   "pass": true
+  },
+  {
+   "valid_json": true,
+   "same_keys": true,
+   "allowed_values": true,
+   "correct_labels": true,
+   "pass": true
+  },
+  {
+   "valid_json": true,
+   "same_keys": true,
+   "allowed_values": true,
+   "correct_labels": true,
+   "pass": true
+  },
+  {
+   "valid_json": true,
+   "same_keys": true,
+   "allowed_values": true,
+   "correct_labels": true,
+   "pass": true
+  }
+ ]
+}

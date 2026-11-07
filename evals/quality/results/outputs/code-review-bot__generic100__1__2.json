@@ -1,0 +1,4 @@
+{
+ "output": "**Approve.** The refactor keeps the behavior the same, and the `slug` alias preserves existing positional calls.\n\nOne minor compatibility note, not a blocker: the parameter was renamed from `s` to `text`. Any caller that passes it by keyword, such as `slug(s=\"Hello World\")`, will now raise `TypeError`. If you want to be fully backwards-compatible, keep the old name or document the rename in the changelog. Positional callers are unaffected.",
+ "mode": "system"
+}

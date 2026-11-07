@@ -1,0 +1,36 @@
+{
+ "items": [
+  {
+   "judge_pass": true,
+   "reason": "The email names Priya's real pains (missed oil changes, DOT inspections) and the features she liked, and gives one next step (send the trial link and pricing sheet) in a casual tone.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 99,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It asks the rep for more detail and invents nothing about Mike or his company.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 85,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It says the Samsara integration isn't confirmed and makes no promise on the discount, saying only that the rep is checking with the manager; the one clear next step is a Friday answer.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 83,
+   "pass": true
+  },
+  {
+   "judge_pass": false,
+   "reason": "It focuses on north depot downtime, but it treats the ROI summary as already done and makes the next step a CFO walkthrough instead of delivering the ROI summary before Tuesday.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 107,
+   "pass": false
+  }
+ ]
+}

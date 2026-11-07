@@ -1,0 +1,36 @@
+{
+ "items": [
+  {
+   "judge_pass": true,
+   "reason": "The email names Priya's real pains (missed oil changes, DOT inspections slipping) and what she liked (auto-reminders, driver app), gives one next step (trial link and pricing sheet by a set date), and the tone is casual enough.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 74,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It invents nothing about Mike's company, fleet size, pains or commitments, and uses clear placeholders throughout to make a generic email.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 92,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It doesn't claim a Samsara integration or promise the 30% discount, says the rep is checking with engineering and his manager, and ends with one next step (a Samsara answer by Friday).",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 84,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It sticks to north depot downtime and making the ROI easy for the CFO instead of listing features, and has one next step (the ROI one-pager before the Tuesday meeting).",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 96,
+   "pass": true
+  }
+ ]
+}

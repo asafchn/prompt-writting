@@ -1,0 +1,4 @@
+{
+ "output": "Ticket #4815 is a feature request: the customer asks for xlsx support in export. The \"URGENT!!!!!!\" subject doesn't meet the bar for `urgent` (no outage, data loss, security issue, or money being lost), so I'm not adding it.\n\nI don't have a Zendesk connection in this session, and you didn't give me a ticket URL, so I haven't applied the tag. It needs to go on ticket #4815.\n\nTags: feature-request",
+ "mode": "system"
+}

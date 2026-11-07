@@ -1,0 +1,4 @@
+{
+ "output": "For 10 Pro users billed annually, the total is **$2,400/year**.\n\n- Pro is $24/user/month, and annual billing gives you 2 months free, so you pay for 10 months: $24 \u00d7 10 = $240 per user per year.\n- 10 users \u00d7 $240 = $2,400/year.\n\nThat's $480 less than paying monthly ($2,880/year).",
+ "mode": "system"
+}
