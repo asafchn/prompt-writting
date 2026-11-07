@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "skill",
+ "rep": 0,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 9,
+  "duration_ms": 110129,
+  "total_cost_usd": 0.2343158,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 112.4,
+  "usage": {
+   "input_tokens": 16,
+   "cache_creation_input_tokens": 11918,
+   "cache_read_input_tokens": 203039,
+   "output_tokens": 4915,
+   "output_tokens_details": {
+    "thinking_tokens": 218
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 11918,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 714,
+     "cache_read_input_tokens": 28636,
+     "cache_creation_input_tokens": 978,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 978
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes about 0.14 s on the 20,000-record sample, down from 82.15 s. Its output matched the original exactly on every check I ran.\n\n**Timings:**\n- **Before:** 82.15 s, from one background run of the original code.\n- **After:** median 0.14 s over three runs of `bench/run_bench.py` (0.14, 0.14 and 0.12 s).\n\n**What I changed:** only the inside of `cluster_records` in `dedupe.py`, plus a small private helper `_find`. I built `record_keys` once per record and map each match key to the first record that had it, keeping the kind tags. Each later record with the same key is merged with that first record using union-find with path compression. Records are then grouped by root in ascending index order. The final sort by (\u2212size, smallest index) and the way ids are handed out are unchanged. The normalisers, `record_keys`, `load_csv`, the docstring, the tests and the benchmark are all untouched.\n\n**How I checked the output is identical:**\n- **Unit tests:** all 8 pass.\n- **20k sample:** compared list-for-list with the saved output of the original code. None of the 20,000 ids differ, and both versions give 7,101 clusters.\n- **Random differential test:** 5,000 random inputs of 0\u201360 records each, plus 5 handcrafted cases, with no mismatches. The records were drawn from small pools of values including:\n  - `None`, empty strings and missing fields;\n  - emails with `+tags`, `@@`, no local part or no domain, upper case and surrounding spaces;\n  - phones with 6, 7, 10 and 11 digits (including a leading `1`), full-width digits and Arabic-Indic digits;\n  - names that differ only in case, punctuation, `\u00df`/`ss` or `_`.\n\n**Not verified:** the 3-second limit on a slower machine. There is a lot of headroom, but I only timed it here. The random test checks behaviour on small inputs only, so large inputs are covered only by the 20k sample.\n\n`REPORT.md` is in the project root and has the two required lines. My helper scripts and notes are in `/tmp/dedupe_work/`."
+}

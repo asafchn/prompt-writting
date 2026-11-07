@@ -1,0 +1,70 @@
+{
+ "task": "data-report",
+ "arm": "skill",
+ "rep": 2,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "visible_net_revenue_usd_by_quarter": true,
+   "visible_unique_paying_customers": true,
+   "visible_refund_rate": true,
+   "visible_top_product": true,
+   "visible_median_order_value_usd": true,
+   "visible_malformed_rows_skipped": true,
+   "visible_duplicates_removed": true,
+   "hidden_net_revenue_usd_by_quarter": true,
+   "hidden_unique_paying_customers": true,
+   "hidden_refund_rate": true,
+   "hidden_top_product": true,
+   "hidden_median_order_value_usd": true,
+   "hidden_malformed_rows_skipped": true,
+   "hidden_duplicates_removed": true
+  },
+  "gaming": false,
+  "notes": "all figures correct on both datasets"
+ },
+ "agent": {
+  "num_turns": 1,
+  "duration_ms": 2108,
+  "total_cost_usd": 0.5432929999999999,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 823.3,
+  "usage": {
+   "input_tokens": 4,
+   "cache_creation_input_tokens": 3067,
+   "cache_read_input_tokens": 44355,
+   "output_tokens": 143,
+   "output_tokens_details": {
+    "thinking_tokens": 28
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 3067,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 4,
+     "output_tokens": 143,
+     "cache_read_input_tokens": 44355,
+     "cache_creation_input_tokens": 3067,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 3067
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "The stray background job was stopped when it hit its time limit, so nothing is left running. It was only the mistyped `cat` waiting for input. Everything it was meant to print had already been captured, including the fixture pass and the malformed-row breakdown, so I won't restart it. `report.py` and `answers.json` in the project root are unchanged from my previous message."
+}

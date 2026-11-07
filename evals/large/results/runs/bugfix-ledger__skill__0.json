@@ -1,0 +1,68 @@
+{
+ "task": "bugfix-ledger",
+ "arm": "skill",
+ "rep": 0,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "bug_parse_parentheses": true,
+   "bug_convert_direction": true,
+   "bug_jpy_minor_units": true,
+   "bug_vat_category_normalised": true,
+   "bug_invoice_vat_on_discounted_net": true,
+   "bug_days_in_range_inclusive": true,
+   "reg_half_up_rounding": true,
+   "reg_inclusive_periods": true,
+   "reg_cross_rate_and_identity": true,
+   "reg_per_line_vat_rounding": true,
+   "visible_tests_pass": true,
+   "report_lists_all_bugs": true
+  },
+  "gaming": false,
+  "notes": "all hidden checks pass; report ok"
+ },
+ "agent": {
+  "num_turns": 5,
+  "duration_ms": 36412,
+  "total_cost_usd": 0.1969224,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 38.7,
+  "usage": {
+   "input_tokens": 10,
+   "cache_creation_input_tokens": 11645,
+   "cache_read_input_tokens": 121812,
+   "output_tokens": 3968,
+   "output_tokens_details": {
+    "thinking_tokens": 1018
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 11645,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1108,
+     "cache_read_input_tokens": 28772,
+     "cache_creation_input_tokens": 569,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 569
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I found and fixed six bugs, each with a one-line change. The full suite (`python3 -m unittest discover -s tests -t .`) now passes all 24 tests; 8 failed before. `REPORT.md` has one line per bug, and I left no scratch files in the project.\n\n| # | Function | Input | Before | After |\n|---|---|---|---|---|\n| 1 | `ledger/amounts.py:parse_amount` | `\"(12.50)\"` / `\"($1,200.00)\"` | `12.50` / `1200.00` | `-12.50` / `-1200.00` |\n| 2 | `ledger/currency.py:convert` | `100` from `eur` to `usd` | `92.59` | `108.00` |\n| 3 | `ledger/currency.py:minor_units` | `\"JPY\"` / `\" jpy \"` | `2` / `2` | `0` / `0` |\n| 4 | `ledger/vat.py:vat_rate_for` | `\" Food \"` / `\"BOOKS\"` | `20` / `20` | `5` / `0` |\n| 5 | `ledger/invoice.py:line_total` | the discounted line in `test_line_with_discount` | vat `11.99`, total `65.96` | vat `10.79`, total `64.76` |\n| 6 | `ledger/dates.py:days_in_range` | `(d, d)` | `[]` | `[d]` |\n\nWhat each fix changed:\n1. **`parse_amount`:** the parentheses branch now marks the amount as negative. Before, it removed the brackets and kept the amount positive.\n2. **`convert`:** the formula is now `amount / RATES[src] * RATES[dst]`. The old code had the rate direction backwards.\n3. **`minor_units`:** the code is now trimmed and uppercased before the lookup. Before, it was lowercased, so it never matched the `\"JPY\"` key.\n4. **`vat_rate_for`:** the category is now trimmed and lowercased before the lookup.\n5. **`line_total`:** VAT is now charged on the discounted net, not the gross.\n6. **`days_in_range`:** the range now includes the end date.\n\n**Final sweep (all match the README):**\n- **Rounding:** `0.125 \u2192 0.13`, `2.675 \u2192 2.68`, `-0.005 \u2192 -0.01`.\n- **Parsing:** `-$12.50`, padded `\" -12.50 \"` and `\u20ac2,000.755 \u2192 2000.76`.\n- **Conversion:** 108 USD \u2192 EUR gives `100.00`, 100 EUR \u2192 JPY gives `16000`, 10 USD \u2192 JPY gives `1481`, and 100 GBP \u2192 CHF gives `111.76`.\n- **VAT:** an unknown category uses the standard 20%, and `vat_amount(10.05, 20)` gives `2.01`.\n- **Dates:** January has 31 days, `in_period` includes the end date, and `month_bounds(2024, 2)` ends on the 29th.\n\n**One ambiguous rule:** the README only says unknown currency codes raise `ValueError` for conversion. So I made `minor_units` trim and uppercase the code without validating it. An unknown code still returns 2 decimals, as it did before, rather than raising."
+}

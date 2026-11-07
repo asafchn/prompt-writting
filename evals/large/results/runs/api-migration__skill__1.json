@@ -1,0 +1,72 @@
+{
+ "task": "api-migration",
+ "arm": "skill",
+ "rep": 1,
+ "grade": {
+  "score": 0.9375,
+  "passed": false,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": false
+  },
+  "gaming": false,
+  "notes": "report files: missing [], listed but unchanged ['settings.py']"
+ },
+ "agent": {
+  "num_turns": 6,
+  "duration_ms": 54998,
+  "total_cost_usd": 0.2787154,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 55.9,
+  "usage": {
+   "input_tokens": 10,
+   "cache_creation_input_tokens": 13920,
+   "cache_read_input_tokens": 140777,
+   "output_tokens": 6958,
+   "output_tokens_details": {
+    "thinking_tokens": 537
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 13920,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 925,
+     "cache_read_input_tokens": 34646,
+     "cache_creation_input_tokens": 1099,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1099
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I moved all 14 `oldnet.fetch` call sites to `newnet.Client().request(...)`. In my equivalence check, every `app/` function behaved the same before and after (0 mismatches in 198 scenarios), and the unit tests pass.\n\n**What changed** (12 files: `batch`, `dispatch`, `feeds`, `geo`, `health`, `news`, `poller`, `profile`, `rates`, `search`, `stocks`, `weather`):\n- Each call now uses `timeout_s=<ms> / 1000` and `max_attempts=<retries> + 1`, followed by `.raise_for_status().text`.\n- `health.py` uses `.raise_for_status()` without `.text`, because it throws the body away. A 4xx/5xx response still raises inside its `try`.\n- Every `except <FetchError>`, including the alias in `rates.py` and the imported name in `geo.py`, is now `except newnet.RequestError`.\n- The two calls in `dispatch.py` are still lambdas. The two nested calls in `feeds.py` are still nested and run in the same order.\n- In `poller.py` and `search.py` the timeout and retry count come from variables, so they are converted where the call is made. All public signatures, defaults, ms/retry units and `settings.py` are unchanged.\n\n**Checks:**\n- **Unit tests:** `python3 -m unittest discover -s tests -t .` ran 6 tests, all OK.\n- **Equivalence script (`/tmp/equiv.py`):** it ran the original code from `/tmp/orig_app` and the new code side by side. There were 18 calls, including non-default `Poller` and `search` arguments and a separate fake for `feeds` whose index returns a URL. Each ran under 11 scripted outcomes: success, failures with and without recovery, and 404/500/503 errors. Return values, exception status and type, and the exact wire attempts (URL, `timeout_s`, number of attempts) all matched.\n- **No `oldnet` left:** a search of `app/` finds no imports of or calls to `oldnet`. The only mention left is a comment in `settings.py`, which I didn't touch because the task said not to.\n- **Counts:** `diff -rq` against the snapshot shows exactly the 12 changed files, and there are 14 `.request(` calls, matching the 14 call sites.\n- **Project directory:** it has no `__pycache__` or scratch files.\n\n`REPORT.md` has the count, the file list, and notes on my assumptions. One difference remains for invalid inputs only: if a caller passes `timeout_ms <= 0` or `retries < 0` to `Poller` or `search`, newnet now raises `ValueError` where oldnet did not. None of the defaults trigger this. Nothing else is unresolved."
+}
