@@ -1,0 +1,73 @@
+{
+ "task": "api-migration",
+ "arm": "generic",
+ "rep": 3,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": true
+  },
+  "gaming": false,
+  "notes": "all modules migrated with identical behaviour"
+ },
+ "agent": {
+  "num_turns": 6,
+  "duration_ms": 67520,
+  "total_cost_usd": 0.29097599999999996,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 68.6,
+  "usage": {
+   "input_tokens": 12,
+   "cache_creation_input_tokens": 13912,
+   "cache_read_input_tokens": 147860,
+   "output_tokens": 7503,
+   "output_tokens_details": {
+    "thinking_tokens": 1630
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 13912,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 832,
+     "cache_read_input_tokens": 30972,
+     "cache_creation_input_tokens": 1395,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1395
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I replaced all 14 `oldnet.fetch` call sites in `app/` with newnet; `REPORT.md` has `MIGRATED: 14` and the list of changed files. The existing tests pass. I also ran each function against the original `app/` code under 3,328 scripted mixes of 200, 404, 500 and network failure. In every case the old and new versions returned the same values, raised errors with the same status and message, and sent the same requests (same URL, timeout and number of attempts).\n\nHow the calls were converted:\n- **Timeout:** milliseconds became seconds (`timeout_s`).\n- **Retries:** `retries=N` became `max_attempts=N+1`.\n- **Results and errors:** every call ends in `.raise_for_status().text`, so 4xx/5xx responses still raise straight away and the result is still the body text.\n- **Error handling:** `except oldnet.FetchError` became `except newnet.RequestError`, which catches both kinds of newnet error.\n\nThe less obvious call sites, all included in the count:\n- One aliased import (`import oldnet as on`).\n- One imported under another name (`from oldnet import fetch as legacy_fetch`).\n- One nested call in `feeds.py` (it counts as 2).\n- Two calls inside lambdas in `dispatch.py`.\n- One with the retry count passed positionally (`fetch(url, 1000, 3)`).\n- The comment in `news.py` that mentions `oldnet.fetch` is not counted.\n\nThirteen files changed. `app/settings.py` and the comment in `app/news.py` changed only to remove references to oldnet.\n\nTwo behaviour differences remain, both written up in the report:\n- **Different exception type:** `batch`, `dispatch`, `feeds`, `profile`, `weather` and `search` (except on a 404) pass errors on to their callers. Those errors are now `newnet.RequestError` or `newnet.HTTPError` rather than `oldnet.FetchError`, with the same status and message. Any outside code that catches `oldnet.FetchError` from these functions needs to catch `newnet.RequestError` instead.\n- **Invalid arguments:** `Poller` and `search()` let the caller set the timeout and retry count. With a timeout of zero or less, or a negative retry count, newnet now raises `ValueError`, where oldnet sent the request with a zero timeout or failed without trying. Normal values behave the same.\n\n`oldnet/`, `newnet/`, `netcore/` and `tests/` were not touched.",
+ "regraded": "api-migration grader fix: only list items count as listed files"
+}

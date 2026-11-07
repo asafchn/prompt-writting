@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "generic",
+ "rep": 1,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 317604,
+  "total_cost_usd": 0.1639536,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 318.4,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 7647,
+   "cache_read_input_tokens": 155508,
+   "output_tokens": 3581,
+   "output_tokens_details": {
+    "thinking_tokens": 358
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 7647,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 507,
+     "cache_read_input_tokens": 25317,
+     "cache_creation_input_tokens": 742,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 742
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes about 0.2 seconds on the 20k sample, down from 112 seconds, and its output hasn't changed.\n\n**What was slow:** it compared every pair of records (about 200 million pairs for 20,000). Each time two clusters merged, it also rewrote the whole label list.\n\n**The fix (`dedupe.py`):** records are now joined through the match keys they share (union-find): each record is linked to the first earlier record with the same key. That gives exactly the \"transitive closure\" clusters the spec describes, and the time grows roughly in line with the number of records instead of with every pair. The cleaning rules for name, email and phone and the cluster numbering (biggest first, ties by smallest index) are unchanged. It uses only the standard library, keeps the same signature and caches nothing.\n\n**Checks:**\n- **20k sample:** the output matches the original's id for id.\n- **Random inputs:** I compared the new version against a saved copy of the original on 20,000 random small inputs, built to hit tricky cases: case and Unicode variants, `+` tags, broken emails, 11-digit phones and same name/domain pairs. All matched.\n- **Unit tests:** all pass.\n\n`REPORT.md` contains `BEFORE_SECONDS: 112.00` and `AFTER_SECONDS: 0.21`. I ran the new version three times (0.10, 0.21 and 0.21 s) and reported the slowest run.\n\nThe old `_shares_key` helper is no longer used. I left it in place, and it's safe to delete."
+}

@@ -1,0 +1,72 @@
+{
+ "task": "api-migration",
+ "arm": "skill",
+ "rep": 6,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": true
+  },
+  "gaming": false,
+  "notes": "all modules migrated with identical behaviour"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 90981,
+  "total_cost_usd": 0.340107,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 93.0,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 15322,
+   "cache_read_input_tokens": 203475,
+   "output_tokens": 8839,
+   "output_tokens_details": {
+    "thinking_tokens": 1032
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 15322,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1099,
+     "cache_read_input_tokens": 35816,
+     "cache_creation_input_tokens": 1331,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1331
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I moved all 14 `oldnet.fetch` call sites to `newnet.Client().request(...)`, across 12 files in `app/`. The unit tests pass, and my equivalence check found no behaviour differences against a copy of the original code.\n\n**Changes:** I edited every file in `app/` except `__init__.py` (no calls) and `settings.py` (only a comment mentions oldnet, and you said to leave it alone).\n\n**Call sites (14):**\n- `batch.py`: 1, inside a list comprehension.\n- `dispatch.py`: 2, one in each lambda. They are still lambdas.\n- `feeds.py`: 2, one call nested inside another. The order is unchanged: index request, then `.strip()`, then the item request.\n- `geo.py`: 1, imported as `legacy_fetch`.\n- `rates.py`: 1, imported via the alias `on`.\n- One each in `health.py`, `news.py`, `poller.py`, `profile.py`, `search.py`, `stocks.py` and `weather.py`.\n\n**How each call was translated:**\n- **Timeout:** `timeout_s=<ms> / 1000`. This gives exactly the same value oldnet computed internally.\n- **Retries:** `max_attempts=<retries> + 1`. Where the original relied on the default of 0, I wrote `0 + 1`.\n- **Body:** `.raise_for_status().text`, so 4xx/5xx responses still raise.\n- **Errors:** `except newnet.RequestError` in place of `FetchError`.\n- **`health.check`:** it never used the body, so it calls `.raise_for_status()` alone. HTTP errors still raise inside its `try`.\n- **Public signatures:** all signatures, defaults and units are unchanged.\n\n**Evidence that behaviour is unchanged:**\n- **Unit tests:** all 6 pass.\n- **Equivalence check (`/tmp/equiv.py`):** it ran every public function and method in the original and the migrated code: 27 cases \u00d7 18 outcome scripts, 486 scenarios. Each run compared the return value or exception (class and `.status`) and the full list of wire attempts. There were 0 mismatches. The cases used non-default arguments, plus a separate fake for `feeds` where the index returns a URL.\n- **Check on the check:** on a deliberately broken copy (no `raise_for_status` in health, one attempt short in news), the script reported 16 mismatches, so it does catch real differences.\n- **No oldnet left:** searching `app/` for `oldnet`, `fetch(` and `FetchError` finds only the comment in `settings.py`.\n- **Report contents:** the file list in `REPORT.md` comes from `diff -rq` against the snapshot. There are 14 `.request(` calls, which matches the count.\n- **Clean project:** no `__pycache__` or scratch files are in the project directory, and the library and test folders were not touched.\n\n**Assumption:** I did not keep the old behaviour for invalid inputs, such as `timeout_ms <= 0` or `retries < 0` passed to `Poller` or `search`. newnet raises `ValueError` there and oldnet did not. No `app/` function hits this case with its own constants or defaults. This is recorded in `REPORT.md`.\n\nNothing is unresolved."
+}

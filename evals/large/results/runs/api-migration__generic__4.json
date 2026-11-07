@@ -1,0 +1,73 @@
+{
+ "task": "api-migration",
+ "arm": "generic",
+ "rep": 4,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": true
+  },
+  "gaming": false,
+  "notes": "all modules migrated with identical behaviour"
+ },
+ "agent": {
+  "num_turns": 6,
+  "duration_ms": 75627,
+  "total_cost_usd": 0.3281164,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 76.5,
+  "usage": {
+   "input_tokens": 12,
+   "cache_creation_input_tokens": 15192,
+   "cache_read_input_tokens": 149562,
+   "output_tokens": 8831,
+   "output_tokens_details": {
+    "thinking_tokens": 1650
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 15192,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 885,
+     "cache_read_input_tokens": 32694,
+     "cache_creation_input_tokens": 953,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 953
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I've moved all 14 `oldnet.fetch` call sites in `app/` over to newnet and written `REPORT.md` with `MIGRATED: 14` and the list of changed files. The existing tests pass. I didn't touch the client libraries or the tests.\n\n**How each call was converted:**\n- Timeouts went from milliseconds to seconds (`timeout_s = timeout_ms / 1000`).\n- `retries=N` became `max_attempts=N+1`.\n- Every call now ends in `.raise_for_status().text`, so it still returns the body text and still raises on non-2xx responses like oldnet did.\n- `except oldnet.FetchError` became `except newnet.RequestError`, which also catches HTTP errors, so `exc.status` is the same as before.\n\nThe count covers the two calls in the `dispatch.py` lambdas and the nested pair in `feeds.py`. It leaves out the commented-out call in `news.py`. Each module now creates one shared `newnet.Client()` and reuses it, instead of building a new client on every call.\n\n**Behaviour check:** I rebuilt the original modules in the scratchpad and ran old and new versions of every function side by side. That was 12,288 scenarios, covering every mix of success, 404, 500 and network failure. Both versions sent the same requests with the same timeouts and the same number of attempts, and returned the same results and error statuses every time. The script is at `/tmp/claude-0/-tmp-claude-0--home-claude-4b99c7d5-3217-5d38-9c31-9b4690d1b13d-scratchpad-large-eval-runs-runs-api-migration--generic--4/4cf6a4d2-3b3f-4916-aaf7-eae55a56d5bf/scratchpad/cmp.py`.\n\n**Behaviour differences you should know about:**\n- **Error type:** where errors aren't caught (batch, dispatch, feeds, profile, weather, and search on non-404 errors), callers now get `newnet.RequestError` or `newnet.HTTPError` instead of `oldnet.FetchError`. The status codes are the same, but any code outside `app/` that catches `oldnet.FetchError` will need updating. Some change here is unavoidable once oldnet is gone.\n- **Bad arguments:** `Poller` and `search()` take timeout and retry values from their callers. oldnet accepted a timeout of 0 or less and negative retries, but newnet raises `ValueError` for both. Nothing in `app/` passes values like that.\n\nI also changed a comment in `app/settings.py` that said oldnet takes milliseconds, so it's on the changed-files list too. No setting names or values changed.",
+ "regraded": "api-migration grader fix: only list items count as listed files"
+}

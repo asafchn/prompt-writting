@@ -1,0 +1,73 @@
+{
+ "task": "api-migration",
+ "arm": "skill",
+ "rep": 5,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": true
+  },
+  "gaming": false,
+  "notes": "all modules migrated with identical behaviour"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 68545,
+  "total_cost_usd": 0.33004579999999994,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 71.1,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 15453,
+   "cache_read_input_tokens": 203529,
+   "output_tokens": 8283,
+   "output_tokens_details": {
+    "thinking_tokens": 703
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 15453,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 889,
+     "cache_read_input_tokens": 36067,
+     "cache_creation_input_tokens": 1211,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1211
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I moved all 14 `oldnet.fetch` call sites in `app/` to `newnet`. The unit tests pass, and my equivalence check found no behaviour differences from the original code.\n\n**What changed:** 12 files in `app/`: batch, dispatch, feeds, geo, health, news, poller, profile, rates, search, stocks and weather. `__init__.py` and `settings.py` are untouched.\n- **Each call** now uses `newnet.Client().request(\"GET\", url, timeout_s=<ms> / 1000, max_attempts=<retries> + 1).raise_for_status().text`.\n- **`health.check`** ends at `.raise_for_status()`, because it never uses the body and catches every error. A 4xx or 5xx still raises inside the `try`.\n- **Error handling:** `except FetchError` and its aliases (`on.FetchError`, the imported `FetchError`) are now `except newnet.RequestError`, so `exc.status` still works.\n- **Structure:** the two lambdas in dispatch are still lambdas. The nested call in feeds is still nested, so the index request still happens first.\n- **Signatures:** all public signatures, defaults and millisecond/retry units are the same as before.\n\n**Evidence that behaviour is unchanged:**\n- **Unit tests:** `python3 -m unittest discover -s tests -t .` ran 6 tests, all OK.\n- **Equivalence check:** `/tmp/equiv.py` ran 378 scenarios against a snapshot of the original `app/` and found 0 mismatches. The scenarios cover every public function and method, including non-default `Poller` and `search` arguments, under 14 outcome scripts (success, failures with and without recovery, 4xx, 5xx, 301, 204). Each run compares the return value, the escaping exception's type and `.status`, and the exact list of wire attempts.\n- **The check catches real bugs:** I broke three call sites on purpose in a copy of the project, and it reported 42 mismatches.\n- **Clean-up:** `grep oldnet app/` finds only the comment in `settings.py`, which stays because that file must not be edited. No `__pycache__` or scratch files are left in the project.\n\n**`REPORT.md`** says `MIGRATED: 14`, lists the 12 files, and records one assumption: behaviour for invalid inputs need not match. If a caller passes `timeout_ms <= 0` or `retries < 0` to `Poller` or `search`, newnet now raises `ValueError` where oldnet did not. No default or constant in `app/` hits this case.\n\nNothing is left unresolved.",
+ "regraded": "api-migration grader fix: only list items count as listed files"
+}

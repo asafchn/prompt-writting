@@ -168,7 +168,9 @@ def main():
     checks["report_migrated_count"] = bool(m) and int(m.group(1)) == EXPECTED_COUNT
     if not checks["report_migrated_count"]:
         notes.append(f"MIGRATED is {m.group(1) if m else 'missing'}, want {EXPECTED_COUNT}")
-    listed = set(re.findall(r"\bapp/(\w+\.py)\b", text))
+    # Only list items that name a file (optionally followed by a short note), e.g. "- app/x.py" or
+    # "- `app/x.py` (comment only)". Prose such as "app/settings.py was left untouched" doesn't count as listing it.
+    listed = set(re.findall(r"(?m)^[ \t]*[-*+][ \t]*`?app/(\w+\.py)`?[ \t]*(?:\(.*\)|[-:—–][ \t].*)?[ \t]*$", text))
     changed = {f for f in app_files
                if manifest["app"].get(f"app/{f}") != sha(os.path.join(app_dir, f))}
     want = {f"{x}.py" for x in MODULES}

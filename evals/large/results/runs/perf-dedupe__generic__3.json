@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "generic",
+ "rep": 3,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 367018,
+  "total_cost_usd": 0.16140279999999999,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 367.9,
+  "usage": {
+   "input_tokens": 12,
+   "cache_creation_input_tokens": 7774,
+   "cache_read_input_tokens": 131214,
+   "output_tokens": 3646,
+   "output_tokens_details": {
+    "thinking_tokens": 196
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 7774,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 519,
+     "cache_read_input_tokens": 25318,
+     "cache_creation_input_tokens": 868,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 868
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes about 0.26 s on the 20k sample, down from 172.86 s, and gives exactly the same output. `REPORT.md` has `BEFORE_SECONDS: 172.86` and `AFTER_SECONDS: 0.26`.\n\n**What changed (`dedupe.py`):** the old code compared every pair of records. Each time two clusters merged, it also rebuilt the whole label list. Now each match key is mapped to the first record that has it, and union-find joins every record to the first holder of each of its keys. Two records share a key exactly when both are joined to that key's first holder, so the clusters come out the same. The normalisation functions, `record_keys`, and the code that numbers the clusters are unchanged.\n\n**Checks:**\n- On `bench/sample_20k.csv`, the new `ids` list is identical to the original's, element for element (7,101 clusters).\n- The existing unit tests pass.\n- A randomized comparison against a saved copy of the original ran 3,000 small inputs with identical results. The inputs covered `+` tags, malformed emails, full-width characters, 11-digit phones starting with `1`, short phones and empty fields.\n\n**Timing notes:**\n- The 172.86 s baseline is wall-clock time; only about 72 s of that was CPU time, so the machine was probably busy. Either way, the original is far over the 3-second target.\n- The 0.26 s is the median of three runs (0.21, 0.26, 0.27 s).\n\nI left `_shares_key` in place even though nothing calls it now, in case other code imports it."
+}

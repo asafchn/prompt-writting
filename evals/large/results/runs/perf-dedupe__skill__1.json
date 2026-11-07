@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "skill",
+ "rep": 1,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 12,
+  "duration_ms": 151154,
+  "total_cost_usd": 0.3034818,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 151.9,
+  "usage": {
+   "input_tokens": 22,
+   "cache_creation_input_tokens": 13497,
+   "cache_read_input_tokens": 309889,
+   "output_tokens": 6672,
+   "output_tokens_details": {
+    "thinking_tokens": 398
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 13497,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 900,
+     "cache_read_input_tokens": 34526,
+     "cache_creation_input_tokens": 388,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 388
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes a median of 0.13 s on the 20,000-record sample, down from 118.18 s. Its output matched the original implementation's exactly in every check I ran.\n\n**The change.** In `dedupe.py`, I replaced the all-pairs loop and the `label` rebuilding with a dict and a union-find:\n- Each record's keys are computed once with `record_keys`. The keys keep their kind tags.\n- The dict maps each key to the first record that had it. Every later record with that key is merged into the same group.\n- Records are then grouped in ascending index order. The groups are sorted by `(-size, smallest index)` and numbered exactly as before.\n\nThe ids depend only on which records end up together, not on the order of the merges, so they come out the same. I didn't touch the normalisers, `record_keys`, `load_csv` or the docstring. The old `_shares_key` helper is now unused but still there.\n\n**Timings from `bench/run_bench.py`:**\n\n| | Runs | Result |\n|---|---|---|\n| Before | one run of the original code (in the background) | 118.18 s |\n| After | 0.24 s, 0.13 s, 0.10 s | median 0.13 s |\n\n**Equivalence checks:**\n- **Unit tests:** all 8 pass.\n- **20k sample:** the output is list-identical to the original's saved output (20,000 ids, 7,101 clusters).\n- **Random comparison:** 5,000 random inputs of 0\u201360 records and 5 handcrafted cases gave 0 mismatches against the original code. The handcrafted cases cover empty input, records with no keys, `None` fields, tied cluster sizes and chains of matches. The random records came from small pools with every edge case you listed (missing and `None` fields, malformed and padded emails, the phone lengths, full-width digits, `\u00df`/`\u00d8`, names differing only in case or punctuation). In a check on 2,000 of those inputs, 1,646 had a cluster of 5 or more records and 107 had two or more matched clusters of the same size, so the tie-break was exercised.\n\n`REPORT.md` has both required lines and the summary above. My test scripts, notes and the saved reference output are in `/tmp/dedupe_work/`. I deleted the `__pycache__` folders that running the code created, so the project only has `dedupe.py` changed and `REPORT.md` added.\n\n**Not verified:**\n- The test inputs you'll use but I couldn't see. The random test only covers values I came up with, so it gives strong evidence of identical output but not proof for every input.\n- The before figure comes from a single run, as you instructed.\n- Speed on the slower checking machine. The 0.13 s here leaves a lot of room under the 3 s limit."
+}

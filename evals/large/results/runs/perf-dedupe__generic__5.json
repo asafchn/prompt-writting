@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "generic",
+ "rep": 5,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 249052,
+  "total_cost_usd": 0.1618976,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 250.1,
+  "usage": {
+   "input_tokens": 12,
+   "cache_creation_input_tokens": 7806,
+   "cache_read_input_tokens": 131208,
+   "output_tokens": 3658,
+   "output_tokens_details": {
+    "thinking_tokens": 235
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 7806,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 470,
+     "cache_read_input_tokens": 25383,
+     "cache_creation_input_tokens": 835,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 835
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes about 0.10 s on the 20k sample, down from **134.94 s**, and its output is unchanged.\n\n**Change** (in `dedupe.py`): the old code compared every pair of records, about 200 million checks for 20k records. Every merge also rebuilt the whole label list. The new code makes one pass: it remembers which record first had each match key, and when another record has the same key it joins the two using union-find. This groups the records exactly as the pairwise comparison did. The step that numbers the clusters (largest first, ties broken by smallest record index) is unchanged, so the ids come out the same. I didn't touch normalisation, `record_keys` or the function's signature, and it still uses only the standard library.\n\n**Checks:**\n- On `bench/sample_20k.csv` the new ids are exactly the same as the original's (7101 clusters).\n- I also ran 3,000 small random inputs through both the old and new versions and got identical ids every time. They were built from tricky values: Unicode variants that normalise to the same text, `+tag` emails, malformed emails, 11-digit phone numbers and empty fields.\n- The unit tests pass.\n\n`REPORT.md` has `BEFORE_SECONDS: 134.94` and `AFTER_SECONDS: 0.10`, both timed with `bench/run_bench.py`. The helper `_shares_key` is no longer used; I left it in place in case anything imports it."
+}

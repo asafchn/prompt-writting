@@ -188,6 +188,17 @@ if __name__ == "__main__":
         with ThreadPoolExecutor(workers) as ex:
             list(ex.map(lambda j: run_one(*j), jobs))
         report()
+    elif mode == "regrade":  # re-score every saved workspace with the current graders
+        for f in sorted((RES / "runs").glob("*.json")):
+            rec = json.loads(f.read_text())
+            ws = WORK / "runs" / f.stem
+            g = subprocess.run([sys.executable, "grader.py", str(ws)], cwd=TASKS / rec["task"], capture_output=True, text=True, timeout=600)
+            new = json.loads(g.stdout.strip().splitlines()[-1])
+            if (new.get("score"), new.get("passed")) != (rec["grade"].get("score"), rec["grade"].get("passed")):
+                print(f"  {f.stem}: {rec['grade'].get('score')} -> {new.get('score')}")
+            rec["grade"] = new
+            f.write_text(json.dumps(rec, indent=1))
+        report()
     elif mode == "report":
         report()
     else:

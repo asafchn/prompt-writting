@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "skill",
+ "rep": 5,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 8,
+  "duration_ms": 94173,
+  "total_cost_usd": 0.20182799999999998,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 95.2,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 8069,
+   "cache_read_input_tokens": 179700,
+   "output_tokens": 5064,
+   "output_tokens_details": {
+    "thinking_tokens": 245
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 8069,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 785,
+     "cache_read_input_tokens": 28583,
+     "cache_creation_input_tokens": 903,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 903
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes about 0.36 s on the 20,000-record sample, down from 169.12 s, and its output matched the original exactly in every check I ran.\n\n**Before and after:** the original code took **169.12 s** in one background run. The new code took 0.36, 0.39 and 0.35 s in three `bench/run_bench.py` runs, so **AFTER_SECONDS is 0.36**. That is well under the 1 s target.\n\n**The change:** I replaced the every-pair comparison loop and the per-merge `label` rebuild in `dedupe.py` with the approach you described:\n- `record_keys` is still computed once per record.\n- A dict maps each match key to the first record that had it, and each later record with that key is merged with it in a union-find with path compression.\n- The grouping and the final sort by `(-len(members), members[0])` are unchanged.\n\nNothing else changed: not the normalisers, `record_keys`, `load_csv`, the signature or the docstring. `_shares_key` is no longer called but is still there.\n\n**Evidence the output is identical:**\n- **Unit tests:** all 8 pass.\n- **20k sample:** the new ids match the original's list-for-list: 20,000 ids, 7,101 clusters, no differences.\n- **Random comparison against the original:** 5,500 cases with 0 mismatches.\n  - 5,000 random inputs of 0\u201360 records each, drawn from small value pools. The pools cover `None` values, missing fields, empty strings, `+tags`, `@@`, a missing local part or domain, upper-case and padded emails, `\u00df`/`\u00d8`, full-width and Arabic-Indic digits, and phones of 5, 6, 7, 10 and 11 digits with and without a leading `1`.\n  - 500 extra cases with several clusters of the same size, to test the tie-break.\n\n**Not verified:**\n- Inputs larger than 60 records were only compared on the 20k sample.\n- I didn't test non-string, non-`None` field values such as ints. Both versions call the same normalisers, so I expect them to behave the same, but I didn't run it.\n- I timed only on this machine.\n\n`REPORT.md` is in the project root with the two required lines. My scratch files are in `/tmp/dedupe_work/`: the reference copy, the 20k reference ids, the baseline and comparison scripts, and `NOTES.md`."
+}

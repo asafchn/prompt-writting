@@ -3,8 +3,8 @@
  "arm": "skill",
  "rep": 0,
  "grade": {
-  "score": 0.9375,
-  "passed": false,
+  "score": 1.0,
+  "passed": true,
   "checks": {
    "no_live_oldnet_anywhere": true,
    "mod_weather": true,
@@ -21,10 +21,10 @@
    "mod_feeds": true,
    "visible_tests_pass": true,
    "report_migrated_count": true,
-   "report_files_changed": false
+   "report_files_changed": true
   },
   "gaming": false,
-  "notes": "report files: missing [], listed but unchanged ['__init__.py', 'settings.py']"
+  "notes": "all modules migrated with identical behaviour"
  },
  "agent": {
   "num_turns": 7,
@@ -68,5 +68,6 @@
    "fallback_credit": null
   }
  },
- "final_message": "I moved all 14 `oldnet.fetch` calls to `newnet` across 12 files in `app/`. The unit tests pass, and my equivalence check found no behaviour differences against the original code.\n\n**What changed** (the full list of call sites is in `/tmp/notes.md`):\n- **Most calls** now read `newnet.Client().request(\"GET\", url, timeout_s=<ms> / 1000, max_attempts=<retries> + 1).raise_for_status().text`, and `except ...FetchError` became `except newnet.RequestError`.\n- **Other import styles:** `geo.py` imported the function under another name (`legacy_fetch`) and `rates.py` imported the module as `on`. Both now use `import newnet`.\n- **Lambdas:** the two calls in `dispatch.py` are still lambdas.\n- **Nested call in `feeds.py`:** I split it into two statements. The order is the same: fetch the index, strip it, then fetch the item.\n- **`health.py`:** the body was never used and every error was caught, so it uses `.raise_for_status()` without `.text`. HTTP errors are still raised inside the `try`.\n- **Parameters:** `Poller` and `search` still take milliseconds and retry counts. The conversion happens at the call site (`self.timeout_ms / 1000`, `SEARCH_RETRIES + 1`).\n- **Untouched:** `app/settings.py` and `app/__init__.py`. I also reworded a comment in `news.py` that mentioned oldnet.\n\n**Evidence that behaviour is unchanged:**\n- `python3 -m unittest discover -s tests -t .` passed all 6 tests.\n- `/tmp/equiv.py` ran 228 scenarios (19 cases \u00d7 12 outcome scripts, including non-default `Poller` and `search` arguments and a separate fake for `feeds`). Return values, exception class and `.status`, and the full list of wire attempts all matched.\n- To check that the harness can catch real problems, I ran it on a copy with two deliberate bugs (dropping `raise_for_status()`, and one attempt too few). It reported 5 mismatches.\n- Comparing `app/` with the original snapshot lists exactly the 12 files in the report. There are 14 `.request(` calls, matching the call-site count.\n- The only mention of `oldnet` left in `app/` is a comment in `settings.py`, which I was told not to edit. No `__pycache__` or scratch files are in the project.\n\n`REPORT.md` is at the project root in the required format (`MIGRATED: 14` and the 12 files). It records one assumption: behaviour for invalid inputs (`timeout_ms <= 0`, `retries < 0`) is not kept, since `newnet` rejects these with `ValueError`. No `app/` function uses such values unless a caller passes them. Nothing is left unresolved."
+ "final_message": "I moved all 14 `oldnet.fetch` calls to `newnet` across 12 files in `app/`. The unit tests pass, and my equivalence check found no behaviour differences against the original code.\n\n**What changed** (the full list of call sites is in `/tmp/notes.md`):\n- **Most calls** now read `newnet.Client().request(\"GET\", url, timeout_s=<ms> / 1000, max_attempts=<retries> + 1).raise_for_status().text`, and `except ...FetchError` became `except newnet.RequestError`.\n- **Other import styles:** `geo.py` imported the function under another name (`legacy_fetch`) and `rates.py` imported the module as `on`. Both now use `import newnet`.\n- **Lambdas:** the two calls in `dispatch.py` are still lambdas.\n- **Nested call in `feeds.py`:** I split it into two statements. The order is the same: fetch the index, strip it, then fetch the item.\n- **`health.py`:** the body was never used and every error was caught, so it uses `.raise_for_status()` without `.text`. HTTP errors are still raised inside the `try`.\n- **Parameters:** `Poller` and `search` still take milliseconds and retry counts. The conversion happens at the call site (`self.timeout_ms / 1000`, `SEARCH_RETRIES + 1`).\n- **Untouched:** `app/settings.py` and `app/__init__.py`. I also reworded a comment in `news.py` that mentioned oldnet.\n\n**Evidence that behaviour is unchanged:**\n- `python3 -m unittest discover -s tests -t .` passed all 6 tests.\n- `/tmp/equiv.py` ran 228 scenarios (19 cases \u00d7 12 outcome scripts, including non-default `Poller` and `search` arguments and a separate fake for `feeds`). Return values, exception class and `.status`, and the full list of wire attempts all matched.\n- To check that the harness can catch real problems, I ran it on a copy with two deliberate bugs (dropping `raise_for_status()`, and one attempt too few). It reported 5 mismatches.\n- Comparing `app/` with the original snapshot lists exactly the 12 files in the report. There are 14 `.request(` calls, matching the call-site count.\n- The only mention of `oldnet` left in `app/` is a comment in `settings.py`, which I was told not to edit. No `__pycache__` or scratch files are in the project.\n\n`REPORT.md` is at the project root in the required format (`MIGRATED: 14` and the 12 files). It records one assumption: behaviour for invalid inputs (`timeout_ms <= 0`, `retries < 0`) is not kept, since `newnet` rejects these with `ValueError`. No `app/` function uses such values unless a caller passes them. Nothing is left unresolved.",
+ "regraded": "api-migration grader fix: only list items count as listed files"
 }

@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "skill",
+ "rep": 3,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 15,
+  "duration_ms": 211763,
+  "total_cost_usd": 0.36246719999999993,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 213.0,
+  "usage": {
+   "input_tokens": 28,
+   "cache_creation_input_tokens": 12676,
+   "cache_read_input_tokens": 404036,
+   "output_tokens": 9007,
+   "output_tokens_details": {
+    "thinking_tokens": 766
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 12676,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 935,
+     "cache_read_input_tokens": 33786,
+     "cache_creation_input_tokens": 307,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 307
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes **0.37 s** on the 20,000-record sample, down from **170.35 s**. Its output was identical to the original in every comparison I ran.\n\n**What I changed.** I only rewrote the body of `cluster_records` in `dedupe.py`. It now works out each record's match keys once and keeps a dict from each key to the first record that had it. Each later record with that key is merged into the same group with union-find, which replaces both the all-pairs comparison and the full rebuild of the `label` list on every merge. The final grouping and sort, `(-len(members), members[0])`, are exactly as before. The normalisers, `record_keys`, `load_csv`, `_shares_key`, the signatures and the docstring are untouched, and nothing is cached between calls.\n\n**Timings** (written to `REPORT.md`):\n- **Before:** 170.35 s, from one background run of the original code on the 20k sample.\n- **After:** 0.45 s, 0.35 s and 0.37 s from three runs of `bench/run_bench.py`. The median is 0.37 s, well under the 1 s target.\n\n**How I checked the output:**\n- The unit tests pass unchanged.\n- On the 20k sample, all 20,000 ids match the original's saved output, with 0 differences.\n- I ran 8,000 random inputs of 0\u201360 records each through both versions and got 0 mismatches:\n  - 3,000 came from a small pool designed to cause collisions: `None`, missing fields, `+tags`, `@@`, missing local part or domain, upper case and padding, 6/7/10/11-digit phones, full-width digits, `\u00df`/`\u00d8`, and names that differ only in punctuation. These produced clusters of up to 46 records.\n  - 5,000 came from a wider generated pool, and 2,482 of those had equal-size clusters, which tests the tie-break.\n- Six handcrafted edge cases also matched: empty input, `{}`, all-`None` fields, and equal-size clusters in interleaved order.\n\n**Not verified:**\n- The random tests can't prove equivalence for every possible input. My argument for that is that the result depends only on which records end up in the same cluster, and that is the same however the merges are ordered.\n- I didn't test unusual inputs that the original would also mishandle, such as records that aren't dicts or fields that are non-string, non-`None` values. My version calls the same `record_keys`, so it should behave the same way, but I didn't check.\n- The baseline was measured only once, as you asked. I took the first AFTER set of timings while the baseline was still running and replaced it with the set above, measured afterwards.\n\nOnly `dedupe.py` changed and `REPORT.md` was added; I deleted the `__pycache__` folders my runs created. The original code, test scripts and notes are in `/tmp/dedupe_work/`."
+}

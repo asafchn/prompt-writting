@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "generic",
+ "rep": 4,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 305229,
+  "total_cost_usd": 0.1614466,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 305.9,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 7566,
+   "cache_read_input_tokens": 155413,
+   "output_tokens": 3489,
+   "output_tokens_details": {
+    "thinking_tokens": 229
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 7566,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 397,
+     "cache_read_input_tokens": 25421,
+     "cache_creation_input_tokens": 557,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 557
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes **0.13 s** on the 20k sample, down from **167.90 s**. The output is the same as before, and both numbers are in `REPORT.md`.\n\n**What was slow:** the old code compared every record with every other record. On top of that, each time two clusters merged it relabelled the whole list.\n\n**The fix (`dedupe.py`):** I replaced the pairwise loop with a lookup table from each match key to the first record that has it. Each record is joined to those first records using union-find, a standard structure for grouping items into sets. This gives the same clusters as before. The step that numbers the clusters (largest first, ties by smallest record index) and the normalisation functions are unchanged. It still uses only the standard library and caches nothing between calls.\n\n**Checks:**\n- On the full 20k sample, the output matches a saved copy of the original code list for list.\n- 3,000 random small inputs gave identical output from both versions. They were built to hit edge cases: full-width characters, `+` tags, malformed `@@` emails, 11-digit phones with a leading 1, empty fields and chains of matches.\n- The existing unit tests pass.\n\nThe old `_shares_key` helper is no longer used, but I left it in."
+}

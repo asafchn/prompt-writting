@@ -1,0 +1,68 @@
+{
+ "task": "bugfix-ledger",
+ "arm": "skill",
+ "rep": 5,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "bug_parse_parentheses": true,
+   "bug_convert_direction": true,
+   "bug_jpy_minor_units": true,
+   "bug_vat_category_normalised": true,
+   "bug_invoice_vat_on_discounted_net": true,
+   "bug_days_in_range_inclusive": true,
+   "reg_half_up_rounding": true,
+   "reg_inclusive_periods": true,
+   "reg_cross_rate_and_identity": true,
+   "reg_per_line_vat_rounding": true,
+   "visible_tests_pass": true,
+   "report_lists_all_bugs": true
+  },
+  "gaming": false,
+  "notes": "all hidden checks pass; report ok"
+ },
+ "agent": {
+  "num_turns": 5,
+  "duration_ms": 38073,
+  "total_cost_usd": 0.180888,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 39.1,
+  "usage": {
+   "input_tokens": 10,
+   "cache_creation_input_tokens": 9213,
+   "cache_read_input_tokens": 125920,
+   "output_tokens": 4098,
+   "output_tokens_details": {
+    "thinking_tokens": 669
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 9213,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1246,
+     "cache_read_input_tokens": 29022,
+     "cache_creation_input_tokens": 978,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 978
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I found and fixed six bugs, each with a one-line change, and wrote `REPORT.md` with one line per bug. The full suite now passes: 24 tests, OK (8 were failing before).\n\n| # | Location | Input that showed it | Before | After |\n|---|---|---|---|---|\n| 1 | `ledger/amounts.py:parse_amount` | `'(12.50)'`, `'($1,200.00)'` | `12.50`, `1200.00` | `-12.50`, `-1200.00` |\n| 2 | `ledger/currency.py:minor_units` | `minor_units('JPY')` | `2` | `0` |\n| 3 | `ledger/currency.py:convert` | `convert(100,'eur','jpy')` / `convert(108,'USD','EUR')` | `0.63` / `116.64` | `16000` / `100.00` |\n| 4 | `ledger/vat.py:vat_rate_for` | `' Books '` | `20` | `0` |\n| 5 | `ledger/invoice.py:line_total` | 3 \u00d7 19.99, 10% discount, standard rate | VAT `11.99` | VAT `10.79` |\n| 6 | `ledger/dates.py:days_in_range` | `days_in_range(d, d)` | `[]` | `[d]` |\n\nWhat each fix does:\n1. **Parentheses:** they now set the negative flag. Before, they were removed but the amount stayed positive.\n2. **Minor units:** the code is now trimmed and upper-cased before the lookup. It was lower-cased, so it never matched the `\"JPY\"` key.\n3. **Conversion direction:** it now divides by the source rate (A \u2192 EUR) and multiplies by the target rate (EUR \u2192 B). It used to do the reverse.\n4. **VAT category:** the name is now trimmed and lower-cased before the lookup, so mixed case and padding work.\n5. **VAT base:** VAT is now charged on the discounted net instead of the gross.\n6. **Date range:** the range now includes the end date.\n\n**Final sweep:** all README examples give the right results:\n- Rounding: `0.125 \u2192 0.13`, `2.675 \u2192 2.68`, `-0.005 \u2192 -0.01`.\n- Parsing: `-12.50`, `-$12.50`, `(12.50)` and `($1,200.00)` all come out negative.\n- `month_bounds(2024, 2)` gives 1 to 29 February.\n- Unknown VAT categories get 20%.\n- Junk like `abc` and an empty string raises `ValueError`.\n\nI also checked a few cases the visible tests don't cover, and they're correct: `convert(1, ' usd ', 'JPY')` gives `148` and `convert(10, 'GBP', 'chf')` gives `11.18`.\n\nThings I checked and left alone because they already follow the README:\n- `round_money`: `ROUND_HALF_UP` in `decimal` already rounds away from zero.\n- `_code`, `_check`, `in_period`, `month_bounds`, `vat_amount`, `add_vat` and `invoice_total`.\n\n**Choices where the README is unclear:**\n- **`(-5)`:** the README doesn't define parentheses combined with a minus sign. That input originally parsed as `-5`, and it still does. I briefly tried a stricter check that turned it into `5.00`, then removed it to keep the original behaviour.\n- **`minor_units` with an unknown code:** I only fixed the case and whitespace handling. It still returns 2 instead of raising `ValueError`, because the README only requires that error from `convert`.\n\nNo scratch files were left in the project folder."
+}

@@ -1,0 +1,68 @@
+{
+ "task": "bugfix-ledger",
+ "arm": "skill",
+ "rep": 3,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "bug_parse_parentheses": true,
+   "bug_convert_direction": true,
+   "bug_jpy_minor_units": true,
+   "bug_vat_category_normalised": true,
+   "bug_invoice_vat_on_discounted_net": true,
+   "bug_days_in_range_inclusive": true,
+   "reg_half_up_rounding": true,
+   "reg_inclusive_periods": true,
+   "reg_cross_rate_and_identity": true,
+   "reg_per_line_vat_rounding": true,
+   "visible_tests_pass": true,
+   "report_lists_all_bugs": true
+  },
+  "gaming": false,
+  "notes": "all hidden checks pass; report ok"
+ },
+ "agent": {
+  "num_turns": 5,
+  "duration_ms": 41163,
+  "total_cost_usd": 0.1903722,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 41.8,
+  "usage": {
+   "input_tokens": 10,
+   "cache_creation_input_tokens": 9592,
+   "cache_read_input_tokens": 126681,
+   "output_tokens": 4413,
+   "output_tokens_details": {
+    "thinking_tokens": 879
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 9592,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1188,
+     "cache_read_input_tokens": 29384,
+     "cache_creation_input_tokens": 995,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 995
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I found and fixed six bugs where the code broke the README rules, and wrote all six to `REPORT.md`. The full suite (`python3 -m unittest discover -s tests -t .`) now passes; before the fixes, 8 of 24 tests failed.\n\n| # | Where | What showed the bug | Before | After |\n|---|---|---|---|---|\n| 1 | `ledger/amounts.py:parse_amount` | `parse_amount('(12.50)')` / `('($1,200.00)')`: the brackets were removed but the amount was never made negative | `12.50` / `1200.00` | `-12.50` / `-1200.00` |\n| 2 | `ledger/currency.py:minor_units` | `minor_units('JPY')`: it looked up `'jpy'` but the table key is `\"JPY\"`. Now it trims spaces and upper-cases first | `2` | `0` |\n| 3 | `ledger/currency.py:convert` | `convert(D('108'),'USD','EUR')`: the rates were applied the wrong way round. Now it is `amount * rate[dst] / rate[src]`, rounded once at the end | `116.64` | `100.00` |\n| 4 | `ledger/vat.py:vat_rate_for` | `vat_rate_for(' Books ')`: it looked up the category as given. Now it trims spaces and lower-cases first | `20` | `0` |\n| 5 | `ledger/invoice.py:line_total` | A 100.00 standard-rate line with a 10% discount: VAT was charged on the full price, not the discounted net | vat `20.00`, total `110.00` | vat `18.00`, total `108.00` |\n| 6 | `ledger/dates.py:days_in_range` | `days_in_range(d, d)`: the end date was left out | `[]` | `[d]` |\n\n**Final check:** I ran every README example against the fixed code and they all match:\n- **Rounding:** `0.125 \u2192 0.13`, `2.675 \u2192 2.68`, `-0.005 \u2192 -0.01`.\n- **Parsing:** `-$12.50`, `(12.50)` and `($1,200.00)` all come out negative, and unparseable input raises `ValueError`.\n- **Conversion:** 100 EUR \u2192 16000 JPY, 1.08 USD \u2192 0.85 GBP, and `' jpy '` has 0 decimals.\n- **VAT:** lookups ignore case and spaces, and unknown categories get 20%.\n- **Dates:** ranges include both ends, and `month_bounds(2024, 2)` returns Feb 1 to Feb 29.\n\nThe rest of the code (`round_money`, `_code`, `vat_amount`, `add_vat`, `invoice_total`, `_check`, `in_period`, `month_bounds`) already followed the README, so I didn't change it. No scratch files are left in the project.\n\n**Where the README is unclear, I took the narrowest reading:**\n- `minor_units` still returns 2 for an unknown code instead of raising `ValueError`. The README only requires `ValueError` for unknown codes in conversion.\n- In `line_total`, gross is not rounded before the discount and VAT steps; only the figures that come out are rounded, as before. The README doesn't say to round gross.\n- Inputs the README doesn't cover, such as `(-12.50)` or `$-12.50`, behave as before. I briefly made a second change to `parse_amount` that would have changed how `(-12.50)` is handled, then reverted it because the README doesn't define that input."
+}

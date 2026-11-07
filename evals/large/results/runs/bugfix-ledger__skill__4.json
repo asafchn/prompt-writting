@@ -1,0 +1,68 @@
+{
+ "task": "bugfix-ledger",
+ "arm": "skill",
+ "rep": 4,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "bug_parse_parentheses": true,
+   "bug_convert_direction": true,
+   "bug_jpy_minor_units": true,
+   "bug_vat_category_normalised": true,
+   "bug_invoice_vat_on_discounted_net": true,
+   "bug_days_in_range_inclusive": true,
+   "reg_half_up_rounding": true,
+   "reg_inclusive_periods": true,
+   "reg_cross_rate_and_identity": true,
+   "reg_per_line_vat_rounding": true,
+   "visible_tests_pass": true,
+   "report_lists_all_bugs": true
+  },
+  "gaming": false,
+  "notes": "all hidden checks pass; report ok"
+ },
+ "agent": {
+  "num_turns": 5,
+  "duration_ms": 33279,
+  "total_cost_usd": 0.16964659999999998,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 34.8,
+  "usage": {
+   "input_tokens": 10,
+   "cache_creation_input_tokens": 9075,
+   "cache_read_input_tokens": 125233,
+   "output_tokens": 3598,
+   "output_tokens_details": {
+    "thinking_tokens": 763
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 9075,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 890,
+     "cache_read_input_tokens": 28256,
+     "cache_creation_input_tokens": 1606,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1606
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I found and fixed six bugs, and the full test suite now passes (24 tests, previously 8 failing). `REPORT.md` has one line for each bug.\n\n| # | Location | Input that showed the bug | Before | After |\n|---|---|---|---|---|\n| 1 | `ledger/amounts.py:parse_amount`: the parentheses were removed but the amount was never marked negative | `'(12.50)'` / `'($1,200.00)'` | `12.50` / `1200.00` | `-12.50` / `-1200.00` |\n| 2 | `ledger/currency.py:minor_units`: it lowercased the code but the table key is `\"JPY\"` | `minor_units('JPY')` / `('jpy')` | `2` / `2` | `0` / `0` |\n| 3 | `ledger/currency.py:convert`: rates applied the wrong way round (`amount*rate[src]/rate[dst]`); it is now `amount/rate[src]*rate[dst]` | `convert(100,'EUR','USD')` | `92.59` | `108.00` |\n| 4 | `ledger/vat.py:vat_rate_for`: the category was looked up without lowercasing or trimming spaces | `'Food'` / `' books '` | `20` / `20` | `5` / `0` |\n| 5 | `ledger/invoice.py:line_total`: VAT was charged on gross, not on the discounted net | the discount test line | vat `11.99`, total `65.96` | vat `10.79`, total `64.76` |\n| 6 | `ledger/dates.py:days_in_range`: the end date was left out | `days_in_range(d, d)` | `[]` | `[d]` |\n\nBugs 2 and 3 compound: `convert(100,'eur','jpy')` gave `0.63` before and gives `16000` (whole yen) now.\n\n**Final check:** I ran every README example plus cases the visible tests don't cover. These were USD\u2192GBP and JPY\u2192EUR conversion, padded and mixed-case codes and categories, all four negative forms, rounding of `-0.005`, `0.125` and `2.675`, a leap-year February and a single-day `in_period`. All matched the README. No scratch files are left in the project.\n\n**Readings I chose where the README is open:**\n- `minor_units` only got case- and whitespace-insensitivity. For an unknown code it still returns 2 rather than raising `ValueError`, because the README only requires that for `convert`.\n- `round_money` was not changed. It already rounds half up, away from zero, for Decimal inputs, and the README says money is never float.\n- Forms like `-(12.50)` aren't defined in the README, so I left their behaviour alone."
+}

@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "skill",
+ "rep": 4,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 9,
+  "duration_ms": 61500,
+  "total_cost_usd": 0.22394980000000003,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 62.2,
+  "usage": {
+   "input_tokens": 16,
+   "cache_creation_input_tokens": 8796,
+   "cache_read_input_tokens": 207689,
+   "output_tokens": 5599,
+   "output_tokens_details": {
+    "thinking_tokens": 438
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 8796,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 840,
+     "cache_read_input_tokens": 29923,
+     "cache_creation_input_tokens": 290,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 290
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes **0.33 s** on the 20,000-record sample, down from **170.35 s**, and its output matched the original on every input I tested.\n\n**Cause:** the old code compared every pair of records (about 200 million comparisons) and rebuilt the whole `label` list on every merge.\n\n**Change:** only the inside of `cluster_records` in `dedupe.py` is different. Each record's keys are computed once with `record_keys`. A dict maps each key to the first record that had it, and every later record with that key is merged with that record using union-find with path compression. The records are then grouped and numbered with the same sort as before, `(-len(members), members[0])`. The spec, the normalisers, `record_keys` and `load_csv` are unchanged. The old `_shares_key` helper is still in the file, though nothing calls it now.\n\n**Timings:**\n- **Before:** 170.35 s, from one background run of the original code.\n- **After:** 0.36, 0.33 and 0.33 s from three runs of `bench/run_bench.py`, so the median is 0.33 s. That leaves plenty of room under the 3 s limit if the checking machine is slower.\n\n**Evidence the output is identical:**\n- **Unit tests:** all 8 pass, with the tests left unchanged.\n- **20k sample:** the output equals the saved original output list-for-list (20,000 ids, 7,101 clusters).\n- **Handcrafted cases:** all 9 match. They cover empty input, records with no keys, fields set to `None`, an email and a phone with the same digits (which must not match), name-plus-domain matches, a chain of matches in reverse order, and clusters of equal size.\n- **Random differential test:** 6,000 inputs (two seeds of 3,000, each 0\u201360 records) with 0 mismatches. Values were drawn from small pools covering everything you listed, and 418 of these inputs had several multi-record clusters of equal size, which tests the tie-break.\n\n**Not verified:** the hidden inputs used in grading, and the speed on the slower grading machine. Random inputs had at most 60 records, so the 20k sample is the only large-scale check.\n\n`REPORT.md` has the `BEFORE_SECONDS: 170.35` and `AFTER_SECONDS: 0.33` lines and the write-up. The project is left with only `dedupe.py` changed and `REPORT.md` added; I deleted the `__pycache__` folders my test runs created. My scripts, the saved reference output and the notes are in `/tmp/dedupe_work/`."
+}

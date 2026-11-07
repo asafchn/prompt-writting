@@ -1,0 +1,73 @@
+{
+ "task": "api-migration",
+ "arm": "skill",
+ "rep": 4,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": true
+  },
+  "gaming": false,
+  "notes": "all modules migrated with identical behaviour"
+ },
+ "agent": {
+  "num_turns": 8,
+  "duration_ms": 71663,
+  "total_cost_usd": 0.3562574,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 72.7,
+  "usage": {
+   "input_tokens": 16,
+   "cache_creation_input_tokens": 16763,
+   "cache_read_input_tokens": 238547,
+   "output_tokens": 8719,
+   "output_tokens_details": {
+    "thinking_tokens": 676
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 16763,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1012,
+     "cache_read_input_tokens": 37477,
+     "cache_creation_input_tokens": 1111,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1111
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I moved all 14 `oldnet.fetch` calls to newnet. A comparison script found no difference from the original code in 336 scenarios, and the unit tests pass.\n\n**What changed:** 12 files in `app/`: `batch`, `dispatch`, `feeds`, `geo`, `health`, `news`, `poller`, `profile`, `rates`, `search`, `stocks` and `weather`. `__init__.py` and `settings.py` are unchanged.\n- Each call is now `_client.request(\"GET\", url, timeout_s=<ms> / 1000, max_attempts=<retries> + 1).raise_for_status().text`, with one shared `newnet.Client()` per module.\n- Each `except` that caught `FetchError` (under any of its import names) now catches `newnet.RequestError`.\n- The tricky cases kept their shape: the two lambdas in `dispatch` are still lambdas, and the nested call in `feeds` still makes the index request first. The `on.` alias in `rates` and the `legacy_fetch` import in `geo` are replaced.\n- `poller` and `search` convert their millisecond and retry parameters where they make the call, so their public signatures, defaults and the constants in `settings.py` are unchanged.\n- `health` never uses the response body, so it calls `.raise_for_status()` without `.text`. A 4xx or 5xx response still raises inside its `try`.\n- I removed one stale comment mention of oldnet in `news.py`. The only remaining mention of oldnet in `app/` is a comment in `settings.py`, which I had to leave untouched.\n\n**Evidence that behaviour is unchanged:**\n- **Comparison script (`/tmp/equiv.py`):** it ran every public function in the original snapshot (`/tmp/orig_app`) and in the new code against `FakeTransport`. It covered 24 call setups, including non-default `Poller` and `search` arguments and a special fake for `feeds` whose index returns a URL. Each setup ran under 14 scripted outcomes: success, transport failures with and without recovery, 404, 500 and 503. All 336 scenarios matched on return value, on the exception and its `.status` (including whether it is an `HTTPError`), and on the exact sequence of URLs and timeouts sent.\n- **Unit tests:** all 6 pass.\n- **Call count:** the 14 call sites I listed match the 14 `.request(` calls in the new code.\n- **Clean project:** the list of changed files comes from comparing `app/` with the snapshot. No `__pycache__` or scratch files are left in the project, and nothing outside `app/` was changed except the new `REPORT.md`.\n\n**Not resolved:** behaviour for invalid inputs, such as `timeout_ms <= 0` or `retries < 0` passed to `Poller` or `search`. newnet raises `ValueError` there and oldnet did not, which the task said need not be preserved. No function reaches this with its default values. I recorded this assumption in `REPORT.md`.\n\n`REPORT.md` is at the project root.",
+ "regraded": "api-migration grader fix: only list items count as listed files"
+}

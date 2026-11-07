@@ -1,0 +1,73 @@
+{
+ "task": "api-migration",
+ "arm": "generic",
+ "rep": 6,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": true
+  },
+  "gaming": false,
+  "notes": "all modules migrated with identical behaviour"
+ },
+ "agent": {
+  "num_turns": 6,
+  "duration_ms": 70382,
+  "total_cost_usd": 0.262183,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 72.3,
+  "usage": {
+   "input_tokens": 12,
+   "cache_creation_input_tokens": 12999,
+   "cache_read_input_tokens": 147215,
+   "output_tokens": 6435,
+   "output_tokens_details": {
+    "thinking_tokens": 1004
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 12999,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 924,
+     "cache_read_input_tokens": 30598,
+     "cache_creation_input_tokens": 856,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 856
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I've moved everything in `app/` over to newnet, and nothing there uses oldnet anymore. The test suite passes (6 tests). I also ran a fake-transport check on the modules the tests don't cover. They make the same attempts on the wire as before, with the same URLs, timeouts and attempt counts, and give the same results on success, HTTP errors and transport failures.\n\n`REPORT.md` contains `MIGRATED: 14` and lists 13 changed files: every module in `app/` except `__init__.py`. The 14 call sites include both lambdas in `dispatch.py`, the nested call in `feeds.py`, and the aliased imports in `geo.py` (`legacy_fetch`) and `rates.py` (`on`). The `oldnet.fetch` mentions in comments aren't counted.\n\nHow the conversion works:\n- **Errors:** each call becomes `request(\"GET\", url, timeout_s=\u2026, max_attempts=\u2026).raise_for_status()`, using `.text` wherever the body was needed. `raise_for_status()` keeps the old behaviour of raising on any non-2xx response.\n- **Timeouts and attempts:** timeouts are milliseconds \u00f7 1000 and attempts are `retries + 1`. The easy one to miss is `news.py`, where `fetch(url, 1000, 3)` passed retries positionally and becomes `max_attempts=4`.\n- **Catching errors:** `except oldnet.FetchError` became `except newnet.RequestError`, which catches both HTTP errors and transport failures, the same cases as before. `search.py` still treats a 404 as \"no results\" by checking `.status`.\n- **Public interfaces:** `Poller(timeout_ms, retries)`, `search(timeout_ms=\u2026)` and the `SEARCH_TIMEOUT_MS` setting still take milliseconds and retry counts, and are converted at the call.\n- **Comments:** I reworded one comment each in `news.py` and `settings.py` so they no longer mention oldnet. That's the only change to `settings.py`.\n\nThere are two small differences. Neither is avoidable without keeping oldnet:\n1. Where errors reach callers (`batch`, `dispatch`, `feeds`, `profile`, `search`, `weather`), the exception is now `newnet.HTTPError` or `newnet.RequestError` instead of `oldnet.FetchError`. `.status` is the same, but any code outside `app/` that catches `oldnet.FetchError` would need updating.\n2. Passing `timeout_ms <= 0` or a negative `retries` to `Poller` or `search` now raises `ValueError`, because newnet checks its inputs and oldnet didn't. That only matters for invalid values.",
+ "regraded": "api-migration grader fix: only list items count as listed files"
+}
