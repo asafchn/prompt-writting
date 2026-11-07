@@ -139,6 +139,9 @@ def report():
             mc = statistics.mean([(r["agent"].get("total_cost_usd") or 0) for r in rs])
             lines.append(f"| {t} | {a} | {pw} | {len(rs)} | {statistics.mean(sc):.2f} | {sum(bool(r['grade'].get('passed')) for r in rs)}/{len(rs)} | "
                          f"{sum(bool(r['grade'].get('gaming')) for r in rs)} | {mt:.0f} | {mm:.1f} | {mc:.2f} |")
+    lines.append("\n**Skill arm, cost of writing the brief (once per task, read-only exploration):** " + ", ".join(
+        f"{p.stem}: {json.loads(p.read_text()).get('num_turns')} turns, ${json.loads(p.read_text()).get('total_cost_usd') or 0:.2f}"
+        for p in sorted((RES / "writer").glob("*.json"))))
     lines.append("\n**Mean score over tasks (each task weighted equally):** " +
                  ", ".join(f"{a}: {statistics.mean(v):.2f}" for a, v in summary.items()))
     # paired by task and rep

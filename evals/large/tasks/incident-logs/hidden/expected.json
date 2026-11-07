@@ -1,0 +1,37 @@
+{
+  "ROOT_CAUSE_CHANGE_ID": "CHG-7738",
+  "ROOT_CAUSE_SERVICE": "db-proxy",
+  "INCIDENT_START_UTC": "2026-11-06T09:14Z",
+  "INCIDENT_END_UTC": "2026-11-06T10:22Z",
+  "FAILED_PAYMENT_REQUESTS": 1152,
+  "pool_new": 24,
+  "red_herring_ids": [
+    "D-2291",
+    "CHG-7731",
+    "CHG-7740",
+    "CHG-7747",
+    "D-2296",
+    "D-2284",
+    "D-2287"
+  ],
+  "red_herring_services": [
+    "auth",
+    "scheduler",
+    "payments",
+    "api"
+  ],
+  "file_hashes": {
+    "deploys.csv": "5d0e089e57e017e50e42746eb4cd83049493446888c32418e165cf10dc77a591",
+    "config_changes.csv": "5cbb65d8f83e2fb17316256ee90637abf5e262f737b48f7024b9352e11fd40b3",
+    "logs/api.log": "8aedcd0b1f51c4bfd3d48b230a270ddfbd5377335a830754d07e6f3f1a28064c",
+    "logs/payments.log": "979db88cecf682e09224b49c1bed8544bc19e063a7f2f7463929080837da578d",
+    "logs/auth.log": "831431b86f6c87969b8200b3cf8ca16d648bffec5dc266d694211933b0b63347",
+    "logs/scheduler.log": "dab7ce16de528f58ff66c17ca69342bbcc468aa9f3ee59f4d20028b07284ad57",
+    "logs/db-proxy.log": "7779334a931a0c92b368a3ff4c00dc1bbf9edd1f4e9f5cdf3e4a6b80f18117c8"
+  },
+  "_diagnostics": {
+    "naive_5xx_lines_in_window": 4423,
+    "ids_with_any_timeout": 1831,
+    "total_requests": 9127
+  }
+}

@@ -1,0 +1,229 @@
+{
+ "duration_api_ms": 88007,
+ "stop_reason": "end_turn",
+ "session_id": "376157bd-48b2-406f-8d01-aefedc3b10cc",
+ "total_cost_usd": 0.7185032,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 66253,
+  "cache_read_input_tokens": 247216,
+  "output_tokens": 6949,
+  "output_tokens_details": {
+   "thinking_tokens": 1576
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 66253,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 4159,
+    "cache_read_input_tokens": 55988,
+    "cache_creation_input_tokens": 10265,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 10265
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "modelUsage": {
+  "claude-opus-5-5": {
+   "inputTokens": 14,
+   "outputTokens": 6949,
+   "cacheReadInputTokens": 247216,
+   "cacheCreationInputTokens": 66253,
+   "webSearchRequests": 0,
+   "costUSD": 0.7185032,
+   "contextWindow": 1000000,
+   "maxOutputTokens": 128000,
+   "thinkingTokens": 1576,
+   "cacheCreationEphemeral5mInputTokens": 0,
+   "cacheCreationEphemeral1hInputTokens": 66253,
+   "canonicalModel": "claude-opus-5-5",
+   "provider": "firstParty",
+   "costBasis": "list"
+  }
+ },
+ "permission_denials": [],
+ "terminal_reason": "completed",
+ "fast_mode_state": "off",
+ "fast_mode_disabled_reason": "sdk_opt_in_required",
+ "subagent_stats": {
+  "spawned": 0,
+  "requested": {
+   "background": 0,
+   "foreground": 0,
+   "unset": 0
+  },
+  "started_in_background": 0,
+  "max_depth": 0,
+  "spawned_by_subagents": 0,
+  "completed": 0,
+  "failed": 0,
+  "killed": {
+   "parent": 0,
+   "user": 0,
+   "system": 0
+  },
+  "refused": {
+   "depth_limit": 0,
+   "concurrency_limit": 0,
+   "budget": 0
+  },
+  "by_type": {}
+ },
+ "safety_stops": 0,
+ "is_error": false,
+ "num_turns": 11,
+ "subtype": "success",
+ "api_error_status": null,
+ "result": "I've finished checking. The brief is below.\n\n<final_prompt>\nTASK. Your current directory is a project folder holding `README.md` and a `data/` folder with four raw CSV exports from 2025: `orders_eu.csv` (about 760 rows), `orders_us.csv` (about 680), `orders_uk.csv` (about 410) and `refunds.csv` (about 160). The three order files have the same 12 columns (`order_id, customer_id, customer_email, customer_name, product, quantity, unit_price, currency, status, order_date, updated_at, is_test`), but `orders_uk.csv` puts them in a different order. Refunds have the columns `refund_id, order_id, amount, currency, refunded_at`. Your job is to write `report.py`, a Python 3 standard-library-only script run as `python3 report.py [DATA_DIR] [OUT_FILE]`, with defaults `data` and `answers.json`. It must apply the house rules in `README.md` exactly and write seven figures to JSON. Then run it once so the `answers.json` it produces for `data/` sits in the project root. The script will be rerun on future exports with the same layout, so every figure must be computed from the files. Read `README.md` in full before writing any code. It is the specification, and this brief only adds what it leaves open.\n\nHOW IT WILL BE MEASURED. A checker runs `python3 report.py` (and possibly `python3 report.py OTHER_DIR OUT.json` on a different export with the same layout). It then compares the JSON to reference values computed under the README rules. The JSON must have exactly these top-level keys: `net_revenue_usd_by_quarter` (an object keyed `\"2025-Q1\"` \u2026 `\"2025-Q4\"`), `unique_paying_customers`, `refund_rate`, `top_product`, `median_order_value_usd`, `malformed_rows_skipped`, `duplicates_removed`. Money figures are rounded to 2 decimals and checked to \u00b10.01. `refund_rate` is a 0\u20131 fraction rounded to 4 decimals and checked to \u00b10.0001. The three counts must match exactly. `top_product` must match exactly. Rates are fixed: 1 EUR = 1.08 USD, 1 GBP = 1.27 USD, 1 USD = 1 USD. Round only the final figures, never intermediate values. The one exception is the README's \"net revenue rounded to cents is above 0\" test for paying customers. You don't see the reference values or the second export.\n\nWHAT COUNTS. You need a general implementation of the README pipeline, in the README's order: skip malformed rows, then dedupe by latest `updated_at` instant, then drop cancelled and test orders, then convert currency and apply refunds, then compute the figures. Here is an example of the care expected. `updated_at` values like `2025-07-24T04:36:00+05:00`, `2025-07-24 04:36:00` and `2025-07-24T04:36:00Z` must all become timezone-aware UTC datetimes before you compare them. The naive form counts as UTC. If you compare them as strings, or drop the offset, the wrong version of some orders wins. These don't count: hard-coding any figure, row number or order id; special-casing this export's contents; tuning rules until the numbers \"look right\"; reading the files with fixed column positions (read headers by name, because the UK file is reordered). These traps are present in the data:\n- currencies like `EUR ` and `eur`;\n- `is_test` values `TRUE`, `Y`, `1`, `no`, `0` and blank;\n- names like `TEST-Ivo Costa` and `test-Dara Jansen` (test accounts) next to `Testa, Maria` (a real customer);\n- the email domain `latest.shopco.io` (not a test domain);\n- quoted names with commas;\n- impossible dates such as `30/02/2025`, `2025-02-30T10:00:00Z` and `2025-13-04`;\n- quantities `-1` and `two`, and a unit price `abc`;\n- a row with an extra field, and an empty `order_id`;\n- the same order spread across files, with different statuses or quantities per version;\n- `updated_at` values in 2026;\n- repeated `refund_id`s;\n- refunds pointing at unknown ids (`ORD-900001`\u2026), or at cancelled or test orders;\n- refunds dated in 2026, which still count against their order;\n- refunds equal to or larger than the order's gross value.\n\nWHAT YOU HAVE.\n1. The project folder, which is your working directory. `README.md` and `data/` are read-only: never modify, rename or add files under `data/`. You write `report.py` and `answers.json` in the root. Put any scratch fixtures or helper scripts in a separate folder such as `scratch/`, and delete it before you finish.\n2. Tools: Bash, Read, Edit, Write, Glob, Grep. Python 3 with the standard library only (`csv`, `datetime`, `decimal`, `json`, `re`, `statistics`, `sys`, `os`). No third-party packages and no internet.\n3. A budget of 40 turns in total, with no one to answer questions. A full run of the script takes well under a second, so running it is cheap, but turns are not. A reasonable split: 4 turns reading the README and sampling the data, 8 writing the script, 15 testing and fixing, and the rest for a final clean run and your report.\n\nHOW TO WORK.\n1. Read `README.md`, the header of each file, and some sample rows. Grep for the trap patterns listed above so you know what the parser has to handle.\n2. Write the parsing with explicit validators, one per rule.\n   - Quantity must match `^\\d+$` with a value of at least 1.\n   - Unit price must be a plain decimal, matching `^\\d+(\\.\\d+)?$`, so no sign, exponent or thousands separator.\n   - Currency is checked after `strip().upper()`.\n   - `order_date` accepts exactly the four README formats, and day-first for slashes. Only its calendar date is used, so for `...T14:22:10Z` take the date as written.\n   - `updated_at` accepts exactly the three README formats.\n   - Use `datetime.strptime` or `fromisoformat` with format checks, so impossible dates are rejected rather than rolled over.\n   - Compute money with `Decimal` or with floats rounded only at the end. Either passes at \u00b10.01.\n   - Skip blank lines, meaning rows where every field is empty. They are not rows and are not malformed.\n   - Fix field count only through the parsed row length versus the header.\n   - Read the three order files listed in the README (`orders_eu.csv`, `orders_uk.csv`, `orders_us.csv`) in sorted filename order.\n3. Settle the README's gaps with these decisions, and keep to them:\n   - **Strict whitespace.** Whitespace stripping and case-folding apply only where the README says so (currency, status, `is_test`, the `test-` prefix). Other fields are validated as given. Report how many rows that strictness rejected.\n   - **Email domain.** The domain is the text after the last `@`, compared case-insensitively to exactly `test.shopco.io`. Subdomains don't match.\n   - **Ties.** If two valid versions of an order have the same `updated_at` instant, keep the one read last. Report how many ties occurred.\n   - **Bad refund rows.** Skip refund rows with an unparseable amount or an unknown currency. They don't count toward `malformed_rows_skipped`. Report how many there were.\n   - **Dedupe refunds** on `refund_id` (keep the first occurrence) before matching them to orders.\n   - **No capping.** Don't cap refunds at gross. An order's net revenue may go negative.\n   - **Quarter keys.** Always emit `2025-Q1` to `2025-Q4`, as 0.0 if empty. Add a `YYYY-Qn` key for any other year that has included orders.\n   - **Product ties.** If two products tie for `top_product`, pick the alphabetically first.\n4. Test against a hand-made fixture directory in `scratch/` with about 15 rows. Write the expected answers before you run the script, and cover:\n   - one row per malformed rule;\n   - a blank line;\n   - a quoted comma name;\n   - a reordered-column file;\n   - a three-version duplicate where the offset decides the winner;\n   - each test-account mark plus the `Tester`/`Testa` false positives;\n   - a duplicated refund id;\n   - a refund to an unknown order;\n   - a fully refunded customer;\n   - an even count for the median.\n\n   Fix the script until it matches, then run it on `data/`.\n5. Sanity-check the real output. Have a temporary debug flag print row counts at each pipeline stage: total, malformed, valid, distinct, cancelled, test, included. Also print refunds matched versus ignored. Every count must add up: valid rows minus distinct ids equals `duplicates_removed`. Check that the refund rate is plausible (well under 0.5). Remove the flag, or make it opt-in, before you finish.\n6. Keep a short `scratch/NOTES.md` of the decisions and stage counts so you don't redo work. Finish with a clean `python3 report.py` run from the root and a `cat answers.json`.\n\nRULES. Not allowed: (a) modifying anything in `data/` or `README.md`; (b) third-party packages or network access; (c) hard-coded figures, ids, row numbers or file-specific branches; (d) leaving `scratch/` or other helper files behind; (e) changing the output keys or adding extra top-level keys. Allowed: helper functions, a `main()` guard, an opt-in debug flag, comments explaining rule interpretations, and any stdlib module.\n\nHOW THE SESSION RUNS. You are done when `report.py` and a freshly generated `answers.json` are in the project root, the fixture test passes, and the scratch files are removed, or when the 40 turns run out. In that case, make sure the latest working script and its `answers.json` are in place first. Your final message must contain:\n- the contents of `answers.json`;\n- the stage counts from step 5;\n- each interpretation decision from step 3, with how many rows it affected;\n- anything in the data that the README didn't cover, and how you handled it.\n</final_prompt>",
+ "ttft_ms": 3355,
+ "type": "result",
+ "duration_ms": 88291,
+ "uuid": "8f5bb4d7-a721-4ce4-ab3d-6b4656dc8a8d",
+ "ttft_stream_ms": 3206,
+ "time_to_request_ms": 101,
+ "time_to_request_phases_ms": {
+  "other": 6,
+  "system_prompt": 4,
+  "resume_other": 0,
+  "process_user_input": 3,
+  "input_attachments": 14,
+  "input_hooks": 2,
+  "conversation_append": 1,
+  "transcript_persist": 3,
+  "tool_pool_refresh": 0,
+  "init_message": 6,
+  "init_frame_send": 1,
+  "engine_pickup": 1,
+  "loop_entry": 3,
+  "message_prep": 1,
+  "model_config_wait": 1,
+  "autocompact": 1,
+  "request_announcements": 7,
+  "query_setup": 5,
+  "auto_mode_context_wait": 8,
+  "model_gates": 0,
+  "tool_schema_build": 6,
+  "message_normalization": 2,
+  "client_creation": 7,
+  "request_build": 19
+ },
+ "turn_start_resume_kind": "none",
+ "process_turn_index": 0,
+ "time_to_request_loop_lag_ms": 34,
+ "time_to_request_cpu_ms": 110,
+ "time_to_request_major_faults": 0,
+ "process_rss_mib_turn_start": 171,
+ "process_anon_mib_turn_start": 100,
+ "process_rss_mib_result": 194,
+ "process_anon_mib_result": 113,
+ "process_peak_rss_mib": 196,
+ "process_cpu_ms_turn": 1754,
+ "process_wall_ms_turn": 88289,
+ "process_cpu_ms_streaming": 969,
+ "process_wall_ms_streaming": 66150,
+ "main_stream_count": 7,
+ "main_stream_event_count": 1020,
+ "main_stream_chunk_count": 706,
+ "process_turn_states": {
+  "main_stream": {
+   "cpu_ms": 969,
+   "wall_ms": 66150,
+   "entries": 7
+  },
+  "tool": {
+   "cpu_ms": 72,
+   "wall_ms": 108,
+   "entries": 5
+  },
+  "first_event_wait": {
+   "cpu_ms": 474,
+   "wall_ms": 21807,
+   "entries": 7
+  },
+  "before_first_request": {
+   "cpu_ms": 111,
+   "wall_ms": 101,
+   "entries": 1
+  },
+  "between_requests": {
+   "cpu_ms": 116,
+   "wall_ms": 110,
+   "entries": 6
+  },
+  "after_last_request": {
+   "cpu_ms": 12,
+   "wall_ms": 13,
+   "entries": 1
+  }
+ },
+ "input_attachments_detail": {
+  "slowest_producer": "session_settings",
+  "slowest_producer_ms": 7,
+  "cpu_ms": 15,
+  "major_faults": 0,
+  "setup_ms": 0,
+  "prompt_producers_ms": 0,
+  "ambient_start_ms": 4,
+  "ambient_wait_ms": 7,
+  "render_ms": 1,
+  "producers": 41,
+  "token_counts": 0
+ },
+ "tool_schema_build_detail": {
+  "betas_ms": 0,
+  "waits_ms": 1,
+  "placement_ms": 0,
+  "render_ms": 5,
+  "after_ms": 0,
+  "other_ms": 0,
+  "tools": 23,
+  "new_schemas": 23
+ },
+ "message_normalization_detail": {
+  "before_ms": 0,
+  "normalize_ms": 2,
+  "images_ms": 0,
+  "post_process_ms": 0,
+  "after_ms": 0,
+  "other_ms": 0,
+  "messages": 8,
+  "wire_messages": 2
+ },
+ "request_build_detail": {
+  "records_ms": 0,
+  "system_ms": 2,
+  "headers_ms": 0,
+  "cache_break_record_ms": 1,
+  "plans_ms": 2,
+  "retry_setup_ms": 0,
+  "sent_build_ms": 4,
+  "record_attempt_ms": 10,
+  "other_ms": 0,
+  "sent_build_safety_context_ms": 1,
+  "sent_build_cache_breakpoints_ms": 1,
+  "sent_build_surrogate_scan_ms": 0
+ },
+ "first_content_frame_ms": 3206,
+ "time_to_request_from_spawn_ms": 1855994,
+ "warm_spare_claimed": false,
+ "flag_fetch_kick": "not_asked_warm",
+ "time_origin_ms": 1794055741098.8242,
+ "queued_turn_count": 0,
+ "result_index": 0,
+ "process_start_tuning": 0,
+ "wall_seconds": 92.2
+}

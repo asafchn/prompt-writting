@@ -1,0 +1,7 @@
+change_id,service,key,old_value,new_value,applied_at_utc,author,note
+CHG-7731,auth,log.level,DEBUG,INFO,2026-11-06T07:15:02Z,m.lind,tidy log noise
+CHG-7734,db-proxy,stmt_cache_size,512,1024,2026-11-06T09:05:01Z,j.park,cache tuning
+CHG-7738,db-proxy,pool.max_connections,200,24,2026-11-06T09:12:40Z,j.park,align pool sizing with new db tier
+CHG-7740,api,ratelimit.payments.burst,300,600,2026-11-06T09:31:18Z,oncall,absorb client retries
+CHG-7745,db-proxy,pool.max_connections,24,200,2026-11-06T10:21:30Z,oncall,revert pool sizing
+CHG-7747,api,ratelimit.payments.burst,600,300,2026-11-06T10:40:05Z,oncall,restore default

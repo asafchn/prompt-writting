@@ -1,0 +1,14 @@
+{
+  "net_revenue_usd_by_quarter": {
+    "2025-Q1": 27790.29,
+    "2025-Q2": 21644.73,
+    "2025-Q3": 29003.8,
+    "2025-Q4": 29320.18
+  },
+  "unique_paying_customers": 290,
+  "refund_rate": 0.0819,
+  "top_product": "Rain Shell",
+  "median_order_value_usd": 86.58,
+  "malformed_rows_skipped": 41,
+  "duplicates_removed": 356
+}

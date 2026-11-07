@@ -1,0 +1,678 @@
+order_id,customer_id,customer_email,customer_name,product,quantity,unit_price,currency,status,order_date,updated_at,is_test
+ORD-100305,C00091,tariq.silva91@post.example.net,"Silva, Tariq",Rain Shell,1,174.52,USD,shipped,2025-08-03,2025-08-04 07:26:00,
+ORD-100667,C00028,ana.moreau28@inbox.example.org,Ana Moreau,Insulated Bottle,1,28.29,USD,shipped,2025-10-09,2025-10-09 06:14:00,0
+ORD-100142,C00263,mateo.rossi263@inbox.example.org,Mateo Rossi,Trail Runner Shoe,3,95.31,USD,Cancelled,"Dec 20, 2025",2025-12-21T01:17:00+03:00,0
+ORD-101043,C00181,hana.ito181@inbox.example.org,"Ito, Hana",Headlamp,2,37.33,USD,completed,2025-06-26,2025-06-26 19:12:00,0
+ORD-101094,C00224,chen.ito224@mail.example.com,"Ito, Chen",Headlamp,5,38.20,USD,completed,13/01/2025,2025-01-14 04:59:00,no
+ORD-101036,C00183,mateo.kowalski183@mail.example.com,"Kowalski, Mateo",Trail Runner Shoe,1,96.04,USD,completed,2025-05-11T02:30:39Z,2025-05-11 14:26:00,
+ORD-101276,C00141,hana.moreau141@mail.example.com,Hana Moreau,Trail Runner Shoe,1,67.30,GBP,cancelled,"Aug 16, 2025",2025-08-16 05:18:00,0
+ORD-100194,C00108,viktor.silva108@inbox.example.org,"Silva, Viktor",Headlamp,5,39.65,USD,delivered,18/10/2025,2025-10-18T06:40:00-04:00,
+ORD-100476,C00133,uma.lopez133@mail.example.com,Uma Lopez,Dry Bag 20L,3,30.06,USD,completed,22/04/2025,2025-04-22T10:49:00Z,
+ORD-101428,C00217,ivo.costa217@mail.example.com,TEST-Ivo Costa,Merino Base Layer,3,64.84,USD,shipped,2025-12-17,2025-12-20T11:45:00+02:00,0
+ORD-100856,C00049,viktor.novak49@mail.example.com,Viktor Novak,Wool Beanie,2,24.50,USD,delivered,2025-09-22,2025-09-23 02:59:00,false
+ORD-101353,C00232,quinn.silva232@inbox.example.org,Quinn Silva,Trail Runner Shoe,1,93.66,USD,completed,2025-09-10T21:43:15Z,2025-09-10 10:57:00,no
+ORD-100391,C00139,goran.dubois139@inbox.example.org,Goran Dubois,Dry Bag 20L,2,30.25,USD,completed,"Jan 31, 2025",2025-02-01T03:43:00Z,no
+ORD-100211,C00244,eli.brandt244@inbox.example.org,Eli Brandt,Headlamp,3,41.34,USD,delivered,"Sep 20, 2025",2025-09-21T06:52:00+05:00,
+ORD-100105,C00239,quinn.rossi239@mail.example.com,Quinn Rossi,Headlamp,2,38.08,USD,completed,"Oct 2, 2025",2025-10-02 08:38:00,false
+ORD-100046,C00059,tariq.rossi59@mail.example.com,Tariq Rossi,Wool Beanie,2,21.61,USD,completed,"Dec 27, 2025",2025-12-28 00:18:00,FALSE
+ORD-100933,C00122,viktor.petrov122@inbox.example.org,"Petrov, Viktor",Wool Beanie,2,25.76,USD,completed,2025-06-10T14:23:37Z,2025-06-10T11:10:00Z,false
+ORD-100203,C00246,kofi.lopez246@inbox.example.org,"Lopez, Kofi",Dry Bag 20L,2,34.76,USD,delivered,"Aug 9, 2025",2025-08-09 07:22:00,0
+ORD-100546,C00304,ivo.garcia304@inbox.example.org,TEST-Ivo Garcia,Dry Bag 20L,1,30.37,USD,delivered,2025-04-25,2025-04-25T22:43:00+02:00,FALSE
+ORD-100258,C00226,ivo.kowalski226@post.example.net,Ivo Kowalski,Gaiters,1,39.23,USD,completed,2025-11-06,2025-11-07T00:49:00+02:00,
+ORD-101451,C00301,ivo.brandt301@post.example.net,Ivo Brandt,Down Vest,4,128.63,USD,completed,"Sep 28, 2025",2025-09-30T18:17:00+02:00,FALSE
+ORD-100345,C00262,mateo.rossi262@mail.example.com,"Rossi, Mateo",Trail Runner Shoe,2,92.02,USD,shipped,21/03/2025,2025-03-21T23:34:00Z,FALSE
+ORD-101085,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Gaiters,5,38.37,USD,shipped,"Jan 28, 2025",2025-01-29 04:28:00,yes
+ORD-100652,C00221,ben.eriksen221@post.example.net,Ben Eriksen,Wool Beanie,3,23.83,USD,completed,2025-06-08T13:38:51Z,2025-06-09 19:53:00,FALSE
+ORD-100110,C00200,goran.costa200@mail.example.com,Goran Costa,Headlamp,1,36.92,USD,completed,2025-01-15T02:59:42Z,2025-01-15T10:22:00-04:00,no
+ORD-100802,C00278,nia.eriksen278@mail.example.com,Nia Eriksen,Hiking Pole Pair,4,80.70,USD,delivered,2025-12-17T20:48:48Z,2025-12-17T14:49:00Z,
+ORD-100419,C00202,jun.garcia202@inbox.example.org,Jun Garcia,Gaiters,2,32.87,USD,completed,2025-05-20T16:05:10Z,2025-05-20T14:54:00-04:00,no
+ORD-100918,C00146,viktor.okafor146@mail.example.com,Viktor Okafor,Down Vest,4,123.28,USD,delivered,"Dec 22, 2025",2025-12-23T03:31:00Z,FALSE
+ORD-101394,C00272,fatima.ito272@post.example.net,Fatima Ito,Trail Runner Shoe,1,97.50,USD,completed,"Dec 10, 2025",2025-12-10 14:06:00,no
+ORD-100014,C00017,priya.holm17@post.example.net,Priya Holm,Dry Bag 20L,1,33.22,USD,completed,2025-12-01T10:48:06Z,2025-12-02 01:05:00,false
+ORD-100803,C00130,quinn.moreau130@post.example.net,Quinn Moreau,Insulated Bottle,2,28.70,USD,Cancelled,06/07/2025,2025-07-06T17:47:00Z,false
+ORD-100379,C00153,lena.rossi153@mail.example.com,Lena Rossi,Headlamp,1,35.87,USD,completed,22/09/2025,2025-09-23T03:31:00Z,no
+ORD-100069,C00017,priya.holm17@post.example.net,Priya Holm,Dry Bag 20L,1,30.89,USD,delivered,24/09/2025,2025-09-24T15:28:00+03:00,no
+ORD-101027,C00170,ben.ito170@inbox.example.org,Ben Ito,Camp Mug,4,14.33,USD,delivered,11/07/2025,2025-07-11 14:55:00,TRUE
+ORD-100178,C00080,ana.alvarez80@mail.example.com,Ana Alvarez,Merino Base Layer,5,63.23,USD,completed,2025-03-27T07:26:13Z,2025-03-28T03:21:00+05:00,TRUE
+ORD-100992,C00093,goran.jansen93@post.example.net,Goran Jansen,Gaiters,3,38.18,USD,completed,2025-03-19,2025-03-19T11:53:00-04:00,FALSE
+ORD-100732,C00064,fatima.garcia64@inbox.example.org,"Garcia, Fatima",Gaiters,1,38.12,USD,shipped,2025-04-26T18:18:27Z,2025-04-26T08:24:00Z,0
+ORD-100644,C00259,qa258@test.shopco.io,"Silva, Lena",Wool Beanie,3,21.89,USD,completed,"Dec 9, 2025",2025-12-09 10:53:00,0
+ORD-100880,C00016,quinn.moreau16@mail.example.com,Quinn Moreau,Headlamp,2,39.69,EUR,cancelled,"Aug 16, 2025",2025-08-17T15:05:00Z,0
+ORD-101304,C00290,qa289@test.shopco.io,Dara Ito,Down Vest,1,134.04,USD,canceled,2025-08-18T11:59:33Z,2025-08-18T19:56:00Z,no
+ORD-100206,C00295,dara.eriksen295@inbox.example.org,Dara Eriksen,Merino Base Layer,4,61.01,USD,delivered,"Jul 4, 2025",2025-07-04T15:12:00Z,
+ORD-101031,C00288,nia.lopez288@inbox.example.org,Nia Lopez,Dry Bag 20L,3,28.92,USD,delivered,2025-10-07,2025-10-07T20:33:00-04:00,false
+ORD-100388,C00217,ivo.costa217@mail.example.com,TEST-Ivo Costa,Dry Bag 20L,2,32.82,USD,shipped,"Jan 6, 2025",2025-01-06T22:32:00Z,FALSE
+ORD-100347,C00154,omar.okafor154@inbox.example.org,Test-Omar Okafor,Dry Bag 20L,2,32.53,USD,delivered,2025-02-09T18:29:21Z,2025-02-10T09:08:00+05:00,0
+ORD-101248,C00304,ivo.garcia304@inbox.example.org,TEST-Ivo Garcia,Merino Base Layer,1,59.07,USD,completed,07/07/2025,2025-07-07T08:35:00+03:00,0
+ORD-100663,C00035,hana.fischer35@mail.example.com,Hana Fischer,Insulated Bottle,2,31.54,USD,delivered,2025-08-27T19:27:06Z,2025-08-27T19:41:00Z,
+ORD-100332,C00198,rosa.moreau198@inbox.example.org,Rosa Moreau,Rain Shell,2,164.75,USD,delivered,2025-08-10,2025-08-11T00:08:00Z,false
+ORD-100149,C00217,ivo.costa217@mail.example.com,TEST-Ivo Costa,Dry Bag 20L,5,29.90,USD,completed,29/09/2025,2025-09-29T06:54:00+03:00,false
+ORD-100768,C00281,jun.novak281@post.example.net,Jun Novak,Insulated Bottle,4,"12,99x",USD,delivered,2025-11-26,2025-11-26T21:19:00+03:00,FALSE
+ORD-100830,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Rain Shell,1,162.19,USD,completed,2025-12-02T22:27:01Z,2025-12-03T09:35:00+05:00,Y
+ORD-100186,C00316,sven.garcia316@inbox.example.org,Sven Garcia,Trail Runner Shoe,1,86.67,USD,shipped,2025-08-07T13:40:04Z,2025-08-07T08:30:00Z,
+ORD-100983,C00109,goran.fischer109@inbox.example.org,Goran Fischer,Trail Runner Shoe,1,95.71,USD,completed,2025-10-12,2025-10-12T23:28:00+02:00,
+ORD-100946,C00223,omar.alvarez223@post.example.net,Omar Alvarez,Down Vest,2,117.92,USD,completed,19/03/2025,2025-03-19T11:15:00+02:00,Y
+ORD-100295,C00039,hana.ito39@inbox.example.org,Hana Ito,Headlamp,1,37.38,USD,shipped,06/11/2025,2025-11-07 17:16:00,FALSE
+ORD-100448,C00007,mateo.garcia7@inbox.example.org,"Garcia, Mateo",Headlamp,2,39.96,USD,shipped,"May 6, 2025",2025-05-06 12:26:00,no
+ORD-100802,C00278,nia.eriksen278@mail.example.com,Nia Eriksen,Hiking Pole Pair,4,80.70,USD,CANCELLED,"Dec 17, 2025",2025-12-17T19:34:00+03:00,
+ORD-100687,C00070,goran.ito70@inbox.example.org,Goran Ito,Gaiters,2,38.10,USD,completed,14/07/2025,2025-07-14T13:04:00Z,FALSE
+ORD-101062,C00218,eli.brandt218@post.example.net,"Brandt, Eli",Merino Base Layer,1,60.80,USD,completed,"Aug 28, 2025",2025-08-28T18:14:00+05:00,no
+ORD-101231,C00311,quinn.kowalski311@mail.example.com,TEST-Quinn Kowalski,Trail Runner Shoe,4,93.12,USD,delivered,31/08/2025,2025-08-31T17:43:00Z,no
+ORD-101252,C00230,quinn.moreau230@inbox.example.org,"Moreau, Quinn",Insulated Bottle,4,28.42,EUR,shipped,2025-04-21T14:32:24Z,2025-04-21 14:35:00,Y
+ORD-101221,C00029,quinn.eriksen29@inbox.example.org,Quinn Eriksen,Gaiters,4,36.34,USD,completed,13/05/2025,2025-05-13 11:00:00,false
+ORD-101277,C00094,chen.ito94@post.example.net,Chen Ito,Wool Beanie,2,24.85,USD,delivered,"Oct 26, 2025",2025-10-26T21:32:00+02:00,false
+ORD-101420,C00148,goran.moreau148@mail.example.com,Goran Moreau,Down Vest,1,141.37,USD,shipped,28/06/2025,2025-06-28 11:58:00,no
+ORD-100332,C00198,rosa.moreau198@inbox.example.org,Rosa Moreau,Rain Shell,2,164.75,USD,cancelled,2025-08-10,2025-08-11T06:15:00+05:00,
+,C00259,qa258@test.shopco.io,"Silva, Lena",Camp Mug,2,14.97,USD,completed,"Feb 8, 2025",2025-02-08 19:39:00,0
+ORD-101072,C00302,jun.dubois302@post.example.net,Jun Dubois,Fleece Pullover,5,81.20,usd,delivered,2025-12-15,2025-12-15T09:25:00Z,0
+ORD-100652,C00221,ben.eriksen221@post.example.net,Ben Eriksen,Wool Beanie,1,23.83,USD,shipped,"Jun 8, 2025",2025-06-08 06:06:00,false
+ORD-100778,C00308,priya.garcia308@inbox.example.org,Priya Garcia,Down Vest,1,134.32,USD,completed,2025-12-22T08:27:17Z,2025-12-22T20:07:00Z,no
+ORD-101468,C00029,quinn.eriksen29@inbox.example.org,Quinn Eriksen,Trail Runner Shoe,3,85.64,USD,shipped,2025-01-12T18:41:27Z,2025-01-11T21:55:00-04:00,false
+ORD-100028,C00292,uma.costa292@mail.example.com,"Costa, Uma",Wool Beanie,3,21.91,USD,completed,17/10/2025,2025-10-20T19:19:00+03:00,FALSE
+ORD-101204,C00086,kofi.dubois86@post.example.net,Kofi Dubois,Dry Bag 20L,1,27.78,EUR,cancelled,2025-05-12T08:21:00Z,2025-05-12T11:43:00Z,FALSE
+ORD-101208,C00055,fatima.novak55@mail.example.com,Fatima Novak,Wool Beanie,4,21.66,USD,shipped,"Jan 29, 2025",2025-01-31T14:12:00+05:00,FALSE
+ORD-100582,C00326,qa325@test.shopco.io,Uma Holm,Gaiters,2,26.34,GBP,cancelled,07/03/2025,2025-03-07 23:53:00,
+ORD-100826,C00255,uma.fischer255@post.example.net,Uma Fischer,Wool Beanie,2,24.17,USD,shipped,"Feb 17, 2025",2025-02-17T12:55:00+05:00,
+ORD-100835,C00153,lena.rossi153@mail.example.com,Lena Rossi,Wool Beanie,1,22.16,USD,delivered,07/05/2025,2025-05-08T01:26:00Z,
+ORD-100654,C00120,kofi.rossi120@post.example.net,"Rossi, Kofi",Fleece Pullover,1,67.32,USD,delivered,"Mar 12, 2025",2025-03-13T04:01:00+02:00,no
+ORD-101395,C00128,qa127@test.shopco.io,Lena Fischer,Rain Shell,3,172.53,USD,delivered,16/07/2025,2025-07-16 09:13:00,0
+ORD-100104,C00239,quinn.rossi239@mail.example.com,Quinn Rossi,Gaiters,5,37.33,USD,shipped,2025-11-10T23:13:23Z,2025-11-10T07:33:00+02:00,
+ORD-100884,C00323,dara.jansen323@post.example.net,test-Dara Jansen,Fleece Pullover,5,70.89,EUR,CANCELLED,30/05/2025,2025-05-30T13:39:00+03:00,FALSE
+ORD-100124,C00027,viktor.silva27@inbox.example.org,Viktor Silva,Camp Mug,3,14.97,USD,completed,"Aug 10, 2025",2025-08-10T23:44:00-04:00,no
+ORD-100401,C00118,mateo.moreau118@mail.example.com,Mateo Moreau,Trail Runner Shoe,1,84.21,USD,completed,2025-11-20T22:42:09Z,2025-11-20 09:39:00,false
+ORD-101217,C00311,quinn.kowalski311@mail.example.com,TEST-Quinn Kowalski,Camp Mug,1,14.46,USD,shipped,04/07/2025,2025-07-04T04:08:00+02:00,0
+ORD-100623,C00154,omar.okafor154@inbox.example.org,Test-Omar Okafor,Fleece Pullover,2,68.14,USD,completed,2025-12-22T04:03:46Z,2025-12-22 23:21:00,FALSE
+ORD-100393,C00324,quinn.brandt324@mail.example.com,Quinn Brandt,Camp Mug,2,14.77,USD,shipped,2025-06-06,2025-06-06 16:07:00,no
+ORD-100056,C00043,qa42@test.shopco.io,Omar Kowalski,Merino Base Layer,2,61.14,USD,completed,2025-06-05,2025-06-07T06:54:00Z,false
+ORD-101088,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Trail Runner Shoe,1,84.41,USD,shipped,2025-06-20,2025-06-20T17:04:00Z,1
+ORD-100533,C00145,ivo.jansen145@post.example.net,Ivo Jansen,Hiking Pole Pair,2,75.27,USD,shipped,2025-08-27T17:58:21Z,2025-08-27T21:50:00Z,
+ORD-100615,C00080,ana.alvarez80@mail.example.com,Ana Alvarez,Merino Base Layer,5,68.37,USD,completed,29/05/2025,2025-05-29T12:39:00Z,yes
+ORD-100752,C00077,hana.costa77@post.example.net,"Costa, Hana",Rain Shell,2,159.39,USD,canceled,2025-11-02,2025-11-05T10:37:00-04:00,false
+ORD-100881,C00056,ana.silva56@mail.example.com,"Silva, Ana",Down Vest,1,118.78,USD,completed,21/05/2025,2025-05-21T17:46:00+03:00,false
+ORD-100289,C00080,ana.alvarez80@mail.example.com,Ana Alvarez,Headlamp,5,37.02,USD,shipped,18/10/2025,2025-10-18 06:32:00,1
+ORD-100068,C00128,qa127@test.shopco.io,Lena Fischer,Gaiters,1,35.25,USD,cancelled,19/08/2025,2025-08-19T14:06:00+05:00,false
+ORD-100368,C00080,ana.alvarez80@mail.example.com,Ana Alvarez,Merino Base Layer,3,63.20,USD,completed,2025-11-07T09:31:22Z,2025-11-07T11:47:00Z,yes
+ORD-100318,C00177,ben.fischer177@inbox.example.org,Ben Fischer,Dry Bag 20L,1,26.73,EUR,shipped,2025-06-07T21:49:25Z,2025-06-07 14:13:00,no
+ORD-100182,C00278,nia.eriksen278@mail.example.com,Nia Eriksen,Headlamp,1,38.56,USD,completed,2025-10-15T01:34:41Z,2025-10-15T11:33:00-04:00,false
+ORD-100875,C00301,ivo.brandt301@post.example.net,Ivo Brandt,Dry Bag 20L,3,29.49,USD,completed,2025-03-19,2025-03-19T17:08:00Z,false
+ORD-100662,C00062,qa61@test.shopco.io,Mateo Jansen,Fleece Pullover,4,76.43,USD,shipped,2025-04-29,2025-04-30T01:05:00Z,0
+ORD-100834,C00259,qa258@test.shopco.io,"Silva, Lena",Down Vest,2,127.19,USD,completed,"Nov 21, 2025",2025-11-21 11:01:00,no
+ORD-100488,C00275,ana.moreau275@post.example.net,Ana Moreau,Hiking Pole Pair,1,76.97,USD,completed,2025-08-27,2025-08-27T10:55:00+02:00,0
+ORD-100472,C00200,goran.costa200@mail.example.com,Goran Costa,Trail Runner Shoe,1,93.02,USD,completed,2025-09-10T03:10:35Z,2025-09-10T14:53:00Z,no
+ORD-100136,C00304,ivo.garcia304@inbox.example.org,TEST-Ivo Garcia,Gaiters,2,33.49,USD,completed,2025-01-28,2025-01-28T16:35:00+05:00,FALSE
+ORD-100058,C00087,ben.alvarez87@post.example.net,Ben Alvarez,Camp Mug,4,15.53,USD,completed,2025-06-08T18:36:18Z,2025-06-08T08:33:00Z,FALSE
+ORD-100637,C00019,viktor.lopez19@inbox.example.org,Viktor Lopez,Gaiters,3,34.71,USD,shipped,09/12/2025,2025-12-09T22:34:00-04:00,false
+ORD-101390,C00230,quinn.moreau230@inbox.example.org,"Moreau, Quinn",Insulated Bottle,2,31.59,USD,CANCELLED,2025-12-05,2025-12-07T04:14:00Z,yes
+ORD-100862,C00167,ana.lopez167@inbox.example.org,"Lopez, Ana",Merino Base Layer,2,62.41,USD,completed,2025-03-04T06:02:14Z,2025-03-04T13:45:00Z,0
+ORD-101132,C00062,qa61@test.shopco.io,Mateo Jansen,Wool Beanie,1,23.49,USD,completed,"Dec 11, 2025",2025-12-11T18:11:00+03:00,
+ORD-100611,C00283,mateo.novak283@mail.example.com,Mateo Novak,Wool Beanie,3,25.78,USD,completed,"Apr 1, 2025",2025-04-01T18:33:00Z,
+ORD-101278,C00043,qa42@test.shopco.io,Omar Kowalski,Headlamp,4,30.35,GBP,completed,2025-08-28,2025-08-29T21:38:00+05:00,0
+ORD-100339,C00185,fatima.okafor185@inbox.example.org,Fatima Okafor,Dry Bag 20L,2,31.51,EURO,completed,2025-05-18T11:33:13Z,2025-05-19 06:31:00,0
+ORD-100655,C00033,lena.alvarez33@inbox.example.org,Lena Alvarez,Fleece Pullover,3,76.46,USD,CANCELLED,"Feb 5, 2025",2025-02-06T02:49:00Z,
+ORD-101208,C00055,fatima.novak55@mail.example.com,Fatima Novak,Wool Beanie,2,21.66,USD,completed,"Jan 29, 2025",2025-01-29T05:05:00Z,no
+ORD-101470,C00269,rosa.rossi269@inbox.example.org,Rosa Rossi,Down Vest,1,139.22,USD,delivered,2025-09-06T00:21:36Z,2025-09-06 07:11:00,no
+ORD-100909,C00043,qa42@test.shopco.io,Omar Kowalski,Camp Mug,3,13.67,USD,completed,2025-12-14,2025-12-14 11:11:00,0
+ORD-101468,C00029,quinn.eriksen29@inbox.example.org,Quinn Eriksen,Trail Runner Shoe,3,85.64,USD,delivered,"Jan 12, 2025",2025-01-12T05:12:00+02:00,0
+ORD-101253,C00073,priya.eriksen73@mail.example.com,Priya Eriksen,Fleece Pullover,1,57.22,GBP,completed,2025-03-05,2025-03-05T20:39:00-04:00,
+ORD-100446,C00154,omar.okafor154@inbox.example.org,Test-Omar Okafor,Gaiters,1,38.61,USD,delivered,22/05/2025,2025-05-22 05:29:00,no
+ORD-100131,C00094,chen.ito94@post.example.net,Chen Ito,Camp Mug,2,abc,USD,shipped,03/08/2025,2025-08-03 15:18:00,FALSE
+ORD-100577,C00207,quinn.eriksen207@post.example.net,Quinn Eriksen,Hiking Pole Pair,3,77.31,USD,delivered,2025-03-17,2025-03-17T14:21:00+03:00,0
+ORD-100628,C00297,rosa.jansen297@inbox.example.org,TEST-Jansen Rosa,Wool Beanie,5,22.40,USD,delivered,"Apr 6, 2025",2025-04-06 22:48:00,FALSE
+ORD-100637,C00019,viktor.lopez19@inbox.example.org,Viktor Lopez,Gaiters,4,34.71,USD,shipped,2025-12-09,2025-12-10T02:02:00Z,FALSE
+ORD-101073,C00302,jun.dubois302@post.example.net,Jun Dubois,Trail Runner Shoe,2,90.80,USD,completed,14/06/2025,2025-06-14 14:05:00,0
+ORD-101101,C00010,viktor.holm10@post.example.net,Viktor Holm,Headlamp,2,38.32,USD,shipped,"Apr 29, 2025",2025-04-29T20:19:00-04:00,0
+ORD-100321,C00125,ben.costa125@inbox.example.org,Ben Costa,Insulated Bottle,4,27.36,USD,completed,2025-10-06T18:09:53Z,2025-10-06T07:24:00+02:00,false
+ORD-100922,C00148,goran.moreau148@mail.example.com,Goran Moreau,Fleece Pullover,4,72.56,EUR,shipped,19/08/2025,2025-08-20T02:39:00+02:00,no
+ORD-100875,C00301,ivo.brandt301@post.example.net,Ivo Brandt,Dry Bag 20L,5,29.49,USD,completed,2025-03-19,2025-03-19T18:56:00Z,no
+ORD-101215,C00217,ivo.costa217@mail.example.com,TEST-Ivo Costa,Rain Shell,1,151.31,USD,shipped,2025-08-24,2025-08-25T02:10:00Z,FALSE
+ORD-100534,C00230,quinn.moreau230@inbox.example.org,"Moreau, Quinn",Hiking Pole Pair,2,71.46,USD,cancelled,21/04/2025,2025-04-21T23:53:00Z,1
+ORD-100528,C00283,mateo.novak283@mail.example.com,Mateo Novak,Merino Base Layer,1,54.01,GBP,shipped,2025-04-05,2025-04-06T02:20:00+05:00,
+ORD-100390,C00174,ivo.jansen174@mail.example.com,Ivo Jansen,Camp Mug,1,13.23,USD,shipped,"Dec 26, 2025",2025-12-26 17:15:00,0
+ORD-101425,C00175,hana.kowalski175@mail.example.com,Hana Kowalski,Down Vest,2,132.75,USD,completed,2025-03-13T18:30:28Z,2025-03-13T21:46:00Z,false
+ORD-100849,C00037,ben.costa37@mail.example.com,Ben Costa,Camp Mug,1,15.15,USD,Cancelled,09/10/2025,2025-10-09T18:05:00Z,
+ORD-100781,C00206,jun.alvarez206@mail.example.com,Jun Alvarez,Gaiters,1,36.20,USD,CANCELLED,"Oct 23, 2025",2025-10-23T23:28:00Z,
+ORD-100664,C00136,eli.costa136@mail.example.com,Eli Costa,Gaiters,1,34.39,EUR,delivered,2025-01-09T10:23:52Z,2025-01-10T01:10:00+05:00,0
+ORD-101157,C00299,kofi.petrov299@inbox.example.org,Kofi Petrov,Down Vest,1,139.04,USD,completed,2025-02-15T00:32:19Z,2025-02-15 21:20:00,no
+ORD-101241,C00083,viktor.holm83@mail.example.com,Viktor Holm,Wool Beanie,3,22.31,USD,shipped,2025-09-08T20:46:13Z,2025-09-08T22:10:00Z,FALSE
+ORD-101117,C00304,ivo.garcia304@inbox.example.org,TEST-Ivo Garcia,Fleece Pullover,1,71.40,EUR,CANCELLED,07/05/2025,2025-05-08T00:02:00+05:00,0
+ORD-100167,C00065,eli.kowalski65@post.example.net,Eli Kowalski,Rain Shell,1,173.30,USD,completed,2025-02-06,2025-02-07 00:14:00,0
+ORD-101429,C00259,qa258@test.shopco.io,"Silva, Lena",Trail Runner Shoe,1,94.22,USD,delivered,2025-05-13T01:12:51Z,2025-05-13T07:28:00Z,FALSE
+ORD-101061,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Gaiters,1,33.36,USD,completed,2025-11-24,2025-11-24T18:07:00-04:00,true
+ORD-100376,C00290,qa289@test.shopco.io,Dara Ito,Down Vest,1,138.71,USD,shipped,2025-01-04,2025-01-04T11:31:00+02:00,
+ORD-100830,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Rain Shell,1,162.19,USD,delivered,02/12/2025,2025-12-03T02:41:00-04:00,true
+ORD-100984,C00157,mateo.garcia157@post.example.net,Mateo Garcia,Hiking Pole Pair,1,85.91,USD,shipped,01/11/2025,2025-11-01T04:11:00Z,no
+ORD-101129,C00168,nia.silva168@post.example.net,Nia Silva,Rain Shell,1,162.26,USD,shipped,2025-07-27,2025-07-27T11:12:00Z,false
+ORD-100748,C00297,rosa.jansen297@inbox.example.org,TEST-Jansen Rosa,Merino Base Layer,5,67.15,USD,delivered,"Jun 27, 2025",2025-06-28 04:53:00,false
+ORD-100266,C00288,nia.lopez288@inbox.example.org,Nia Lopez,Rain Shell,4,168.15,USD,delivered,2025-08-29,2025-08-30T03:42:00Z,0
+ORD-100223,C00198,rosa.moreau198@inbox.example.org,Rosa Moreau,Merino Base Layer,5,64.00,USD,shipped,"Jul 17, 2025",2025-07-17 20:35:00,
+ORD-101446,C00076,sven.moreau76@inbox.example.org,Sven Moreau,Trail Runner Shoe,1,97.46,USD,completed,2025-09-13T23:18:25Z,2025-09-13 21:50:00,no
+ORD-100204,C00202,jun.garcia202@inbox.example.org,Jun Garcia,Down Vest,2,122.12,USD,canceled,2025-09-07,2025-09-07T08:52:00Z,false
+ORD-100353,C00323,dara.jansen323@post.example.net,test-Dara Jansen,Camp Mug,3,14.74,USD,completed,2025-09-24T10:08:38Z,2025-09-24T10:49:00+05:00,no
+ORD-101375,C00182,hana.alvarez182@inbox.example.org,"Alvarez, Hana",Dry Bag 20L,1,27.69,EUR,delivered,"Nov 22, 2025",2025-11-23T01:42:00Z,0
+ORD-100616,C00202,jun.garcia202@inbox.example.org,Jun Garcia,Wool Beanie,2,21.62,USD,completed,2025-09-02,2025-09-02T14:13:00Z,0
+ORD-100443,C00176,quinn.lopez176@inbox.example.org,Quinn Lopez,Gaiters,1,37.88,USD,completed,26/03/2025,2025-03-27T06:45:00+02:00,
+ORD-101028,C00198,rosa.moreau198@inbox.example.org,Rosa Moreau,Trail Runner Shoe,3,89.39,USD,completed,2025-04-02,2025-04-03T01:08:00Z,FALSE
+ORD-100001,C00194,tariq.okafor194@post.example.net,Tariq Okafor,Wool Beanie,1,22.86,USD,completed,"Mar 6, 2025",2025-03-06 19:12:00,
+ORD-101317,C00261,nia.garcia261@inbox.example.org,Nia Garcia,Trail Runner Shoe,2,96.37,USD,delivered,2025-01-25,2025-01-26 03:15:00,0
+ORD-101305,C00081,ben.garcia81@inbox.example.org,Ben Garcia,Merino Base Layer,4,64.96,EUR,completed,"Dec 30, 2025",2026-01-01T06:00:00Z,0
+ORD-100520,C00169,ivo.petrov169@inbox.example.org,Ivo Petrov,Fleece Pullover,2,70.40,USD,completed,"May 7, 2025",2025-05-07T21:58:00Z,0
+ORD-100797,C00062,qa61@test.shopco.io,Mateo Jansen,Down Vest,1,122.87,USD,completed,2025-10-13,2025-10-13 13:50:00,false
+ORD-100827,C00296,goran.fischer296@post.example.net,Goran Fischer,Merino Base Layer,1,58.59,USD,cancelled,2025-11-13,2025-11-15T16:17:00+02:00,
+ORD-101239,C00055,fatima.novak55@mail.example.com,Fatima Novak,Headlamp,1,36.73,USD,completed,2025-04-28T06:37:35Z,2025-04-29T04:56:00-04:00,false
+ORD-101441,C00279,ivo.lopez279@inbox.example.org,"Lopez, Ivo",Wool Beanie,5,25.49,USD,delivered,2025-12-29T08:28:29Z,2025-12-29 12:18:00,false
+ORD-100048,C00260,priya.costa260@post.example.net,"Costa, Priya",Fleece Pullover,3,79.48,USD,completed,26/11/2025,2025-11-27 06:25:00,false
+ORD-100917,C00001,sven.costa1@post.example.net,Sven Costa,Trail Runner Shoe,1,89.65,USD,completed,2025-08-06T23:22:21Z,2025-08-06T11:38:00-04:00,no
+ORD-100547,C00216,rosa.novak216@mail.example.com,"Novak, Rosa",Merino Base Layer,4,68.14,USD,completed,2025-07-10,2025-07-11 03:00:00,
+ORD-100248,C00295,dara.eriksen295@inbox.example.org,Dara Eriksen,Camp Mug,1,15.53,USD,completed,2025-12-26,2025-12-26 05:48:00,0
+ORD-101439,C00223,omar.alvarez223@post.example.net,Omar Alvarez,Dry Bag 20L,2,32.42,USD,completed,2025-01-04T06:07:12Z,2025-01-04T04:47:00Z,TRUE
+ORD-101347,C00191,priya.dubois191@mail.example.com,"Dubois, Priya",Fleece Pullover,5,71.88,JPY,completed,2025-08-11T03:00:18Z,2025-08-11T20:02:00Z,false
+ORD-100781,C00206,jun.alvarez206@mail.example.com,Jun Alvarez,Gaiters,1,36.20,USD,shipped,"Oct 23, 2025",2025-10-23T22:47:00Z,0
+ORD-101438,C00279,ivo.lopez279@inbox.example.org,"Lopez, Ivo",Hiking Pole Pair,2,82.18,USD,shipped,03/11/2025,2025-11-03 21:02:00,false
+ORD-100641,C00323,dara.jansen323@post.example.net,test-Dara Jansen,Gaiters,2,37.33,USD,completed,26/10/2025,2025-10-26T13:12:00Z,false
+ORD-100200,C00043,qa42@test.shopco.io,Omar Kowalski,Down Vest,1,131.85,USD,completed,22/08/2025,2025-08-22 17:35:00,false
+ORD-100438,C00076,sven.moreau76@inbox.example.org,Sven Moreau,Down Vest,2,108.02,gbp,cancelled,2025-07-30,2025-07-30 22:44:00,FALSE
+ORD-101031,C00288,nia.lopez288@inbox.example.org,Nia Lopez,Dry Bag 20L,3,28.92,USD,delivered,"Oct 7, 2025",2025-10-07T22:12:00Z,false
+ORD-101428,C00217,ivo.costa217@mail.example.com,TEST-Ivo Costa,Merino Base Layer,1,64.84,USD,shipped,2025-12-17,2025-12-17T06:18:00Z,
+ORD-100858,C00051,uma.alvarez51@inbox.example.org,Uma Alvarez,Insulated Bottle,2,26.81,USD,completed,30/03/2025,2025-03-30T08:55:00Z,FALSE
+ORD-100832,C00217,ivo.costa217@mail.example.com,TEST-Ivo Costa,Gaiters,1,36.77,USD,completed,"Nov 21, 2025",2025-11-22T08:03:00+05:00,false
+ORD-100291,C00321,lena.eriksen321@mail.example.com,Lena Eriksen,Merino Base Layer,1,62.95,USD,completed,15/05/2025,2025-05-15T01:06:00-04:00,FALSE
+ORD-100893,C00290,qa289@test.shopco.io,Dara Ito,Headlamp,1,35.85,USD,Cancelled,"Jan 11, 2025",2025-01-12T01:15:00Z,false
+ORD-100912,C00135,ivo.dubois135@mail.example.com,Ivo Dubois,Wool Beanie,1,26.30,USD,completed,"May 2, 2025",2025-05-03 02:31:00,
+ORD-101006,C00048,ben.fischer48@inbox.example.org,Ben Fischer,Headlamp,2,39.35,EUR,canceled,"Apr 3, 2025",2025-04-04T02:37:00Z,
+ORD-100080,C00060,lena.dubois60@inbox.example.org,Lena Dubois,Merino Base Layer,2,61.65,USD,CANCELLED,2025-09-11T06:46:29Z,2025-09-14 05:55:00,FALSE
+ORD-101005,C00238,lena.ito238@inbox.example.org,Lena Ito,Dry Bag 20L,1,30.79,USD,completed,"Sep 28, 2025",2025-09-28T21:13:00Z,no
+ORD-100342,C00268,uma.silva268@post.example.net,Uma Silva,Rain Shell,7,159.21,USD,completed,29/08/2025,2025-08-29 06:53:00,FALSE
+ORD-101353,C00232,quinn.silva232@inbox.example.org,Quinn Silva,Trail Runner Shoe,3,93.66,USD,shipped,10/09/2025,2025-09-10T15:16:00+02:00,FALSE
+ORD-101324,C00073,priya.eriksen73@mail.example.com,Priya Eriksen,Merino Base Layer,2,52.90,GBP,delivered,2025-10-14,2025-10-14T20:31:00Z,false
+ORD-101299,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Dry Bag 20L,2,34.67,USD,cancelled,2025-09-02,2025-09-03 12:11:00,yes
+ORD-101199,C00207,quinn.eriksen207@post.example.net,Quinn Eriksen,Merino Base Layer,1,60.68,USD,delivered,14/03/2025,2025-03-14T12:45:00-04:00,no
+ORD-101428,C00217,ivo.costa217@mail.example.com,TEST-Ivo Costa,Merino Base Layer,1,64.84,USD,cancelled,2025-12-17,2025-12-19T16:27:00-04:00,0
+ORD-101226,C00068,hana.costa68@mail.example.com,Hana Costa,Gaiters,1,38.47,USD,shipped,02/03/2025,2025-03-02T13:32:00+05:00,
+ORD-101391,C00073,priya.eriksen73@mail.example.com,Priya Eriksen,Trail Runner Shoe,1,89.61,USD,delivered,2025-03-05T20:22:46Z,2025-03-05 12:17:00,
+ORD-100775,C00050,uma.rossi50@inbox.example.org,Uma Rossi,Rain Shell,5,163.01,USD,shipped,2025-01-29T22:22:58Z,2025-01-29T23:44:00+03:00,false
+ORD-101135,C00303,ivo.holm303@mail.example.com,Ivo Holm,Insulated Bottle,2,30.14,USD,completed,2025-10-03T21:24:08Z,2025-10-03T16:40:00Z,no
+ORD-100817,C00026,lena.lopez26@post.example.net,Lena Lopez,Dry Bag 20L,2,35.05,USD,canceled,01/01/2025,2025-01-01T23:11:00Z,no
+ORD-101091,C00128,qa127@test.shopco.io,Lena Fischer,Fleece Pullover,1,81.32,USD,shipped,"Jan 16, 2025",2025-01-16T06:56:00Z,no
+ORD-100514,C00216,rosa.novak216@mail.example.com,"Novak, Rosa",Camp Mug,5,14.01,USD,completed,2025-07-17,2025-07-17T09:32:00Z,false
+ORD-100638,C00075,eli.eriksen75@inbox.example.org,Eli Eriksen,Camp Mug,1,15.51,USD,cancelled,04/04/2025,2025-04-04 03:37:00,FALSE
+ORD-101394,C00272,fatima.ito272@post.example.net,Fatima Ito,Trail Runner Shoe,1,97.50,USD,delivered,"Dec 10, 2025",2025-12-13 01:55:00,false
+ORD-100425,C00065,eli.kowalski65@post.example.net,Eli Kowalski,Rain Shell,2,154.67,USD,shipped,2025-02-14T21:31:59Z,2025-02-15T02:19:00Z,
+ORD-101443,C00050,uma.rossi50@inbox.example.org,Uma Rossi,Dry Bag 20L,2,30.15,EUR,completed,"Mar 21, 2025",2025-03-21T08:37:00Z,no
+ORD-100843,C00018,nia.fischer18@inbox.example.org,Nia Fischer,Fleece Pullover,1,77.09,USD,completed,"Nov 27, 2025",2025-11-27T15:42:00Z,0
+ORD-101038,C00006,ana.alvarez6@mail.example.com,Ana Alvarez,Wool Beanie,1,23.51,USD,completed,"Sep 13, 2025",2025-09-13 02:32:00,false
+ORD-100729,C00003,dara.petrov3@post.example.net,Dara Petrov,Merino Base Layer,1,66.96,USD,shipped,"Jul 1, 2025",2025-07-01 15:57:00,no
+ORD-100242,C00113,omar.silva113@post.example.net,Omar Silva,Gaiters,1,38.76,USD,completed,20/09/2025,2025-09-20T14:05:00Z,no
+ORD-100367,C00028,ana.moreau28@inbox.example.org,Ana Moreau,Fleece Pullover,1,71.20,USD,completed,2025-10-19,2025-10-19T12:16:00Z,0
+ORD-100406,C00154,omar.okafor154@inbox.example.org,Test-Omar Okafor,Wool Beanie,2,24.99,USD,shipped,2025-12-27,2025-12-28T02:20:00-04:00,false
+ORD-101093,C00026,lena.lopez26@post.example.net,Lena Lopez,Gaiters,3,37.50,USD,shipped,"Feb 7, 2025",2025-02-08 15:15:00,0
+ORD-100451,C00022,priya.brandt22@inbox.example.org,Priya Brandt,Gaiters,2,33.96,USD,completed,2025-03-22T06:04:34Z,2025-03-22 18:37:00,false
+ORD-101074,C00019,viktor.lopez19@inbox.example.org,Viktor Lopez,Merino Base Layer,1,70.30,USD,delivered,"Feb 1, 2025",2025-02-01T17:29:00Z,false
+ORD-100400,C00068,hana.costa68@mail.example.com,Hana Costa,Merino Base Layer,3,59.75,USD,shipped,"Apr 20, 2025",2025-04-20T21:33:00+05:00,false
+ORD-100779,C00288,nia.lopez288@inbox.example.org,Nia Lopez,Wool Beanie,1,25.02,USD,completed,2025-12-21,2025-12-21T07:51:00Z,
+ORD-100761,C00307,ivo.petrov307@post.example.net,Ivo Petrov,Gaiters,2,37.71,USD,canceled,2025-11-03T07:38:27Z,2025-11-04 03:33:00,
+ORD-100755,C00251,tariq.brandt251@inbox.example.org,"Brandt, Tariq",Insulated Bottle,4,30.53,USD,completed,2025-03-27T22:35:16Z,2025-03-30 03:05:00,FALSE
+ORD-100603,C00220,priya.rossi220@post.example.net,Priya Rossi,Down Vest,2,116.38,USD,delivered,2025-08-22T02:31:36Z,2025-08-22T08:27:00-04:00,
+ORD-100593,C00124,uma.ito124@mail.example.com,"Ito, Uma",Rain Shell,1,145.40,USD,completed,2025-02-09T05:06:48Z,2025-02-09T17:20:00+02:00,no
+ORD-101220,C00100,chen.costa100@mail.example.com,Chen Costa,Fleece Pullover,4,74.37,USD,shipped,2025-03-13,2025-03-14T16:03:00Z,
+ORD-100288,C00121,viktor.holm121@post.example.net,Viktor Holm,Headlamp,1,41.76,USD,delivered,02/07/2025,2025-07-03 03:03:00,FALSE
+ORD-100684,C00062,qa61@test.shopco.io,Mateo Jansen,Camp Mug,5,13.78,USD,completed,2025-03-31T04:36:54Z,2025-04-01T02:55:00+05:00,0
+ORD-101305,C00081,ben.garcia81@inbox.example.org,Ben Garcia,Merino Base Layer,2,64.96,EUR,CANCELLED,"Dec 30, 2025",2026-01-01T04:36:00Z,false
+ORD-100692,C00268,uma.silva268@post.example.net,Uma Silva,Rain Shell,1,135.67,GBP,completed,05/06/2025,2025-06-05T14:59:00+05:00,no
+ORD-100741,C00045,goran.ito45@inbox.example.org,Goran Ito,Fleece Pullover,3,67.64,USD,shipped,2025-07-01,2025-07-01T16:26:00+03:00,0
+ORD-100327,C00054,chen.costa54@post.example.net,Chen Costa,Gaiters,3,38.03,USD,shipped,2025-07-24T10:56:36Z,2025-07-24T13:59:00Z,FALSE
+ORD-101436,C00230,quinn.moreau230@inbox.example.org,"Moreau, Quinn",Headlamp,3,39.33,USD,completed,17/06/2025,2025-06-17T09:52:00Z,TRUE
+ORD-100483,C00286,mateo.fischer286@mail.example.com,"Fischer, Mateo",Trail Runner Shoe,4,92.02,USD,completed,16/09/2025,2025-09-16 15:15:00,Y
+ORD-101097,C00282,kofi.petrov282@post.example.net,Kofi Petrov,Trail Runner Shoe,2,95.45,USD,shipped,2025-03-28,2025-03-28T10:09:00-04:00,no
+ORD-100574,C00160,jun.fischer160@inbox.example.org,Jun Fischer,Down Vest,2,108.94,GBP,cancelled,2025-10-18,2025-10-18T09:50:00Z,false
+ORD-100549,C00062,qa61@test.shopco.io,Mateo Jansen,Rain Shell,1,144.11,USD,completed,2025-11-22T22:46:58Z,2025-11-23 00:38:00,0
+ORD-101390,C00230,quinn.moreau230@inbox.example.org,"Moreau, Quinn",Insulated Bottle,2,31.59,USD,delivered,"Dec 5, 2025",2025-12-05T08:09:00Z,1
+ORD-100827,C00296,goran.fischer296@post.example.net,Goran Fischer,Merino Base Layer,1,58.59,USD,completed,13/11/2025,2025-11-13 16:37:00,no
+ORD-100753,C00152,sven.jansen152@inbox.example.org,Sven Jansen,Rain Shell,1,148.15,USD,completed,2025-03-16T13:56:32Z,2025-03-16T18:53:00Z,
+ORD-100436,C00039,hana.ito39@inbox.example.org,Hana Ito,Trail Runner Shoe,3,96.62,USD,completed,"Feb 23, 2025",2025-02-23 13:30:00,false
+ORD-101175,C00242,priya.okafor242@inbox.example.org,"Okafor, Priya",Trail Runner Shoe,2,90.09,USD,completed,2025-01-09T13:22:19Z,2025-01-09 22:30:00,
+ORD-100592,C00204,viktor.silva204@post.example.net,Viktor Silva,Insulated Bottle,1,27.84,USD,delivered,2025-02-08,2025-02-08T16:50:00Z,no
+ORD-101274,C00311,quinn.kowalski311@mail.example.com,TEST-Quinn Kowalski,Insulated Bottle,3,27.45,USD,completed,"Nov 18, 2025",2025-11-18 14:36:00,0
+ORD-100124,C00027,viktor.silva27@inbox.example.org,Viktor Silva,Camp Mug,1,14.97, USD,delivered,10/08/2025,2025-08-11T01:53:00Z,0
+ORD-100711,C00002,omar.petrov2@mail.example.com,Omar Petrov,Dry Bag 20L,1,31.68,eur,delivered,2025-11-16,2025-11-16 06:11:00,FALSE
+ORD-100719,C00309,priya.holm309@inbox.example.org,Priya Holm,Gaiters,2,33.19,EUR,canceled,"Apr 26, 2025",2025-04-27T02:32:00-04:00,false
+ORD-101411,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Gaiters,1,35.75,USD,delivered,28/03/2025,2025-03-28 19:09:00,yes
+
+ORD-100602,C00249,eli.ito249@inbox.example.org,Eli Ito,Down Vest,1,138.97,USD,shipped,2025-02-25,2025-02-25 12:13:00,0
+ORD-100297,C00048,ben.fischer48@inbox.example.org,Ben Fischer,Hiking Pole Pair,3,80.70,USD,canceled,2025-10-06T10:26:38Z,2025-10-06 21:45:00,
+ORD-101319,C00128,qa127@test.shopco.io,Lena Fischer,Dry Bag 20L,2,32.59,USD,shipped,2025-03-23,2025-03-23 20:04:00,FALSE
+ORD-100744,C00297,rosa.jansen297@inbox.example.org,TEST-Jansen Rosa,Rain Shell,1,164.59,USD,delivered,2025-04-12T06:13:26Z,2025-04-12T06:52:00Z,0
+ORD-100457,C00169,ivo.petrov169@inbox.example.org,Ivo Petrov,Trail Runner Shoe,2,88.95,USD,completed,30/07/2025,2025-07-30 07:57:00,no
+ORD-100783,C00080,ana.alvarez80@mail.example.com,Ana Alvarez,Headlamp,1,35.25,EUR,canceled,2025-02-04T20:45:58Z,2025-02-05T06:09:00+03:00,yes
+ORD-100844,C00159,tariq.rossi159@inbox.example.org,Tariq Rossi,Gaiters,-1,39.40,USD,delivered,18/05/2025,2025-05-19T01:22:00Z,no
+ORD-100700,C00217,ivo.costa217@mail.example.com,TEST-Ivo Costa,Insulated Bottle,1,27.00,USD,delivered,2025-09-07T02:19:27Z,2025-09-07T16:34:00Z,FALSE
+ORD-101351,C00155,mateo.kowalski155@inbox.example.org,Mateo Kowalski,Headlamp,1,37.49,USD,completed,2025-09-02,2025-09-03T03:26:00Z,
+ORD-101037,C00062,qa61@test.shopco.io,Mateo Jansen,Wool Beanie,5,21.68,USD,completed,2025-10-22T16:18:02Z,2025-10-22 23:42:00,0
+ORD-100633,C00062,qa61@test.shopco.io,Mateo Jansen,Down Vest,1,117.32,USD,shipped,2025-11-25T18:04:56Z,2025-11-25T21:34:00Z,FALSE
+ORD-100435,C00048,ben.fischer48@inbox.example.org,Ben Fischer,Headlamp,1,38.26,USD,completed,"Jul 8, 2025",2025-07-08T16:55:00Z,
+ORD-100646,C00290,qa289@test.shopco.io,Dara Ito,Headlamp,1,34.39,EUR,completed,15/11/2025,2025-11-15 05:33:00,false
+ORD-100384,C00260,priya.costa260@post.example.net,"Costa, Priya",Gaiters,1,34.58,USD,completed,2025-10-04T09:54:31Z,2025-10-04 18:14:00,
+ORD-100814,C00311,quinn.kowalski311@mail.example.com,TEST-Quinn Kowalski,Wool Beanie,1,24.05,USD,shipped,2025-04-12,2025-04-12 10:53:00,FALSE
+ORD-100090,C00161,quinn.garcia161@mail.example.com,Quinn Garcia,Insulated Bottle,1,27.10,USD,shipped,2025-09-27,2025-09-27 04:52:00,no
+ORD-101144,C00169,ivo.petrov169@inbox.example.org,Ivo Petrov,Fleece Pullover,4,68.67,USD,canceled,"Mar 13, 2025",2025-03-13 21:43:00,
+ORD-100139,C00304,ivo.garcia304@inbox.example.org,TEST-Ivo Garcia,Merino Base Layer,1,64.21,EUR,delivered,"Oct 12, 2025",2025-10-13T02:14:00Z,
+ORD-100643,C00324,quinn.brandt324@mail.example.com,Quinn Brandt,Headlamp,1,38.14,USD ,completed,2025-04-18T03:50:42Z,2025-04-18 21:55:00,no
+ORD-101186,C00062,qa61@test.shopco.io,Mateo Jansen,Gaiters,2,34.50,EUR,completed,"Jan 5, 2025",2025-01-05 15:48:00,false
+ORD-101325,C00297,rosa.jansen297@inbox.example.org,TEST-Jansen Rosa,Down Vest,1,122.53,USD,completed,"Jan 11, 2025",2025-01-11T20:46:00Z,no
+ORD-101421,C00296,goran.fischer296@post.example.net,Goran Fischer,Camp Mug,1,13.13,USD,cancelled,"Jul 27, 2025",2025-07-27 05:22:00,false
+
+ORD-100766,C00262,mateo.rossi262@mail.example.com,"Rossi, Mateo",Gaiters,3,37.07,USD,shipped,"Jul 7, 2025",2025-07-08T01:40:00+05:00,FALSE
+ORD-101385,C00271,quinn.okafor271@inbox.example.org,Quinn Okafor,Rain Shell,1,143.85,USD,shipped,"Feb 23, 2025",2025-02-23T12:47:00Z,no
+ORD-100040,C00288,nia.lopez288@inbox.example.org,Nia Lopez,Insulated Bottle,2,31.06,usd,shipped,"Nov 4, 2025",2025-11-05T05:32:00Z,false
+ORD-100899,C00087,ben.alvarez87@post.example.net,Ben Alvarez,Fleece Pullover,1,67.30,USD,completed,"Apr 24, 2025",2025-04-25T08:45:00+05:00,false
+ORD-100823,C00172,viktor.okafor172@inbox.example.org,Viktor Okafor,Merino Base Layer,1,66.29,USD,completed,"Jul 11, 2025",2025-07-11T11:12:00Z,FALSE
+ORD-101373,C00038,omar.alvarez38@post.example.net,Omar Alvarez,Rain Shell,3,160.71,USD,shipped,2025-10-03T18:34:26Z,2025-10-03T13:32:00+02:00,FALSE
+ORD-100998,C00175,hana.kowalski175@mail.example.com,Hana Kowalski,Down Vest,2,97.75,GBP,completed,2025-10-01T05:25:04Z,2025-10-01T17:34:00+03:00,FALSE
+ORD-100100,C00174,ivo.jansen174@mail.example.com,Ivo Jansen,Camp Mug,2,13.60,USD,completed,"Jan 29, 2025",2025-01-29 21:12:00,no
+ORD-100901,C00130,quinn.moreau130@post.example.net,Quinn Moreau,Hiking Pole Pair,3,76.63,USD,completed,30/08/2025,2025-08-31 01:12:00,0
+ORD-101414,C00317,jun.novak317@mail.example.com,Jun Novak,Camp Mug,1,13.18,USD,completed,2025-06-13T03:07:00Z,2025-06-13 15:41:00,false
+ORD-100658,C00291,priya.brandt291@inbox.example.org,Priya Brandt,Fleece Pullover,1,80.27,USD,completed,"Apr 30, 2025",2025-04-30 20:35:00,false
+ORD-100976,C00174,ivo.jansen174@mail.example.com,Ivo Jansen,Camp Mug,1,15.24,USD,canceled,21/01/2025,2025-01-22T03:43:00+02:00,
+ORD-100008,C00243,mateo.costa243@mail.example.com,"Costa, Mateo",Fleece Pullover,4,71.65,USD,completed,"Feb 28, 2025",2025-02-28T20:35:00-04:00,false
+ORD-101158,C00304,ivo.garcia304@inbox.example.org,TEST-Ivo Garcia,Dry Bag 20L,1,32.23, USD,completed,22/01/2025,2025-01-23T04:27:00Z,FALSE
+ORD-101263,C00106,jun.eriksen106@mail.example.com,"Eriksen, Jun",Insulated Bottle,4,28.33,USD,completed,2025-02-04,2025-02-06T11:49:00-04:00,0
+ORD-100752,C00077,hana.costa77@post.example.net,"Costa, Hana",Rain Shell,2,159.39,USD,shipped,"Nov 2, 2025",2025-11-02T22:13:00Z,false
+ORD-100091,C00230,quinn.moreau230@inbox.example.org,"Moreau, Quinn",Headlamp,1,35.47,USD,completed,21/08/2025,2025-08-21T16:51:00+05:00,1
+ORD-101020,C00138,omar.eriksen138@post.example.net,Omar Eriksen,Insulated Bottle,1,27.07,USD,delivered,17/05/2025,2025-05-18T03:07:00Z,false
+ORD-100126,C00154,omar.okafor154@inbox.example.org,Test-Omar Okafor,Wool Beanie,1,23.95,USD,completed,2025-07-16,2025-07-16T05:30:00Z,0
+ORD-101167,C00290,qa289@test.shopco.io,Dara Ito,Gaiters,1,35.87,USD,shipped,23/10/2025,2025-10-23T12:41:00Z,false
+ORD-101081,C00290,qa289@test.shopco.io,Dara Ito,Hiking Pole Pair,1,74.72,USD,completed,"Mar 5, 2025",2025-03-05T11:02:00Z,FALSE
+ORD-100767,C00218,eli.brandt218@post.example.net,"Brandt, Eli",Down Vest,1,119.09,USD,completed,2025-10-11T23:11:46Z,2025-10-12T00:42:00Z,
+ORD-100553,C00006,ana.alvarez6@mail.example.com,Ana Alvarez,Rain Shell,1,144.02,USD,delivered,2025-07-07T22:57:30Z,2025-07-07T14:18:00Z,0
+ORD-101190,C00118,mateo.moreau118@mail.example.com,Mateo Moreau,Down Vest,1,121.56,USD,completed,"Jul 16, 2025",2025-07-16T11:36:00Z,FALSE
+ORD-100198,C00051,uma.alvarez51@inbox.example.org,Uma Alvarez,Headlamp,1,33.50,GBP,shipped,24/04/2025,2025-04-25 15:53:00,
+ORD-100857,C00100,chen.costa100@mail.example.com,Chen Costa,Gaiters,2,28.43,GBP,completed,16/12/2025,2025-12-18 20:56:00,FALSE
+ORD-100028,C00292,uma.costa292@mail.example.com,"Costa, Uma",Wool Beanie,3,21.91,USD,completed,2025-10-17T17:11:19Z,2025-10-17 20:54:00,
+ORD-100624,C00152,sven.jansen152@inbox.example.org,Sven Jansen,Trail Runner Shoe,5,84.78,USD,completed,2025-12-18,2025-12-18T16:39:00Z,0
+ORD-100845,C00101,jun.lopez101@mail.example.com,Jun Lopez,Fleece Pullover,1,77.21,USD,completed,2025-12-29T21:10:21Z,2025-12-29T17:21:00+05:00,
+ORD-100369,C00062,qa61@test.shopco.io,Mateo Jansen,Rain Shell,2,170.34,USD,Cancelled,2025-02-24,2025-02-24T02:10:00Z,0
+ORD-101194,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Headlamp,3,38.60,USD,completed,2025-07-20T20:42:33Z,2025-07-20 07:01:00,true
+ORD-101344,C00290,qa289@test.shopco.io,Dara Ito,Camp Mug,1,15.29,USD,completed,16/03/2025,2025-03-16 23:08:00,
+ORD-100471,C00297,rosa.jansen297@inbox.example.org,TEST-Jansen Rosa,Down Vest,2,122.54,USD,completed,2025-03-13T07:15:00Z,2025-03-13T18:51:00+05:00,FALSE
+ORD-100571,C00021,mateo.lopez21@mail.example.com,Mateo Lopez,Trail Runner Shoe,2,84.08,USD,CANCELLED,2025-10-08,2025-10-08T07:27:00+03:00,false
+ORD-101458,C00148,goran.moreau148@mail.example.com,Goran Moreau,Camp Mug,1,15.83,USD,completed,2025-03-13T07:34:42Z,2025-03-13 19:16:00,0
+ORD-100456,C00326,qa325@test.shopco.io,Uma Holm,Down Vest,1,141.35,USD,completed,2025-08-16,2025-08-16T03:05:00Z,no
+ORD-101023,C00066,viktor.dubois66@inbox.example.org,"Dubois, Viktor",Rain Shell,1,162.02,USD,delivered,"Aug 10, 2025",2025-08-10T20:08:00+02:00,0
+ORD-100080,C00060,lena.dubois60@inbox.example.org,Lena Dubois,Merino Base Layer,2,61.65,USD,completed,11/09/2025,2025-09-12 03:29:00,no
+ORD-101243,C00316,sven.garcia316@inbox.example.org,Sven Garcia,Insulated Bottle,2,29.21,USD,completed,2025-01-25T10:05:36Z,2025-01-25 23:26:00,FALSE
+ORD-100824,C00095,chen.kowalski95@post.example.net,"Kowalski, Chen",Insulated Bottle,3,31.79,USD,completed,02/07/2025,2025-07-05T13:57:00+02:00,
+ORD-101131,C00105,jun.dubois105@inbox.example.org,Jun Dubois,Camp Mug,1,14.45,USD,completed,"Sep 14, 2025",2025-09-14T05:34:00Z,FALSE
+ORD-101050,C00226,ivo.kowalski226@post.example.net,Ivo Kowalski,Headlamp,3,37.24,EUR,shipped,"Jan 7, 2025",2025-01-08T23:00:00-04:00,
+ORD-101263,C00106,jun.eriksen106@mail.example.com,"Eriksen, Jun",Insulated Bottle,1,28.33,USD,delivered,2025-02-04,2025-02-04 10:04:00,0
+ORD-100056,C00043,qa42@test.shopco.io,Omar Kowalski,Merino Base Layer,1,61.14,USD,completed,"Jun 5, 2025",2025-06-05T17:52:00Z,
+ORD-100328,C00286,mateo.fischer286@mail.example.com,"Fischer, Mateo",Down Vest,4,118.92,USD,completed,16/02/2025,2025-02-19T10:29:00Z,true
+ORD-101136,C00106,jun.eriksen106@mail.example.com,"Eriksen, Jun",Rain Shell,2,139.86,EUR,delivered,2025-11-17,2025-11-17 21:49:00,0
+ORD-100159,C00080,ana.alvarez80@mail.example.com,Ana Alvarez,Dry Bag 20L,3,31.35,USD,delivered,"Jan 3, 2025",2025-01-03T06:02:00Z,1
+ORD-100772,C00179,hana.moreau179@mail.example.com,Hana Moreau,Fleece Pullover,1,66.98,USD,delivered,"Aug 5, 2025",2025-08-05 08:42:00,
+ORD-101352,C00170,ben.ito170@inbox.example.org,Ben Ito,Dry Bag 20L,1,29.82,USD,completed,2025-06-29,2025-06-30T02:58:00Z,yes
+ORD-100836,C00167,ana.lopez167@inbox.example.org,"Lopez, Ana",Gaiters,2,32.94,USD,completed,2025-07-22,2025-07-22 17:10:00,no
+ORD-101187,C00043,qa42@test.shopco.io,Omar Kowalski,Gaiters,5,36.42,USD,completed,09/10/2025,2025-10-11T14:24:00Z,no
+ORD-100688,C00131,nia.garcia131@inbox.example.org,"Garcia, Nia",Trail Runner Shoe,1,84.38,EUR,canceled,"Feb 21, 2025",2025-02-21 11:06:00,0
+ORD-100776,C00313,priya.kowalski313@mail.example.com,Priya Kowalski,Trail Runner Shoe,1,84.91,USD,delivered,23/01/2025,2025-01-23T09:28:00+02:00,no
+ORD-100952,C00116,ben.lopez116@inbox.example.org,Ben Lopez,Merino Base Layer,1,61.02,USD,shipped,2025-07-22,2025-07-22T06:33:00Z,no
+ORD-100227,C00080,ana.alvarez80@mail.example.com,Ana Alvarez,Down Vest,2,121.09,EUR,shipped,2025-09-08T18:17:17Z,2025-09-08T11:58:00Z,yes
+ORD-100846,C00129,omar.costa129@inbox.example.org,"Costa, Omar",Down Vest,4,119.37,USD,delivered,2025-09-03,2025-09-03T21:28:00+02:00,FALSE
+ORD-100696,C00311,quinn.kowalski311@mail.example.com,TEST-Quinn Kowalski,Trail Runner Shoe,1,82.39,USD,shipped,"Apr 7, 2025",2025-04-07T17:51:00-04:00,
+ORD-101147,C00323,dara.jansen323@post.example.net,test-Dara Jansen,Hiking Pole Pair,3,82.73,USD,cancelled,2025-01-07T10:54:59Z,2025-01-09T16:48:00+03:00,false
+ORD-100229,C00159,tariq.rossi159@inbox.example.org,Tariq Rossi,Camp Mug,1,13.08,USD,shipped,05/12/2025,2025-12-05T04:50:00Z,
+ORD-101174,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Hiking Pole Pair,3,80.85,USD,delivered,2025-01-21T07:56:06Z,2025-01-21T16:02:00-04:00,yes
+ORD-100677,C00273,viktor.brandt273@post.example.net,Viktor Brandt,Insulated Bottle,3,31.88,USD,completed,"Feb 15, 2025",2025-02-15 12:11:00,false
+ORD-100518,C00315,ben.fischer315@mail.example.com,Ben Fischer,Camp Mug,4,15.08,USD,delivered,05/12/2025,2025-12-05T20:46:00Z,no
+ORD-101128,C00215,rosa.novak215@inbox.example.org,Rosa Novak,Gaiters,1,34.78,usd,cancelled,2025-01-14,2025-01-15T00:02:00+05:00,FALSE
+ORD-100549,C00062,qa61@test.shopco.io,Mateo Jansen,Rain Shell,1,144.11,USD,completed,22/11/2025,2025-11-23T01:17:00+05:00,FALSE
+ORD-100966,C00042,viktor.ito42@post.example.net,Viktor Ito,Rain Shell,4,173.01,USD,completed,03/10/2025,2025-10-04T07:53:00+02:00,
+ORD-100755,C00251,tariq.brandt251@inbox.example.org,"Brandt, Tariq",Insulated Bottle,2,30.53,usd,shipped,2025-03-27,2025-03-27T13:18:00Z,no
+ORD-100925,C00304,ivo.garcia304@inbox.example.org,TEST-Ivo Garcia,Dry Bag 20L,2,35.11,USD,completed,2025-11-25,2025-11-25T14:36:00-04:00,no
+ORD-101181,C00210,goran.okafor210@inbox.example.org,Goran Okafor,Merino Base Layer,3,62.19,USD,completed,"Jul 21, 2025",2025-07-22T05:20:00Z,no
+ORD-100540,C00237,rosa.kowalski237@post.example.net,Rosa Kowalski,Merino Base Layer,3,67.41,USD,delivered,30/11/2025,2025-11-30 10:00:00,no
+ORD-100902,C00239,quinn.rossi239@mail.example.com,Quinn Rossi,Hiking Pole Pair,1,79.71,USD,cancelled,22/06/2025,2025-06-22T15:48:00+02:00,false
+ORD-100661,C00223,omar.alvarez223@post.example.net,Omar Alvarez,Merino Base Layer,1,62.11,USD,completed,2025-08-01,2025-08-01T14:00:00Z,yes
+ORD-100871,C00204,viktor.silva204@post.example.net,Viktor Silva,Trail Runner Shoe,5,87.60,USD,shipped,16/09/2025,2025-09-17 04:17:00,FALSE
+ORD-101284,C00286,mateo.fischer286@mail.example.com,"Fischer, Mateo",Fleece Pullover,2,76.32,USD,completed,24/12/2025,2025-12-25T04:47:00+05:00,true
+ORD-101241,C00083,viktor.holm83@mail.example.com,Viktor Holm,Wool Beanie,3,22.31,USD,completed,08/09/2025,2025-09-10 02:58:00,
+ORD-101299,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Dry Bag 20L,2,34.67,USD,delivered,02/09/2025,2025-09-02 21:30:00,true
+ORD-100817,C00026,lena.lopez26@post.example.net,Lena Lopez,Dry Bag 20L,-1,35.05,USD,completed,2025-01-01T09:53:08Z,2025-01-01T21:40:00Z,
+ORD-100344,C00021,mateo.lopez21@mail.example.com,Mateo Lopez,Dry Bag 20L,1,31.74,USD,completed,"Oct 18, 2025",2025-10-19 04:45:00,
+ORD-101189,C00168,nia.silva168@post.example.net,Nia Silva,Trail Runner Shoe,2,92.00,USD,completed,"Jul 12, 2025",2025-07-13T03:59:00Z,
+ORD-100635,C00277,omar.dubois277@mail.example.com,Omar Dubois,Wool Beanie,1,26.09,USD,completed,14/06/2025,2025-06-14 06:47:00,FALSE
+ORD-100623,C00154,omar.okafor154@inbox.example.org,Test-Omar Okafor,Fleece Pullover,2,68.14,USD,delivered,22/12/2025,2025-12-22 23:56:00,0
+ORD-100386,C00105,jun.dubois105@inbox.example.org,Jun Dubois,Camp Mug,3,15.53,USD,CANCELLED,2025-11-02,2025-11-02 09:40:00,no
+ORD-100313,C00230,quinn.moreau230@inbox.example.org,"Moreau, Quinn",Gaiters,2,36.80,USD,completed,2025-10-25,2025-10-25T20:55:00Z,yes
+ORD-100176,C00286,mateo.fischer286@mail.example.com,"Fischer, Mateo",Headlamp,1,39.85,USD,completed,"Sep 6, 2025",2025-09-06T13:32:00Z,yes
+ORD-100588,C00189,dara.garcia189@post.example.net,Dara Garcia,Hiking Pole Pair,1,72.67,USD,cancelled,"Jul 2, 2025",2025-07-02T21:14:00Z,
+ORD-100073,C00218,eli.brandt218@post.example.net,"Brandt, Eli",Wool Beanie,1,22.96,USD,delivered,2025-03-21T10:52:43Z,2025-03-22T02:53:00Z,FALSE
+ORD-100100,C00174,ivo.jansen174@mail.example.com,Ivo Jansen,Camp Mug,2,13.60,USD,cancelled,"Jan 29, 2025",2025-01-30T03:23:00+05:00,
+ORD-100932,C00043,qa42@test.shopco.io,Omar Kowalski,Wool Beanie,1,26.22,USD,delivered,03/09/2025,2025-09-03 10:08:00,FALSE
+ORD-101348,C00107,rosa.brandt107@inbox.example.org,Rosa Brandt,Merino Base Layer,1,69.31,USD,delivered,18/03/2025,2025-03-19T08:56:00+05:00,0
+ORD-100855,C00122,viktor.petrov122@inbox.example.org,"Petrov, Viktor",Rain Shell,4,154.24,USD ,shipped,2025-04-29,2025-04-29T14:10:00Z,0
+ORD-101168,C00326,qa325@test.shopco.io,Uma Holm,Gaiters,2,36.42,usd,completed,2025-04-18T14:08:44Z,2025-04-18T13:10:00-04:00,0
+ORD-101288,C00146,viktor.okafor146@mail.example.com,Viktor Okafor,Headlamp,2,39.08,USD,shipped,2025-12-03,2025-12-03T19:33:00Z,no
+ORD-100247,C00287,nia.brandt287@inbox.example.org,Nia Brandt,Hiking Pole Pair,4,75.56,USD,shipped,12/10/2025,2025-10-12T07:08:00+03:00,0
+ORD-100317,C00319,ivo.kowalski319@inbox.example.org,Ivo Kowalski,Insulated Bottle,1,28.33,USD,shipped,07/04/2025,2025-04-08T03:18:00Z,FALSE
+ORD-100709,C00328,dara.lopez328@inbox.example.org,"Lopez, Dara",Dry Bag 20L,1,32.38,USD,completed,2025-10-02T04:43:35Z,2025-10-02 05:19:00,FALSE
+ORD-100043,C00116,ben.lopez116@inbox.example.org,Ben Lopez,Wool Beanie,1,25.78,USD,completed,17/04/2025,2025-04-17T19:17:00-04:00,false
+ORD-100873,C00138,omar.eriksen138@post.example.net,Omar Eriksen,Insulated Bottle,1,28.25,USD,completed,01/11/2025,2025-11-01 12:49:00,0
+ORD-101064,C00200,goran.costa200@mail.example.com,Goran Costa,Merino Base Layer,1,68.62,USD,completed,2025-08-18T10:26:27Z,2025-08-18T17:06:00Z,FALSE
+ORD-101123,C00080,ana.alvarez80@mail.example.com,Ana Alvarez,Hiking Pole Pair,1,80.67,USD,completed,"Feb 4, 2025",2025-02-04 09:29:00,yes
+ORD-100845,C00101,jun.lopez101@mail.example.com,Jun Lopez,Fleece Pullover,2,77.21,USD,completed,29/12/2025,2025-12-29T14:46:00Z,false
+ORD-101056,C00062,qa61@test.shopco.io,Mateo Jansen,Merino Base Layer,5,56.63,EUR,delivered,2025-05-12T04:24:54Z,2025-05-13 18:25:00,0
+ORD-100466,C00087,ben.alvarez87@post.example.net,Ben Alvarez,Hiking Pole Pair,1,82.59,USD,cancelled,2025-11-23,2025-11-23 11:39:00,false
+ORD-100976,C00174,ivo.jansen174@mail.example.com,Ivo Jansen,Camp Mug,1,15.24,USD,completed,21/01/2025,2025-01-21T20:11:00-04:00,FALSE
+ORD-100975,C00039,hana.ito39@inbox.example.org,Hana Ito,Hiking Pole Pair,1,74.45,USD,completed,2025-03-09T21:29:29Z,2025-03-10T01:40:00Z,FALSE
+ORD-101262,C00029,quinn.eriksen29@inbox.example.org,Quinn Eriksen,Trail Runner Shoe,2,89.66,USD,completed,2025-03-13,2025-03-13T19:43:00Z,no
+ORD-100174,C00297,rosa.jansen297@inbox.example.org,TEST-Jansen Rosa,Gaiters,1,39.25,USD,delivered,2025-07-07T17:00:34Z,2025-07-07 17:43:00,false
+ORD-100433,C00264,nia.brandt264@post.example.net,Nia Brandt,Trail Runner Shoe,1,92.96,USD,delivered,"Feb 14, 2025",2025-02-14T10:14:00Z,FALSE
+ORD-100059,C00237,rosa.kowalski237@post.example.net,Rosa Kowalski,Merino Base Layer,2,58.05,USD,completed,2025-01-24T22:02:44Z,2025-01-25 05:31:00,false
+ORD-101103,C00205,ivo.eriksen205@inbox.example.org,Ivo Eriksen,Camp Mug,1,15.47,USD,completed,18/10/2025,2025-10-18 05:31:00,
+ORD-101103,C00205,ivo.eriksen205@inbox.example.org,Ivo Eriksen,Camp Mug,1,15.47,USD,completed,"Oct 18, 2025",2025-10-20 14:36:00,
+ORD-101111,C00272,fatima.ito272@post.example.net,Fatima Ito,Hiking Pole Pair,1,83.35,USD,shipped,2025-11-09T21:56:49Z,2025-11-09 06:49:00,false
+ORD-100513,C00003,dara.petrov3@post.example.net,Dara Petrov,Rain Shell,2,168.13,USD,shipped,2025-01-13,2025-01-14T04:37:00+05:00,false
+ORD-100764,C00048,ben.fischer48@inbox.example.org,Ben Fischer,Merino Base Layer,2,67.88,USD,completed,2025-10-08T02:11:16Z,2025-10-09 03:05:00,
+ORD-101029,C00154,omar.okafor154@inbox.example.org,Test-Omar Okafor,Wool Beanie,1,17.77,GBP,shipped,2025-05-16T11:15:03Z,2025-05-18T01:50:00+05:00,FALSE
+ORD-100334,C00170,ben.ito170@inbox.example.org,Ben Ito,Trail Runner Shoe,2,90.10,USD,shipped,"Aug 10, 2025",2025-08-11T03:34:00+02:00,Y
+ORD-100452,C00326,qa325@test.shopco.io,Uma Holm,Wool Beanie,2,25.07,USD,shipped,"Sep 4, 2025",2025-09-05 04:46:00,false
+ORD-100869,C00109,goran.fischer109@inbox.example.org,Goran Fischer,Gaiters,1,33.77,USD,shipped,"Feb 11, 2025",2025-02-11T23:08:00Z,
+ORD-100031,C00057,sven.garcia57@inbox.example.org,"Garcia, Sven",Merino Base Layer,1,62.99,USD,completed,04/07/2025,2025-07-04T22:16:00+05:00,0
+ORD-100210,C00169,ivo.petrov169@inbox.example.org,Ivo Petrov,Camp Mug,1,15.06,USD,shipped,"Mar 3, 2025",2025-03-03T13:29:00+03:00,no
+ORD-101138,C00145,ivo.jansen145@post.example.net,Ivo Jansen,Wool Beanie,3,24.05,USD,completed,02/11/2025,2025-11-03T07:31:00+05:00,
+ORD-100125,C00066,viktor.dubois66@inbox.example.org,"Dubois, Viktor",Insulated Bottle,4,26.25,USD,shipped,2025-10-28,2025-10-29T00:59:00+02:00,FALSE
+ORD-101422,C00324,quinn.brandt324@mail.example.com,Quinn Brandt,Trail Runner Shoe,2,88.89,USD,cancelled,2025-04-18,2025-04-18T22:26:00-04:00,false
+ORD-101188,C00184,ivo.garcia184@inbox.example.org,Ivo Garcia,Camp Mug,2,14.96,USD,shipped,2025-02-12,2025-02-12T22:58:00Z,
+ORD-100430,C00290,qa289@test.shopco.io,Dara Ito,Gaiters,1,35.25,USD,shipped,2025-04-05,2025-04-05 22:08:00,no
+ORD-100631,C00229,rosa.garcia229@post.example.net,Rosa Garcia,Down Vest,2,137.07,USD,CANCELLED,"Aug 1, 2025",2025-08-01T18:53:00+05:00,false
+ORD-101378,C00154,omar.okafor154@inbox.example.org,Test-Omar Okafor,Down Vest,5,124.42,USD,CANCELLED,"Mar 21, 2025",2025-03-21T15:06:00Z,FALSE
+ORD-101216,C00038,omar.alvarez38@post.example.net,Omar Alvarez,Insulated Bottle,1,30.31,USD,shipped,2025-10-04,2025-10-05 01:36:00,no
+ORD-101241,C00083,viktor.holm83@mail.example.com,Viktor Holm,Wool Beanie,2,22.31,USD,completed,"Sep 8, 2025",2025-09-09 00:56:00,
+ORD-100160,C00140,nia.dubois140@post.example.net,Nia Dubois,Merino Base Layer,3,69.38,USD,completed,2025-12-04,2025-12-05T00:48:00Z,
+ORD-100452,C00326,qa325@test.shopco.io,Uma Holm,Wool Beanie,2,25.07,usd,delivered,04/09/2025,2025-09-05T04:04:00Z,0
+ORD-100747,C00286,mateo.fischer286@mail.example.com,"Fischer, Mateo",Down Vest,5,134.79,USD,delivered,2025-12-18,2025-12-18T12:41:00Z,1
+ORD-101160,C00259,qa258@test.shopco.io,"Silva, Lena",Trail Runner Shoe,5,89.56,USD,completed,19/03/2025,2025-03-19 11:52:00,FALSE
+ORD-101002,C00225,jun.brandt225@mail.example.com,"Brandt, Jun",Down Vest,1,138.92,USD,completed,"Oct 16, 2025",2025-10-16T21:38:00Z,false
+ORD-101044,C00097,sven.jansen97@mail.example.com,Sven Jansen,Headlamp,1,39.39,USD,delivered,2025-10-17,2025-10-17T20:05:00Z,0
+ORD-101342,C00221,ben.eriksen221@post.example.net,Ben Eriksen,Fleece Pullover,1,72.90,USD,completed,2025-03-17,2025-03-19 05:42:00,false
+ORD-100301,C00192,ben.alvarez192@mail.example.com,"Alvarez, Ben",Trail Runner Shoe,2,88.16,USD,completed,17/03/2025,2025-03-17T18:19:00Z,no
+ORD-100566,C00055,fatima.novak55@mail.example.com,Fatima Novak,Rain Shell,1,153.29,USD,completed,2025-12-06,2025-12-06T21:43:00Z,FALSE
+ORD-101011,C00061,nia.garcia61@inbox.example.org,Nia Garcia,Insulated Bottle,3,30.84,USD,shipped,08/08/2025,2025-08-08T23:34:00+05:00,0
+ORD-100655,C00033,lena.alvarez33@inbox.example.org,Lena Alvarez,Fleece Pullover,3,76.46,USD,shipped,2025-02-05,2025-02-06T04:09:00+02:00,
+ORD-100649,C00103,chen.rossi103@mail.example.com,"Rossi, Chen",Down Vest,1,122.63,EUR,completed,2025-04-09T16:14:01Z,2025-04-09 08:16:00,FALSE
+ORD-101012,C00302,jun.dubois302@post.example.net,Jun Dubois,Insulated Bottle,3,23.81,GBP,completed,12/09/2025,2025-09-14T19:02:00Z,no
+ORD-100136,C00304,ivo.garcia304@inbox.example.org,TEST-Ivo Garcia,Gaiters,2,33.49,USD,shipped,"Jan 28, 2025",2025-01-29 14:18:00,
+ORD-100093,C00290,qa289@test.shopco.io,Dara Ito,Gaiters,1,28.60,GBP,CANCELLED,"Jul 29, 2025",2025-07-29T16:43:00Z,FALSE
+ORD-101419,C00286,mateo.fischer286@mail.example.com,"Fischer, Mateo",Insulated Bottle,1,21.21,GBP,delivered,2025-10-01T17:37:52Z,2025-10-01T23:51:00+02:00,TRUE
+ORD-100196,C00072,dara.jansen72@inbox.example.org,Dara Jansen,Down Vest,1,119.10,USD,delivered,18/01/2025,2025-01-19T15:43:00Z,
+ORD-101026,C00076,sven.moreau76@inbox.example.org,Sven Moreau,Trail Runner Shoe,1,95.08,USD,completed,2025-08-04,2025-08-04T09:29:00Z,
+ORD-100099,C00253,ivo.costa253@inbox.example.org,Ivo Costa,Dry Bag 20L,4,29.52,USD,delivered,2025-12-17,2025-12-17T20:29:00Z,false
+ORD-101201,C00062,qa61@test.shopco.io,Mateo Jansen,Down Vest,2,140.60,USD,completed,"Nov 17, 2025",2025-11-17T21:27:00+05:00,no
+ORD-100526,C00164,hana.jansen164@post.example.net,Hana Jansen,Rain Shell,1,145.45,USD,delivered,"Jun 24, 2025",2025-06-24T20:21:00+02:00,false
+ORD-100829,C00213,fatima.lopez213@inbox.example.org,Fatima Lopez,Down Vest,3,121.28,USD,delivered,2025-11-15T06:36:23Z,2025-11-15T12:45:00+03:00,false
+ORD-100256,C00254,uma.costa254@mail.example.com,"Costa, Uma",Merino Base Layer,2,57.82,USD,canceled,"Jun 21, 2025",2025-06-21T09:27:00Z,0
+ORD-100587,C00225,jun.brandt225@mail.example.com,"Brandt, Jun",Down Vest,1,123.37,USD,completed,"Aug 5, 2025",2025-08-05 04:15:00,
+ORD-100898,C00184,ivo.garcia184@inbox.example.org,Ivo Garcia,Merino Base Layer,1,60.10,USD,shipped,2025-07-14,2025-07-14T15:03:00+05:00,
+ORD-100640,C00271,quinn.okafor271@inbox.example.org,Quinn Okafor,Fleece Pullover,1,67.84,USD,completed,25/02/2025,2025-02-26T02:26:00Z,false
+ORD-101422,C00324,quinn.brandt324@mail.example.com,Quinn Brandt,Trail Runner Shoe,2,88.89,USD,completed,2025-13-04,2025-04-19T01:10:00Z,
+ORD-100063,C00128,qa127@test.shopco.io,Lena Fischer,Trail Runner Shoe,2,84.32,usd,shipped,2025-12-23,2025-12-23T09:31:00Z,FALSE
+ORD-100735,C00045,goran.ito45@inbox.example.org,Goran Ito,Down Vest,1,111.34,GBP,shipped,2025-08-02T06:26:48Z,2025-08-03 06:10:00,0
+ORD-100454,C00287,nia.brandt287@inbox.example.org,Nia Brandt,Camp Mug,4,14.70,USD,Cancelled,2025-02-21T03:04:27Z,2025-02-21T21:10:00+03:00,
+ORD-100358,C00280,jun.novak280@inbox.example.org,Jun Novak,Trail Runner Shoe,3,87.55,USD,completed,2025-11-01T19:15:22Z,2025-11-01T15:17:00+03:00,no
+ORD-100493,C00186,eli.ito186@mail.example.com,Eli Ito,Dry Bag 20L,1,33.51,USD,completed,2025-08-02,2025-08-02 02:36:00,
+ORD-101320,C00289,dara.silva289@inbox.example.org,Dara Silva,Trail Runner Shoe,2,92.31,USD,completed,15/06/2025,2025-06-15 15:15:00,no
+ORD-100942,C00217,ivo.costa217@mail.example.com,TEST-Ivo Costa,Insulated Bottle,3,26.62,USD,completed,2025-09-24T13:24:18Z,2025-09-25T03:19:00+02:00,false
+ORD-101214,C00061,nia.garcia61@inbox.example.org,Nia Garcia,Hiking Pole Pair,1,75.14,USD,delivered,2025-08-18T08:28:55Z,2025-08-18 11:08:00,FALSE
+ORD-100064,C00290,qa289@test.shopco.io,Dara Ito,Fleece Pullover,1,69.82,USD,completed,2025-09-03T05:32:41Z,2025-09-03 23:22:00,false
+ORD-100420,C00304,ivo.garcia304@inbox.example.org,TEST-Ivo Garcia,Insulated Bottle,3,28.22,USD,shipped,2025-10-10,2025-10-10T20:07:00Z,0
+ORD-100147,C00059,tariq.rossi59@mail.example.com,Tariq Rossi,Rain Shell,1,135.69,EUR,delivered,2025-02-19,2025-02-20 01:03:00,
+ORD-101243,C00316,sven.garcia316@inbox.example.org,Sven Garcia,Insulated Bottle,2,29.21,USD,delivered,2025-01-25T15:34:31Z,2025-01-27T16:16:00Z,
+ORD-101171,C00150,rosa.jansen150@inbox.example.org,"Jansen, Rosa",Merino Base Layer,1,65.84,USD,canceled,21/03/2025,2025-03-24T14:03:00Z,no
+ORD-101300,C00214,rosa.rossi214@post.example.net,"Rossi, Rosa",Insulated Bottle,1,27.27,USD,completed,16/09/2025,2025-09-16T19:14:00Z,FALSE
+ORD-100842,C00203,eli.alvarez203@mail.example.com,Eli Alvarez,Fleece Pullover,2,77.91,USD,delivered,2025-05-25,2025-05-26T03:38:00+03:00,
+ORD-100093,C00290,qa289@test.shopco.io,Dara Ito,Gaiters,1,28.60,GBP,completed,2025-07-29,2025-07-29 18:37:00,0
+ORD-101345,C00266,uma.alvarez266@post.example.net,Uma Alvarez,Gaiters,1,25.79,GBP,completed,"Aug 25, 2025",2025-08-25T21:00:00+05:00,no
+ORD-101048,C00117,eli.eriksen117@post.example.net,Eli Eriksen,Down Vest,3,130.56,USD,completed,"May 14, 2025",2025-05-14T08:34:00Z,no
+ORD-100465,C00225,jun.brandt225@mail.example.com,"Brandt, Jun",Fleece Pullover,2,77.30,USD,shipped,2025-11-25,2025-11-26 00:05:00,
+ORD-100816,C00036,chen.silva36@post.example.net,Chen Silva,Gaiters,2,34.19,USD,shipped,26/08/2025,2025-08-26 08:14:00,no
+ORD-100431,C00029,quinn.eriksen29@inbox.example.org,Quinn Eriksen,Headlamp,2,41.09,USD,completed,23/12/2025,2025-12-24T01:27:00Z,0
+ORD-100349,C00048,ben.fischer48@inbox.example.org,Ben Fischer,Trail Runner Shoe,1,86.13,USD,delivered,2025-05-13,2025-05-13 20:28:00,FALSE
+ORD-100326,C00261,nia.garcia261@inbox.example.org,Nia Garcia,Wool Beanie,2,21.25,EUR,completed,2025-06-09,2025-06-10T04:49:00+05:00,false
+ORD-101360,C00219,ben.brandt219@inbox.example.org,Ben Brandt,Insulated Bottle,1,24.91,GBP,completed,2025-06-18T23:27:36Z,2025-06-18T00:09:00-04:00,false
+ORD-100153,C00023,sven.moreau23@mail.example.com,Sven Moreau,Wool Beanie,4,26.29,USD,delivered,28/04/2025,2025-04-29T03:42:00Z,
+ORD-100002,C00290,qa289@test.shopco.io,Dara Ito,Gaiters,1,36.86,USD,shipped,2025-08-17,2025-08-18T10:06:00+03:00,no
+ORD-100561,C00008,r.ito8@latest.shopco.io,Ana Rossi,Wool Beanie,2,25.04,USD,shipped,15/04/2025,2025-04-16 00:18:00,
+ORD-100190,C00227,mateo.dubois227@post.example.net,"Dubois, Mateo",Hiking Pole Pair,1,73.32,USD,completed,2025-10-06,2025-10-06T04:18:00Z,0
+ORD-100375,C00286,mateo.fischer286@mail.example.com,"Fischer, Mateo",Gaiters,2,35.96,USD,shipped,10/10/2025,2025-10-10T08:42:00Z,TRUE
+ORD-100091,C00230,quinn.moreau230@inbox.example.org,"Moreau, Quinn",Headlamp,2,35.47,USD,completed,"Aug 21, 2025",2025-08-21 11:01:00,Y
+ORD-100693,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Rain Shell,3,154.03,USD,delivered,2025-11-04T00:33:15Z,2025-11-04T07:44:00+02:00,yes
+ORD-100283,C00167,ana.lopez167@inbox.example.org,"Lopez, Ana",Camp Mug,1,13.44,USD,shipped,13/09/2025,2025-09-13T17:37:00-04:00,0
+ORD-100826,C00255,uma.fischer255@post.example.net,Uma Fischer,Wool Beanie,2,24.17,USD,shipped,"Feb 17, 2025",2025-02-18T03:09:00Z,0
+ORD-100958,C00259,qa258@test.shopco.io,"Silva, Lena",Dry Bag 20L,2,34.93, USD,shipped,"Jul 7, 2025",2025-07-08T06:06:00+02:00,FALSE
+ORD-101336,C00076,sven.moreau76@inbox.example.org,Sven Moreau,Rain Shell,2,148.95,USD,completed,"Mar 4, 2025",2025-03-05T03:50:00Z,no
+ORD-101454,C00239,quinn.rossi239@mail.example.com,Quinn Rossi,Dry Bag 20L,2,32.92,USD,cancelled,2025-09-12T13:22:55Z,2025-09-12T22:22:00+03:00,
+ORD-101333,C00283,mateo.novak283@mail.example.com,Mateo Novak,Rain Shell,5,172.21,USD,completed,2025-01-06,2025-01-06T19:10:00Z,false
+ORD-100839,C00187,eli.eriksen187@post.example.net,"Eriksen, Eli",Merino Base Layer,1,65.99,USD,completed,02/07/2025,2025-07-02 06:17:00,
+,C00078,jun.silva78@post.example.net,"Silva, Jun",Insulated Bottle,1,31.08,USD,delivered,2025-08-23,2025-08-23 17:12:00,
+ORD-101436,C00230,quinn.moreau230@inbox.example.org,"Moreau, Quinn",Headlamp,3,39.33,USD,CANCELLED,2025-06-17,2025-06-19 09:56:00,TRUE
+ORD-101126,C00223,omar.alvarez223@post.example.net,Omar Alvarez,Down Vest,3,134.09,USD,completed,2025-06-15,2025-06-15 22:49:00,true
+ORD-100521,C00311,quinn.kowalski311@mail.example.com,TEST-Quinn Kowalski,Gaiters,2,31.00,EUR,delivered,2025-09-13T04:23:33Z,2025-09-15T16:17:00Z,no
+ORD-101133,C00111,hana.ito111@inbox.example.org,Hana Ito,Gaiters,1,35.36,USD,delivered,21/12/2025,2025-12-21T06:32:00Z,false
+ORD-101143,C00111,hana.ito111@inbox.example.org,Hana Ito,Insulated Bottle,1,30.87,USD,Cancelled,2025-08-08,2025-08-09T00:23:00Z,no
+ORD-100062,C00154,omar.okafor154@inbox.example.org,Test-Omar Okafor,Dry Bag 20L,1,31.08,USD,Cancelled,2025-08-10T21:21:10Z,2025-08-10 04:47:00,
+ORD-100300,C00151,uma.eriksen151@post.example.net,Uma Eriksen,Dry Bag 20L,1,32.03,USD,completed,"Jan 17, 2025",2025-01-17T13:52:00+03:00,FALSE
+ORD-101310,C00015,goran.jansen15@post.example.net,Goran Jansen,Headlamp,5,34.41,EUR,canceled,08/06/2025,2025-06-08 12:22:00,
+ORD-101297,C00153,lena.rossi153@mail.example.com,Lena Rossi,Camp Mug,5,13.56,USD,completed,2025-10-01T17:50:45Z,2025-10-01 12:51:00,
+ORD-100480,C00003,dara.petrov3@post.example.net,Dara Petrov,Insulated Bottle,1,24.73,GBP,completed,16/05/2025,2025-05-17 00:00:00,
+ORD-100032,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Wool Beanie,1,22.96,USD,shipped,"Nov 13, 2025",2025-11-13T02:42:00-04:00,1
+ORD-101248,C00304,ivo.garcia304@inbox.example.org,TEST-Ivo Garcia,Merino Base Layer,1,59.07,USD,canceled,"Jul 7, 2025",2025-07-11 22:10:00,false
+ORD-100330,C00066,viktor.dubois66@inbox.example.org,"Dubois, Viktor",Rain Shell,2,154.91,USD,completed,2025-05-10T00:02:29Z,2025-05-11T00:59:00Z,no
+ORD-100756,C00182,hana.alvarez182@inbox.example.org,"Alvarez, Hana",Fleece Pullover,1,72.15,USD,delivered,"Jun 8, 2025",2025-06-08T20:29:00+03:00,false
+ORD-100342,C00268,uma.silva268@post.example.net,Uma Silva,Rain Shell,5,159.21,USD,completed,2025-08-29T11:31:40Z,2025-08-29T06:20:00+02:00,false
+ORD-100650,C00108,viktor.silva108@inbox.example.org,"Silva, Viktor",Camp Mug,1,13.71,EUR,shipped,"Jan 8, 2025",2025-01-08 18:05:00,false
+ORD-101171,C00150,rosa.jansen150@inbox.example.org,"Jansen, Rosa",Merino Base Layer,1,65.84,USD,shipped,"Mar 21, 2025",2025-03-22T03:04:00Z,FALSE
+ORD-100543,C00062,qa61@test.shopco.io,Mateo Jansen,Insulated Bottle,3,24.19,EUR,shipped,2025-08-28T22:39:15Z,2025-08-30T13:57:00-04:00,0
+ORD-100775,C00050,uma.rossi50@inbox.example.org,Uma Rossi,Rain Shell,5,163.01,USD,completed,29/01/2025,2025-01-29 18:10:00,FALSE
+ORD-100689,C00200,goran.costa200@mail.example.com,Goran Costa,Wool Beanie,4,22.22,EUR,delivered,"Aug 25, 2025",2025-08-25 10:48:00,no
+ORD-100888,C00297,rosa.jansen297@inbox.example.org,TEST-Jansen Rosa,Headlamp,1,35.27,USD,completed,27/12/2025,2025-12-28T00:17:00+05:00,0
+ORD-101220,C00100,chen.costa100@mail.example.com,Chen Costa,Fleece Pullover,3,74.37,USD,completed,2025-03-13T20:40:22Z,2025-03-13 21:14:00,FALSE
+ORD-100386,C00105,jun.dubois105@inbox.example.org,Jun Dubois,Camp Mug,3,15.53,USD,delivered,2025-11-02,2025-11-02T13:25:00+05:00,FALSE
+ORD-100545,C00194,tariq.okafor194@post.example.net,Tariq Okafor,Hiking Pole Pair,3,86.85,USD,completed,"Oct 30, 2025",2025-10-30 06:57:00,false
+ORD-101069,C00245,ivo.holm245@inbox.example.org,Ivo Holm,Wool Beanie,1,26.18,USD,cancelled,2025-09-07T17:32:54Z,2025-09-08T02:09:00+05:00,0
+ORD-100479,C00101,jun.lopez101@mail.example.com,Jun Lopez,Dry Bag 20L,2,34.73,USD,delivered,2025-11-28T11:31:10Z,2025-11-28 08:19:00,0
+ORD-100295,C00039,hana.ito39@inbox.example.org,Hana Ito,Headlamp,1,37.38,USD,shipped,06/11/2025,2025-11-07T01:59:00+03:00,no
+ORD-100938,C00154,omar.okafor154@inbox.example.org,Test-Omar Okafor,Headlamp,1,42.41,USD,shipped,24/12/2025,2025-12-24 19:20:00,FALSE
+ORD-101173,C00040,fatima.lopez40@mail.example.com,Fatima Lopez,Trail Runner Shoe,1,66.04,GBP,shipped,08/09/2025,2025-09-08T09:55:00Z,FALSE
+ORD-101340,C00304,ivo.garcia304@inbox.example.org,TEST-Ivo Garcia,Down Vest,1,123.91,USD,completed,06/12/2025,2025-12-06 02:55:00,FALSE
+ORD-101003,C00245,ivo.holm245@inbox.example.org,Ivo Holm,Camp Mug,3,15.21,USD,completed,2025-06-03,2025-06-03T21:35:00Z,false
+ORD-100260,C00173,fatima.costa173@inbox.example.org,Fatima Costa,Hiking Pole Pair,2,72.37,USD,shipped,2025-11-02T09:25:42Z,2025-11-02T10:47:00Z,
+ORD-100139,C00304,ivo.garcia304@inbox.example.org,TEST-Ivo Garcia,Merino Base Layer,1,64.21,EUR,completed,2025-10-12T09:45:48Z,2025-10-13T06:08:00+05:00,FALSE
+ORD-100881,C00056,ana.silva56@mail.example.com,"Silva, Ana",Down Vest,1,118.78,USD,CANCELLED,"May 21, 2025",2025-05-21 15:45:00,FALSE
+ORD-100793,C00177,ben.fischer177@inbox.example.org,Ben Fischer,Camp Mug,2,12.76,EUR,canceled,2025-06-01,2025-06-02T01:03:00-04:00,FALSE
+ORD-101028,C00198,rosa.moreau198@inbox.example.org,Rosa Moreau,Trail Runner Shoe,2,89.39,USD,completed,"Apr 2, 2025",2025-04-05 11:17:00,false
+
+ORD-100979,C00207,quinn.eriksen207@post.example.net,Quinn Eriksen,Hiking Pole Pair,3,73.88,USD,completed,"Oct 12, 2025",2025-10-12 19:39:00,0
+ORD-100053,C00323,dara.jansen323@post.example.net,test-Dara Jansen,Trail Runner Shoe,2,94.22,USD,completed,2025-12-07,2025-12-07T11:07:00+05:00,0
+ORD-101037,C00062,qa61@test.shopco.io,Mateo Jansen,Wool Beanie,5,21.68,USD,CANCELLED,2025-10-22,2025-10-23T01:35:00Z,no
+ORD-100328,C00286,mateo.fischer286@mail.example.com,"Fischer, Mateo",Down Vest,2,118.92,USD,delivered,16/02/2025,2025-02-16T22:20:00Z,yes
+ORD-100785,C00063,kofi.moreau63@mail.example.com,"Moreau, Kofi",Trail Runner Shoe,2,96.06,USD,completed,23/01/2025,2025-01-24T06:06:00+03:00,FALSE
+ORD-100398,C00171,sven.novak171@mail.example.com,Sven Novak,Gaiters,1,36.06,USD,shipped,01/08/2025,2025-08-01 14:00:00,0
+ORD-100095,C00018,nia.fischer18@inbox.example.org,Nia Fischer,Insulated Bottle,3,26.74,EUR,cancelled,"Apr 23, 2025",2025-04-23T16:45:00Z,
+ORD-100789,C00105,jun.dubois105@inbox.example.org,Jun Dubois,Fleece Pullover,3,73.22,USD,completed,2025-09-23T12:10:13Z,2025-09-23 22:06:00,
+ORD-100280,C00250,eli.dubois250@post.example.net,Eli Dubois,Rain Shell,1,149.36,USD,completed,10/02/2025,2025-02-10 22:53:00,
+ORD-100809,C00314,ivo.holm314@inbox.example.org,Ivo Holm,Merino Base Layer,1,67.07,USD,shipped,2025-11-18T02:51:53Z,2025-11-18T17:11:00+02:00,FALSE
+ORD-100757,C00118,mateo.moreau118@mail.example.com,Mateo Moreau,Fleece Pullover,1,71.09,USD,completed,2025-02-28,2025-03-01 01:09:00,FALSE
+ORD-100077,C00041,fatima.ito41@mail.example.com,Fatima Ito,Headlamp,5,42.03,USD,shipped,"Sep 2, 2025",2025-09-02 22:12:00,FALSE
+ORD-100851,C00076,sven.moreau76@inbox.example.org,Sven Moreau,Down Vest,1,141.52,USD,shipped,2025-09-27,2025-09-27T20:47:00Z,FALSE
+ORD-100103,C00149,ana.dubois149@mail.example.com,Ana Dubois,Camp Mug,1,13.57,USD,delivered,"Apr 26, 2025",2025-04-26 14:10:00,
+ORD-100912,C00135,ivo.dubois135@mail.example.com,Ivo Dubois,Wool Beanie,1,26.30,USD,canceled,2025-05-02T15:12:38Z,2025-05-03T04:43:00Z,false
+ORD-100367,C00028,ana.moreau28@inbox.example.org,Ana Moreau,Fleece Pullover,2,71.20,USD,completed,2025-10-19T16:23:50Z,2025-10-19T08:36:00-04:00,no
+ORD-100079,C00142,goran.rossi142@mail.example.com,Goran Rossi,Headlamp,1,40.88,USD,delivered,05/06/2025,2025-06-06T01:38:00Z,
+ORD-100531,C00175,hana.kowalski175@mail.example.com,Hana Kowalski,Insulated Bottle,1,29.02,USD,canceled,2025-10-06T07:31:02Z,2025-10-06T14:08:00-04:00,FALSE
+ORD-101267,C00280,jun.novak280@inbox.example.org,Jun Novak,Camp Mug,2,13.14,USD,shipped,07/02/2025,2025-02-07T10:47:00Z,
+ORD-100915,C00075,eli.eriksen75@inbox.example.org,Eli Eriksen,Fleece Pullover,3,70.13, USD,completed,"Apr 16, 2025",2025-04-16T05:16:00Z,0
+ORD-100329,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Dry Bag 20L,1,33.18,USD,completed,20/10/2025,2025-10-21T02:46:00+03:00,true
+ORD-100558,C00064,fatima.garcia64@inbox.example.org,"Garcia, Fatima",Headlamp,1,40.25,USD,CANCELLED,"Oct 19, 2025",2025-10-19 19:03:00,false
+ORD-101369,C00323,dara.jansen323@post.example.net,test-Dara Jansen,Down Vest,1,91.82,GBP,cancelled,"Feb 10, 2025",2025-02-11T16:25:00Z,false
+ORD-100376,C00290,qa289@test.shopco.io,Dara Ito,Down Vest,1,138.71,USD,shipped,"Jan 4, 2025",2025-01-05T20:14:00+02:00,false
+ORD-101326,C00229,rosa.garcia229@post.example.net,Rosa Garcia,Wool Beanie,2,23.63,USD,shipped,"Feb 4, 2025",2025-02-04 12:48:00,no
+ORD-101010,C00230,quinn.moreau230@inbox.example.org,"Moreau, Quinn",Fleece Pullover,4,72.91,USD,delivered,"Aug 30, 2025",2025-08-30T14:29:00+03:00,Y
+ORD-100796,C00199,ivo.kowalski199@mail.example.com,Ivo Kowalski,Trail Runner Shoe,2,97.02,USD,canceled,"Feb 12, 2025",2025-02-12T15:52:00Z,0
+ORD-101313,C00259,qa258@test.shopco.io,"Silva, Lena",Headlamp,2,39.12,USD,completed,20/05/2025,2025-05-20 14:23:00,FALSE
+ORD-100491,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Down Vest,1,130.07,USD,delivered,"Oct 27, 2025",2025-10-28 03:54:00,true
+ORD-100360,C00312,uma.garcia312@post.example.net,Uma Garcia,Gaiters,3,36.69,USD,cancelled,2025-12-26,2025-12-27T09:15:00+05:00,false
+ORD-101327,C00165,uma.eriksen165@post.example.net,Uma Eriksen,Fleece Pullover,1,77.32,USD,completed,26/04/2025,2025-04-26T18:29:00+05:00,no
+ORD-101203,C00031,lena.silva31@inbox.example.org,Lena Silva,Gaiters,1,34.16,USD,shipped,15/08/2025,2025-08-15T17:52:00Z,no
+ORD-100264,C00154,omar.okafor154@inbox.example.org,Test-Omar Okafor,Trail Runner Shoe,5,82.27,USD,delivered,2025-12-14T21:20:01Z,2025-12-14 16:13:00,0
+ORD-100316,C00309,priya.holm309@inbox.example.org,Priya Holm,Headlamp,1,40.76,USD,completed,2025-05-06T05:15:31Z,2025-05-06T19:17:00+03:00,false
+ORD-100818,C00308,priya.garcia308@inbox.example.org,Priya Garcia,Headlamp,5,35.79,USD,completed,"Feb 18, 2025",2025-02-18T12:58:00Z,no
+ORD-100287,C00140,nia.dubois140@post.example.net,Nia Dubois,Down Vest,5,119.04,USD,completed,2025-09-02T05:47:55Z,2025-09-02T17:26:00+03:00,false
+ORD-100828,C00018,nia.fischer18@inbox.example.org,Nia Fischer,Hiking Pole Pair,2,80.13,USD,shipped,"Jul 8, 2025",2025-07-08T10:12:00+05:00,0
+ORD-101163,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Fleece Pullover,2,75.54,USD,shipped,"Oct 8, 2025",2025-10-09T02:13:00Z,true
+ORD-100256,C00254,uma.costa254@mail.example.com,"Costa, Uma",Merino Base Layer,2,57.82,USD,completed,2025-06-21,2025-06-21 08:31:00,
+ORD-100028,C00292,uma.costa292@mail.example.com,"Costa, Uma",Wool Beanie,2,21.91,USD,shipped,2025-10-17T02:32:57Z,2025-10-19 01:11:00,no
+ORD-100088,C00077,hana.costa77@post.example.net,"Costa, Hana",Trail Runner Shoe,3,84.85,USD,completed,23/09/2025,2025-09-23T11:01:00+03:00,no
+ORD-100519,C00080,ana.alvarez80@mail.example.com,Ana Alvarez,Hiking Pole Pair,1,75.84,USD,completed,2025-09-19,2025-09-19T22:04:00Z,TRUE
+ORD-101079,C00263,mateo.rossi263@inbox.example.org,Mateo Rossi,Merino Base Layer,5,58.63,USD,completed,2025-05-06T22:21:54Z,2025-05-06T21:53:00Z,
+ORD-100724,C00179,hana.moreau179@mail.example.com,Hana Moreau,Hiking Pole Pair,1,84.70,USD,completed,2025-09-29,2025-09-29T18:19:00Z,FALSE
+ORD-100196,C00072,dara.jansen72@inbox.example.org,Dara Jansen,Down Vest,1,119.10,USD,shipped,2025-01-18T13:07:36Z,2025-01-19T04:22:00+03:00,false
+ORD-100115,C00046,quinn.garcia46@post.example.net,"Garcia, Quinn",Hiking Pole Pair,two,71.25,USD,completed,2025-03-27T23:38:03Z,2025-03-27 17:48:00,FALSE
+ORD-100057,C00107,rosa.brandt107@inbox.example.org,Rosa Brandt,Wool Beanie,1,25.01,USD,completed,"Mar 18, 2025",2025-03-18 08:09:00,
+ORD-100156,C00306,quinn.eriksen306@post.example.net,"Eriksen, Quinn",Down Vest,3,139.54,USD,shipped,"Feb 7, 2025",2025-02-07T20:08:00Z,false
+ORD-100302,C00141,hana.moreau141@mail.example.com,Hana Moreau,Fleece Pullover,2,69.79,USD,completed,2025-04-25,2025-04-25T11:07:00-04:00,false
+ORD-100859,C00079,ivo.dubois79@post.example.net,Ivo Dubois,Gaiters,1,34.32,usd,completed,"Mar 16, 2025",2025-03-16T22:58:00+03:00,FALSE
+ORD-101066,C00067,lena.silva67@inbox.example.org,Lena Silva,Camp Mug,5,15.36,USD,delivered,"Dec 5, 2025",2025-12-05T21:35:00+02:00,0
+ORD-100447,C00177,ben.fischer177@inbox.example.org,Ben Fischer,Merino Base Layer,1,61.72,USD,cancelled,"Feb 20, 2025",2025-02-20T07:48:00Z,
+ORD-101173,C00040,fatima.lopez40@mail.example.com,Fatima Lopez,Trail Runner Shoe,1,66.04,GBP,shipped,"Sep 8, 2025",2025-09-08T07:39:00-04:00,0
+ORD-100075,C00292,uma.costa292@mail.example.com,"Costa, Uma",Trail Runner Shoe,3,90.61,USD,completed,2025-09-08T22:01:26Z,2025-09-08 15:20:00,false
+ORD-100315,C00297,rosa.jansen297@inbox.example.org,TEST-Jansen Rosa,Headlamp,1,41.86,USD,canceled,13/06/2025,2025-06-13 08:12:00,
+ORD-100563,C00128,qa127@test.shopco.io,Lena Fischer,Rain Shell,1,148.32,USD,shipped,"Jan 5, 2025",2025-01-06T02:15:00+05:00,FALSE
+ORD-101025,C00133,uma.lopez133@mail.example.com,Uma Lopez,Gaiters,1,33.99,USD,completed,"Oct 4, 2025",2025-10-05 05:41:00,FALSE
+ORD-100359,C00148,goran.moreau148@mail.example.com,Goran Moreau,Down Vest,1,117.12,USD,completed,2025-06-03,2025-06-04 03:19:00,no
+ORD-101447,C00055,fatima.novak55@mail.example.com,Fatima Novak,Rain Shell,1,174.63,USD,delivered,29/11/2025,2025-11-29 09:16:00,no
+ORD-101380,C00080,ana.alvarez80@mail.example.com,Ana Alvarez,Down Vest,1,137.97,USD,completed,2025-11-26T18:41:44Z,2025-11-26T23:18:00Z,Y
+ORD-100847,C00055,fatima.novak55@mail.example.com,Fatima Novak,Camp Mug,1,13.88,USD,completed,2025-06-15,2025-06-15 08:11:00,FALSE
+ORD-101430,C00282,kofi.petrov282@post.example.net,Kofi Petrov,Hiking Pole Pair,4,67.74,EUR,completed,2025-12-11T00:24:46Z,2025-12-12T03:44:00Z,false
+ORD-100352,C00037,ben.costa37@mail.example.com,Ben Costa,Insulated Bottle,1,22.74,GBP,shipped,2025-10-31,2025-11-01T00:22:00+05:00,false
+ORD-100711,C00002,omar.petrov2@mail.example.com,Omar Petrov,Dry Bag 20L,1,31.68,EUR,CANCELLED,2025-11-16T05:25:00Z,2025-11-17 06:23:00,FALSE
+ORD-101466,C00140,nia.dubois140@post.example.net,Nia Dubois,Insulated Bottle,1,30.62,USD,completed,2025-01-01T11:25:15Z,2025-01-01T16:18:00+02:00,0
+ORD-101456,C00140,nia.dubois140@post.example.net,Nia Dubois,Dry Bag 20L,1,30.87,USD,completed,31/03/2025,2025-03-31 03:52:00,
+ORD-100904,C00176,quinn.lopez176@inbox.example.org,Quinn Lopez,Down Vest,2,120.06,USD,delivered,16/12/2025,2025-12-16T07:52:00Z,no
+ORD-100328,C00286,mateo.fischer286@mail.example.com,"Fischer, Mateo",Down Vest,2,118.92,USD,shipped,2025-02-16,2025-02-17T00:45:00Z,true
+ORD-101134,C00084,nia.moreau84@inbox.example.org,"Moreau, Nia",Merino Base Layer,2,57.82,USD,shipped,2025-09-16,2025-09-16T08:32:00Z,Y
+ORD-100497,C00062,qa61@test.shopco.io,Mateo Jansen,Fleece Pullover,1,70.42,USD,shipped,2025-09-24,2025-09-25 04:00:00,false
+ORD-101165,C00121,viktor.holm121@post.example.net,Viktor Holm,Wool Beanie,1,25.65,USD,delivered,19/02/2025,2025-02-19T17:17:00Z,no
+ORD-100780,C00085,jun.silva85@post.example.net,Jun Silva,Headlamp,1,40.75, USD,completed,2025-02-20,2025-02-21T06:28:00Z,false
+ORD-101176,C00273,viktor.brandt273@post.example.net,Viktor Brandt,Fleece Pullover,1,72.79,USD,completed,2025-06-09,2025-06-09 04:37:00,0
+ORD-101457,C00228,dara.novak228@inbox.example.org,"Novak, Dara",Fleece Pullover,4,81.23,USD,completed,"Aug 13, 2025",2025-08-13T08:31:00Z,0
+ORD-101353,C00232,quinn.silva232@inbox.example.org,Quinn Silva,Trail Runner Shoe,3,93.66,USD,shipped,2025-09-10T13:00:00Z,2025-09-10 11:33:00,
+ORD-101060,C00056,ana.silva56@mail.example.com,"Silva, Ana",Camp Mug,4,15.64,USD,delivered,05/07/2025,2025-07-05T19:35:00Z,0
+ORD-100639,C00168,nia.silva168@post.example.net,Nia Silva,Rain Shell,1,124.33,GBP,completed,2025-11-02T08:50:32Z,2025-11-02T12:45:00-04:00,false
+ORD-100098,C00255,uma.fischer255@post.example.net,Uma Fischer,Camp Mug,3,15.88,USD,CANCELLED,03/10/2025,2025-10-03 08:00:00,
+ORD-100824,C00095,chen.kowalski95@post.example.net,"Kowalski, Chen",Insulated Bottle,1,31.79,USD,completed,2025-07-02,2025-07-02T11:05:00Z,false
+ORD-100161,C00054,chen.costa54@post.example.net,Chen Costa,Fleece Pullover,2,73.06,USD,completed,24/09/2025,2025-09-24T11:36:00-04:00,FALSE
+ORD-100607,C00146,viktor.okafor146@mail.example.com,Viktor Okafor,Camp Mug,1,14.57,USD,completed,"May 1, 2025",2025-05-01T10:03:00-04:00,false
+ORD-100978,C00219,ben.brandt219@inbox.example.org,Ben Brandt,Headlamp,2,32.42,GBP,cancelled,2025-06-06T05:42:58Z,2025-06-07T02:23:00Z,
+ORD-101386,C00037,ben.costa37@mail.example.com,Ben Costa,Merino Base Layer,3,69.57,USD,completed,"Oct 13, 2025",2025-10-13T23:11:00-04:00,false
+ORD-100262,C00119,hana.petrov119@inbox.example.org,Hana Petrov,Fleece Pullover,1,72.77,USD,delivered,"Jul 22, 2025",2025-07-22T10:12:00Z,
+ORD-101023,C00066,viktor.dubois66@inbox.example.org,"Dubois, Viktor",Rain Shell,1,162.02,USD,delivered,"Aug 10, 2025",2025-08-10T20:03:00Z,
+ORD-101093,C00026,lena.lopez26@post.example.net,Lena Lopez,Gaiters,4,37.50,USD,completed,2025-02-07,2025-02-07 18:07:00,no
+ORD-100605,C00102,dara.rossi102@post.example.net,Dara Rossi,Dry Bag 20L,3,33.17,USD,shipped,2025-03-11T22:41:11Z,2025-03-11 05:35:00,FALSE
+ORD-100332,C00198,rosa.moreau198@inbox.example.org,Rosa Moreau,Rain Shell,2,164.75,USD,shipped,2025-08-10,2025-08-13T16:47:00Z,
+ORD-101119,C00169,ivo.petrov169@inbox.example.org,Ivo Petrov,Headlamp,1,40.73,USD,completed,"Aug 1, 2025",2025-08-01T19:59:00+02:00,no
+ORD-100869,C00109,goran.fischer109@inbox.example.org,Goran Fischer,Gaiters,3,33.77,USD ,completed,2025-02-11,2025-02-12T12:10:00+03:00,0
+ORD-101089,C00080,ana.alvarez80@mail.example.com,Ana Alvarez,Merino Base Layer,2,68.72,USD,shipped,2025-04-14,2025-04-14T13:57:00Z,1
+ORD-101229,C00230,quinn.moreau230@inbox.example.org,"Moreau, Quinn",Headlamp,2,32.86,EUR,completed,"Mar 9, 2025",2025-03-11T13:14:00+03:00,yes
+ORD-100619,C00080,ana.alvarez80@mail.example.com,Ana Alvarez,Headlamp,4,40.78,USD,shipped,"Dec 1, 2025",2025-12-02T00:55:00+05:00,1
+ORD-100754,C00326,qa325@test.shopco.io,Uma Holm,Headlamp,1,42.46,USD,delivered,2025-08-11,2025-08-11 22:33:00,false
+ORD-101267,C00280,jun.novak280@inbox.example.org,Jun Novak,Camp Mug,2,13.14,USD,CANCELLED,07/02/2025,2025-02-07 13:29:00,FALSE
+ORD-100616,C00202,jun.garcia202@inbox.example.org,Jun Garcia,Wool Beanie,3,21.62,USD,completed,2025-09-02T23:56:57Z,2025-09-02T17:57:00+03:00,0
+ORD-101260,C00208,dara.novak208@mail.example.com,Dara Novak,Gaiters,2,37.79,USD,delivered,"Jul 12, 2025",2025-07-12T06:22:00Z,no
+ORD-100741,C00045,goran.ito45@inbox.example.org,Goran Ito,Fleece Pullover,2,67.64,USD,completed,01/07/2025,2025-07-01 10:40:00,
+ORD-100201,C00154,omar.okafor154@inbox.example.org,Test-Omar Okafor,Insulated Bottle,1,28.12,USD,completed,12/09/2025,2025-09-12T17:26:00Z,
+ORD-101292,C00101,jun.lopez101@mail.example.com,Jun Lopez,Gaiters,2,34.27,USD,completed,"May 21, 2025",2025-05-21T09:40:00Z,no
+ORD-101404,C00293,viktor.okafor293@inbox.example.org,Viktor Okafor,Dry Bag 20L,1,32.76,USD,completed,03/04/2025,2025-04-03T19:25:00Z,FALSE
+ORD-101394,C00272,fatima.ito272@post.example.net,Fatima Ito,Trail Runner Shoe,3,97.50,USD,shipped,"Dec 10, 2025",2025-12-13T03:12:00Z,FALSE
+ORD-101451,C00301,ivo.brandt301@post.example.net,Ivo Brandt,Down Vest,2,128.63,USD,completed,31/02/2025,2025-09-28 15:40:00,
+ORD-100214,C00234,fatima.garcia234@inbox.example.org,Fatima Garcia,Wool Beanie,2,25.63,USD,shipped,2025-09-18T09:53:47Z,2025-09-18T14:40:00Z,FALSE
+ORD-101355,C00080,ana.alvarez80@mail.example.com,Ana Alvarez,Hiking Pole Pair,4,72.27,USD,completed,2025-01-10T09:08:09Z,2025-01-10T09:04:00+05:00,true
+ORD-101054,C00306,quinn.eriksen306@post.example.net,"Eriksen, Quinn",Rain Shell,2,125.07,GBP,CANCELLED,2025-04-04,2025-04-05T15:17:00Z,
+ORD-100243,C00043,qa42@test.shopco.io,Omar Kowalski,Down Vest,2,131.76,USD,shipped,08/03/2025,2025-03-08T07:07:00Z,false
+ORD-101461,C00237,rosa.kowalski237@post.example.net,Rosa Kowalski,Hiking Pole Pair,1,75.07,USD,shipped,"Nov 3, 2025",2025-11-03 13:28:00,false
+ORD-101206,C00170,ben.ito170@inbox.example.org,Ben Ito,Headlamp,5,38.97,USD,completed,15/12/2025,2025-12-16T00:53:00Z,yes
+ORD-101356,C00273,viktor.brandt273@post.example.net,Viktor Brandt,Trail Runner Shoe,3,89.87,USD,CANCELLED,"Jan 1, 2025",2025-01-01T01:28:00-04:00,
+ORD-100035,C00017,priya.holm17@post.example.net,Priya Holm,Insulated Bottle,5,29.15,USD,completed,05/04/2025,2025-04-05T10:32:00+02:00,0
+ORD-100228,C00286,mateo.fischer286@mail.example.com,"Fischer, Mateo",Down Vest,1,124.81,USD,completed,"May 23, 2025",2025-05-24T00:44:00Z,TRUE
+ORD-101146,C00249,eli.ito249@inbox.example.org,Eli Ito,Fleece Pullover,1,75.43,USD,shipped,06/08/2025,2025-08-06T21:00:00+05:00,FALSE
+ORD-100973,C00078,jun.silva78@post.example.net,"Silva, Jun",Down Vest,1,139.65,USD,completed,2025-02-18T22:22:50Z,2025-02-18 21:40:00,0
+ORD-101138,C00145,ivo.jansen145@post.example.net,Ivo Jansen,Wool Beanie,4,24.05,USD,delivered,2025-11-02T00:00:56Z,2025-11-02T13:26:00Z,no
+ORD-101047,C00280,jun.novak280@inbox.example.org,Jun Novak,Insulated Bottle,1,30.33,USD,shipped,2025-07-17,2025-07-17T23:34:00Z,
+ORD-100533,C00145,ivo.jansen145@post.example.net,Ivo Jansen,Hiking Pole Pair,2,75.27,USD,cancelled,"Aug 27, 2025",2025-08-30T06:17:00+03:00,0
+ORD-100267,C00092,viktor.lopez92@inbox.example.org,Viktor Lopez,Trail Runner Shoe,1,82.04,USD,completed,"Sep 20, 2025",2025-09-20 16:25:00,FALSE
+ORD-100420,C00304,ivo.garcia304@inbox.example.org,TEST-Ivo Garcia,Insulated Bottle,3,28.22,USD,completed,2025-10-10T11:42:29Z,2025-10-10T19:28:00Z,
+ORD-100981,C00160,jun.fischer160@inbox.example.org,Jun Fischer,Hiking Pole Pair,2,84.46,USD,completed,2025-02-05,2025-02-05T15:16:00Z,0
+ORD-100233,C00082,nia.fischer82@mail.example.com,Nia Fischer,Wool Beanie,1,22.27,USD,Cancelled,2025-10-01T06:40:23Z,2025-10-01T06:57:00Z,no
+ORD-100591,C00276,lena.petrov276@post.example.net,Lena Petrov,Headlamp,1,35.81,USD,shipped,2025-08-23T02:29:20Z,2025-08-23 06:54:00,0
+ORD-100505,C00032,nia.petrov32@post.example.net,"Petrov, Nia",Merino Base Layer,1,61.50,USD,completed,2025-01-06,2025-01-06 05:27:00,FALSE
+ORD-100725,C00177,ben.fischer177@inbox.example.org,Ben Fischer,Merino Base Layer,1,68.55,USD,completed,03/06/2025,2025-06-03T09:48:00+02:00,false
+ORD-101418,C00077,hana.costa77@post.example.net,"Costa, Hana",Trail Runner Shoe,3,89.35,USD,delivered,"Apr 29, 2025",2025-04-30T05:10:00+05:00,no
+ORD-100835,C00153,lena.rossi153@mail.example.com,Lena Rossi,Wool Beanie,1,22.16,USD,cancelled,2025-05-07,2025-05-08T04:34:00+02:00,no
+ORD-100655,C00033,lena.alvarez33@inbox.example.org,Lena Alvarez,Fleece Pullover,1,76.46,USD,completed,"Feb 5, 2025",2025-02-06T00:34:00Z,0,EXTRA
+ORD-101281,C00118,mateo.moreau118@mail.example.com,Mateo Moreau,Wool Beanie,1,25.81,USD,shipped,06/08/2025,2025-08-06T15:20:00Z,
+ORD-100428,C00128,qa127@test.shopco.io,Lena Fischer,Merino Base Layer,1,59.70,USD,completed,"Oct 21, 2025",2025-10-21 04:14:00,FALSE
+ORD-101460,C00083,viktor.holm83@mail.example.com,Viktor Holm,Camp Mug,2,15.00,USD,delivered,2025-08-06T06:54:09Z,2025-08-07 06:52:00,false
+ORD-100905,C00080,ana.alvarez80@mail.example.com,Ana Alvarez,Merino Base Layer,2,60.25,USD,shipped,"May 21, 2025",2025-05-21 10:43:00,1
+ORD-100178,C00080,ana.alvarez80@mail.example.com,Ana Alvarez,Merino Base Layer,5,63.23,usd,shipped,"Mar 27, 2025",2025-03-28T00:49:00Z,Y
+ORD-100886,C00019,viktor.lopez19@inbox.example.org,Viktor Lopez,Trail Runner Shoe,1,90.20,USD,completed,2025-07-16,2025-07-16T09:14:00Z,FALSE
+ORD-101301,C00027,viktor.silva27@inbox.example.org,Viktor Silva,Rain Shell,4,151.25,USD,completed,"Aug 12, 2025",2025-08-13T01:27:00Z,FALSE
+ORD-100629,C00170,ben.ito170@inbox.example.org,Ben Ito,Camp Mug,1,14.19,USD,completed,"Jul 9, 2025",2025-07-10T07:27:00Z,Y
+ORD-101068,C00217,ivo.costa217@mail.example.com,TEST-Ivo Costa,Hiking Pole Pair,1,74.15,USD,shipped,2025-05-07,2025-05-08 05:26:00,no
+ORD-100423,C00297,rosa.jansen297@inbox.example.org,TEST-Jansen Rosa,Fleece Pullover,3,80.93, USD,completed,2025-11-10,2025-11-10T22:49:00-04:00,0
+ORD-101247,C00085,jun.silva85@post.example.net,Jun Silva,Fleece Pullover,1,76.75,USD,shipped,2025-08-28T19:26:45Z,2025-08-29T02:15:00+02:00,FALSE
+ORD-100851,C00076,sven.moreau76@inbox.example.org,Sven Moreau,Down Vest,1,141.52,USD,delivered,"Sep 27, 2025",2025-09-27T20:03:00Z,
+ORD-101187,C00043,qa42@test.shopco.io,Omar Kowalski,Gaiters,3,36.42,USD,completed,09/10/2025,2025-10-09T09:56:00Z,0
+ORD-100010,C00130,quinn.moreau130@post.example.net,Quinn Moreau,Fleece Pullover,4,69.47,USD,shipped,2025-08-14,2025-08-14T16:58:00-04:00,false
+ORD-100281,C00179,hana.moreau179@mail.example.com,Hana Moreau,Gaiters,4,35.18,USD,completed,25/02/2025,2025-02-26T04:12:00Z,
+ORD-100109,C00257,jun.holm257@inbox.example.org,"Holm, Jun",Merino Base Layer,1,67.20,USD,shipped,26/05/2025,2025-05-26 11:25:00,no
+ORD-100990,C00252,viktor.ito252@mail.example.com,Viktor Ito,Rain Shell,1,173.33,USD,completed,2025-10-08,2025-10-09 08:27:00,false
+ORD-100671,C00078,jun.silva78@post.example.net,"Silva, Jun",Rain Shell,3,156.02,USD,delivered,"Nov 10, 2025",2025-11-10 21:01:00,no
+ORD-100661,C00223,omar.alvarez223@post.example.net,Omar Alvarez,Merino Base Layer,1,62.11,USD,cancelled,01/08/2025,2025-08-01T18:14:00+02:00,yes
+ORD-100597,C00016,quinn.moreau16@mail.example.com,Quinn Moreau,Trail Runner Shoe,2,87.00,USD,completed,2025-04-26T03:46:38Z,2025-04-27T01:03:00Z,
+ORD-100011,C00133,uma.lopez133@mail.example.com,Uma Lopez,Merino Base Layer,4,69.65,USD,shipped,2025-08-23,2025-08-23T13:42:00-04:00,
+ORD-100039,C00230,quinn.moreau230@inbox.example.org,"Moreau, Quinn",Insulated Bottle,1,28.61,USD,delivered,"Dec 29, 2025",2025-12-30T01:36:00Z,true
+ORD-100421,C00016,quinn.moreau16@mail.example.com,Quinn Moreau,Insulated Bottle,3,23.26, GBP,shipped,2025-06-30T02:53:11Z,2025-07-02 06:32:00,0
+ORD-101230,C00210,goran.okafor210@inbox.example.org,Goran Okafor,Hiking Pole Pair,1,72.59,USD,shipped,2025-04-13T05:36:42Z,2025-04-14T06:33:00Z,FALSE
+ORD-100734,C00297,rosa.jansen297@inbox.example.org,TEST-Jansen Rosa,Fleece Pullover,2,71.79,USD,shipped,2025-09-05,2025-09-05T18:10:00+02:00,0
+ORD-101095,C00128,qa127@test.shopco.io,Lena Fischer,Headlamp,4,37.37,USD ,delivered,2025-09-27T21:49:51Z,2025-09-27 19:53:00,FALSE
+ORD-100268,C00046,quinn.garcia46@post.example.net,"Garcia, Quinn",Gaiters,1,39.53,USD,delivered,16/02/2025,2025-02-17T07:40:00+03:00,
+ORD-101251,C00217,ivo.costa217@mail.example.com,TEST-Ivo Costa,Gaiters,1,29.11,GBP,completed,2025-05-12T02:19:44Z,2025-05-12 06:31:00,
+ORD-100121,C00298,rosa.garcia298@inbox.example.org,Rosa Garcia,Merino Base Layer,1,49.49,GBP,delivered,2025-07-19,2025-07-19T23:04:00+02:00,FALSE
+ORD-101406,C00259,qa258@test.shopco.io,"Silva, Lena",Gaiters,3,37.36,USD,delivered,2025-11-24,2025-11-24T21:02:00Z,FALSE
+ORD-100790,C00004,nia.alvarez4@post.example.net,"Testa, Maria",Rain Shell,3,160.60,USD,delivered,06/04/2025,2025-04-06T16:36:00+05:00
+ORD-100075,C00292,uma.costa292@mail.example.com,"Costa, Uma",Trail Runner Shoe,5,90.61,USD,completed,08/09/2025,2025-09-08T19:26:00+03:00,false
+ORD-101398,C00170,ben.ito170@inbox.example.org,Ben Ito,Headlamp,3,35.68,USD,completed,2025-02-01T23:07:19Z,2025-02-01T16:01:00+02:00,Y
+ORD-101167,C00290,qa289@test.shopco.io,Dara Ito,Gaiters,1,35.87,USD,completed,2025-10-23T07:03:15Z,2025-10-23T12:02:00Z,
+ORD-101348,C00107,rosa.brandt107@inbox.example.org,Rosa Brandt,Merino Base Layer,1,69.31,USD,delivered,18/03/2025,2025-03-19 02:34:00,
+ORD-100174,C00297,rosa.jansen297@inbox.example.org,TEST-Jansen Rosa,Gaiters,1,39.25,USD,completed,"Jul 7, 2025",2025-07-07T19:16:00+03:00,0
+ORD-101161,C00259,qa258@test.shopco.io,"Silva, Lena",Fleece Pullover,1,67.02,USD,delivered,26/07/2025,2025-07-26 11:14:00,0
+ORD-100960,C00308,priya.garcia308@inbox.example.org,Priya Garcia,Down Vest,2,133.49,USD,delivered,"Jul 20, 2025",2025-07-20T13:41:00+03:00,
+ORD-100540,C00237,rosa.kowalski237@post.example.net,Rosa Kowalski,Merino Base Layer,2,67.41,USD,completed,"Nov 30, 2025",2025-11-30T15:49:00+05:00,0
+ORD-100125,C00066,viktor.dubois66@inbox.example.org,"Dubois, Viktor",Insulated Bottle,4,26.25,USD,cancelled,28/10/2025,2025-10-30T23:29:00-04:00,FALSE
+ORD-100341,C00077,hana.costa77@post.example.net,"Costa, Hana",Gaiters,5,37.34,USD,delivered,2025-11-18T05:41:16Z,2025-11-18T08:50:00+05:00,0
+ORD-101147,C00323,dara.jansen323@post.example.net,test-Dara Jansen,Hiking Pole Pair,3,82.73,USD,completed,2025-01-07,2025-01-07 17:15:00,0
+ORD-100435,C00048,ben.fischer48@inbox.example.org,Ben Fischer,Headlamp,1,38.26,USD,shipped,2025-07-08,2025-07-10T01:01:00Z,no
+ORD-100937,C00166,ivo.fischer166@inbox.example.org,Ivo Fischer,Dry Bag 20L,3,27.73,EUR,completed,2025-05-08,2025-05-11 00:52:00,no
+ORD-100320,C00117,eli.eriksen117@post.example.net,Eli Eriksen,Camp Mug,1,15.00,USD,delivered,15/02/2025,2025-02-15T10:52:00Z,0
+ORD-101342,C00221,ben.eriksen221@post.example.net,Ben Eriksen,Fleece Pullover,2,72.90,USD,delivered,"Mar 17, 2025",2025-03-17T07:59:00+03:00,no
+ORD-101087,C00326,qa325@test.shopco.io,Uma Holm,Insulated Bottle,2,28.24,USD,completed,"Nov 17, 2025",2025-11-18T01:24:00+02:00,FALSE
+ORD-100821,C00311,quinn.kowalski311@mail.example.com,TEST-Quinn Kowalski,Wool Beanie,1,24.63,USD,completed,"Apr 9, 2025",2025-04-10T01:22:00+03:00,no
+ORD-100842,C00203,eli.alvarez203@mail.example.com,Eli Alvarez,Fleece Pullover,1,77.91,USD,shipped,yesterday,2025-05-27T09:33:00Z,FALSE
+ORD-100870,C00103,chen.rossi103@mail.example.com,"Rossi, Chen",Insulated Bottle,3,30.90,USD,delivered,"Apr 26, 2025",2025-04-26 23:20:00,no
+ORD-100741,C00045,goran.ito45@inbox.example.org,Goran Ito,Fleece Pullover,4,67.64,USD,completed,2025-07-01T07:52:24Z,2025-07-01T11:43:00-04:00,false
+ORD-100705,C00154,omar.okafor154@inbox.example.org,Test-Omar Okafor,Camp Mug,1,13.68,USD,completed,"Oct 7, 2025",2025-10-08T00:00:00+03:00,
+ORD-100648,C00181,hana.ito181@inbox.example.org,"Ito, Hana",Down Vest,3,116.34,USD,completed,30/07/2025,2025-07-30T19:19:00Z,
+ORD-101444,C00222,viktor.eriksen222@inbox.example.org,"Eriksen, Viktor",Headlamp,4,36.16,USD,completed,2025-09-07T05:16:45Z,2025-09-07T08:03:00Z,false
+ORD-100750,C00326,qa325@test.shopco.io,Uma Holm,Down Vest,2,140.42,USD,shipped,2025-01-13,2025-01-13T20:36:00Z,false
+ORD-101086,C00248,kofi.silva248@mail.example.com,Kofi Silva,Wool Beanie,1,22.31,USD,cancelled,2025-11-17T07:21:53Z,2025-11-17T01:27:00-04:00,FALSE
+ORD-100787,C00235,kofi.dubois235@mail.example.com,Kofi Dubois,Wool Beanie,5,19.58,GBP,CANCELLED,"Dec 31, 2025",2025-12-31T22:01:00Z,false
+ORD-100834,C00259,qa258@test.shopco.io,"Silva, Lena",Down Vest,1,127.19,USD,completed,2025-11-21T07:50:21Z,2025-11-21 09:43:00,
+ORD-101434,C00175,hana.kowalski175@mail.example.com,Hana Kowalski,Down Vest,4,127.90,USD,delivered,23/11/2025,2025-11-23 14:29:00,FALSE

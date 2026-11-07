@@ -1,0 +1,27 @@
+{
+ "app": {
+  "app/__init__.py": "2bee379275af016bdafc9d70ee5afb015b572aa7bc35955a8d6bbc67fbf416fe",
+  "app/batch.py": "01081b6624d3cf5a1d7e0d0542c1631f4e9a1c46369f365320011cbbfb48ebca",
+  "app/dispatch.py": "c1df4fd0fbd167dc35e3ab111edf14db312b5b4d80a289c013ae5ae80c8a9b46",
+  "app/feeds.py": "39d85ebefba465b8138492c9d0c0484d7e43d7d55eca9b9fddca6a44ef7d51b7",
+  "app/geo.py": "07d594d77c5fde253e31c5af94289276cd8e78d311d0c10f17e63c67ad18cd8d",
+  "app/health.py": "d9b0fcdb49b3ee4d093cc82d7583f57769664ee15831b666645c30325aa14b73",
+  "app/news.py": "ec97d339bd44e201d31cdbb9702522cdee4e8ee5fe0b02508229864cbb52f2e3",
+  "app/poller.py": "cf30660c38b59a0ed33bbac969e9ea32e7d8620f1131f87ef955b8d94116d354",
+  "app/profile.py": "9c05cdd95083d53d7ba714f730a7cb2b534d4031587be4a3029b553915320dca",
+  "app/rates.py": "8a1aa269efbd3564a29199995fa09473c56216900099b9a39e52717c99691189",
+  "app/search.py": "be7d30bbb4dfd3dc8e97907eac87e65bf6ef4051da4318c87313ee8c40b6a7bb",
+  "app/settings.py": "b7877a0ff117b14d194a96251ad8985592ae738f5a5a21bdae35809a2284f8da",
+  "app/stocks.py": "fe60b49eecac46ba60bb3a9b6196b059448bf64160d8dec5ed14f39dcb8cb2bf",
+  "app/weather.py": "b633f84134a8971c521ac1faff8b13b51d0c3f0c1eafb8117af12387794c76f0"
+ },
+ "protected": {
+  "netcore/__init__.py": "f527d9ab8c18725f1328d9e6a7862f38d7a6fc0e6c137646886356b0f9e9e6da",
+  "netcore/transport.py": "e981eea4736cf6def91ff3b1b2a9f19918381ecf89940613340795b7a6210937",
+  "newnet/__init__.py": "018d1115377955449cc0bc12ebc4b4f64f25444b15fcd8580146cbba4c017c81",
+  "oldnet/__init__.py": "959087d2435542e36e56ae211b3777b51a7fc553ac068a09fc9aff99c8d638ce",
+  "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "tests/fake.py": "06737f691fdc06ebd397aaf5dfe7fdcb3e8e68199210c8d86382da8ee44d879f",
+  "tests/test_app.py": "4ff62754526f060312055db6fafa0d8993c59e3ccac89d8774808b7ace83d7b5"
+ }
+}

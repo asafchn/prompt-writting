@@ -1,0 +1,10 @@
+{
+ "tests": {
+  "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "test_amounts.py": "67af7fa87345e15f696de96ae5832e6ed1e957a045fcf2c5caa1e49f37d28001",
+  "test_currency.py": "3e2a5618c83fabdf650df9947c551cfbc56409659e202db8ec506d8d85d723d0",
+  "test_dates.py": "e3542efccede11af6142fef55ae5cab8184e05619e183ba829b4e231e943d6cf",
+  "test_invoice.py": "4bd48e0a5079e4e6774891d6ed8c75592e4b75f7319a49364f8f8b7babdce25b",
+  "test_vat.py": "601240c7f3ad040ca07d180e63a1132f01a866113b1526e2bb87910610ddd3ab"
+ }
+}

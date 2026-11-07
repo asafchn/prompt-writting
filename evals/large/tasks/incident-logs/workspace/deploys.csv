@@ -1,0 +1,5 @@
+deploy_id,service,version,deployed_at_utc,deployed_by
+D-2284,payments,2.41.0,2026-11-06T06:31:12Z,ci-bot
+D-2287,api,7.3.1,2026-11-06T07:42:55Z,ci-bot
+D-2291,scheduler,4.18.0,2026-11-06T09:04:10Z,r.okafor
+D-2296,auth,3.9.4,2026-11-06T11:20:40Z,ci-bot
