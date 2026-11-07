@@ -216,7 +216,7 @@ def render_event(e, rnd, label, m):
     if t == "conditional":
         return [(label(e["who"]), rnd.choice(["If finance approves the budget, I'll take {k}{d}.", "If the vendor gets back to us, I'll handle {k}{d}."]).format(k=k, d=dp(e["due"])))]
     if t == "noid":
-        return [(label(e["who"]), rnd.choice(["I'll send the slides around{d}.", "I'll write up the notes from this{d}.", "I'll book the room for the offsite{d}."]).format(d=dp(e["due"])))]
+        return [(label(e["who"]), rnd.choice(["I'll send the slides around{d}.", "I'll write up today's notes{d}.", "I'll book the room for the offsite{d}."]).format(d=dp(e["due"])))]
     if t == "we":
         return [(label(e["who"]), rnd.choice(["We'll get {k} sorted{d}.", "As a team we'll knock out {k}{d}."]).format(k=k, d=dp(e["due"])))]
     if t == "guest":
@@ -497,12 +497,32 @@ def _norm(x):
     return (owner, key, due)
 
 
+def _lenient_array(text):
+    """First JSON array in the text (fenced or bare); falls back to extract_json."""
+    m = re.search(r"```(?:json)?\s*(.*?)```", text, re.S)
+    if m:
+        try:
+            return json.loads(m.group(1))
+        except Exception:
+            pass
+    dec = json.JSONDecoder()
+    for i, ch in enumerate(text):
+        if ch == "[":
+            try:
+                v, _ = dec.raw_decode(text[i:])
+                if isinstance(v, list):
+                    return v
+            except Exception:
+                continue
+    return extract_json(text)
+
+
 def grade(output, item):
     gold = {_norm(g) for g in item["gold"]}
     strict, ok = strict_json(output.strip())
     fmt = (ok and isinstance(strict, list) and all(isinstance(x, dict) and set(x) == {"owner", "task_key", "due"} and
            (x["due"] is None or (isinstance(x["due"], str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", x["due"]))) for x in strict))
-    obj = strict if ok else extract_json(output)
+    obj = strict if ok else _lenient_array(output)
     if isinstance(obj, dict) and len(obj) == 1 and isinstance(next(iter(obj.values())), list):
         obj = next(iter(obj.values()))  # lenient: {"items": [...]}
     if not isinstance(obj, list):
