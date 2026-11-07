@@ -19,4 +19,23 @@ The replacement procedure, fixed before any main-run results:
 
 ## Task, gold and grader fixes
 
-(none yet)
+### refund-decisions: contradictory and ambiguous inputs (found in the screen; all contenders affected)
+**Signal.** Every contender answered `escalate` on items 07, 10, 34 and 35, where the gold said `approve`.
+
+**Cause.** The generator produced inputs that contradict themselves or the policy:
+- shipping charges on digital downloads (07, 34, 35);
+- a "won't turn on" complaint for a wool overcoat (10);
+- digital items showing a "delivered" date while the policy counts digital windows "from purchase" (07, 34);
+- a downloaded digital item reported as defective (35). The policy doesn't say whether downloading blocks a defect refund, so it's ambiguous.
+
+Escalating such cases to a human is a reasonable reading, so these items broke the rule that golds must be unambiguous. The contenders weren't at fault.
+
+**Fix**, made in `tasks/refund_decisions.py` without changing the random draw sequence, so all other items are byte-identical:
+- digital items have $0.00 shipping;
+- defect complaints are phrased per category;
+- digital items show "purchased (digital delivery, same day)" instead of "delivered";
+- defective digital items are not downloaded.
+
+**Effect.** Inputs 07, 08, 10, 18, 33, 34 and 35 changed; the gold changed only for 35 (from $95.99 to $89.00). The cached outputs of those items were deleted and regenerated for v1, v2 and none. REQUEST was not changed, so the written prompts stay valid.
+
+**After the fix:** v1, v2 and none each score 50/50.
