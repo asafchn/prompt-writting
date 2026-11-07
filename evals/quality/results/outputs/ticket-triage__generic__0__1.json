@@ -1,0 +1,4 @@
+{
+ "output": "**Ticket #4812: \"all dashboards blank for whole org\"**\n\nThis is a service outage. Since about 2am, none of the org's 300 users can see any dashboard data, and the customer runs payroll from these reports at 8am. That meets the urgent criteria (outage, and the customer may lose money if payroll is delayed).\n\nThe blank dashboards are also a defect in the product, so `bug` applies. Nothing points to billing, account access (users can log in and see the dashboards, just without data), a feature request, or spam.\n\n**Tags I'm adding:** `urgent`, `bug`",
+ "mode": "system"
+}

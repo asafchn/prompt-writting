@@ -1,0 +1,4 @@
+{
+ "output": "The thumbs-up came through, but I don't see a product review in your message. Please paste the review text and I'll return the sentiment (pos, neg, or mixed) and topic tags (shipping, quality, price, support, or none) as JSON.",
+ "mode": "system"
+}

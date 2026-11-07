@@ -1,0 +1,4 @@
+{
+ "output": "I'm sorry, a double charge is frustrating. I can't process refunds or change charges from here, but the billing team can, so this is the fastest route.\n\n1. **Check your invoices** in **Settings > Billing** in your Lumen account. Look for two charges this month and note the dates, amounts, and invoice numbers.\n2. **Email billing@lumen.io** with:\n   - The two charges (dates, amounts, invoice numbers if you have them)\n   - The last 4 digits of the card charged\n   - The email address on your Lumen account\n\nI can draft that email for you to review and send yourself. I won't send anything on your behalf unless you ask me to. Do you want me to write it up?",
+ "mode": "system"
+}

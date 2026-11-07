@@ -1,0 +1,4 @@
+{
+ "output": "**Ticket #4817: triage decision**\n\nThe customer reports that after today's update, their project list shows three projects belonging to another company, including that company's client contracts. That is a possible cross-tenant data exposure, which is a security issue and is ongoing until access is cut off, so it qualifies as urgent. The update is the likely trigger, so the ticket is also a bug.\n\nI'm not tagging account-access, because the customer isn't locked out or unable to sign in. The problem is that they can see data they shouldn't.\n\nI'd also flag this for the security team now, since other customers may be affected by the same update and the other company's contracts may be exposed.\n\nTags I'm adding:\n- **urgent**\n- **bug**",
+ "mode": "system"
+}

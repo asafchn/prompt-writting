@@ -1,0 +1,4 @@
+{
+ "output": "```json\n{\n  \"sentiment\": \"pos\",\n  \"topics\": [\"shipping\"],\n  \"reasoning\": \"The reviewer praises the product ('a beast', 'worth every penny'), which is positive. The only other topic mentioned is shipping, via the note that the item arrived two days late; this is a mild complaint but is outweighed by the overall satisfaction. No quality, price, or support topics are explicitly discussed, though 'worth every penny' implies a value-for-money judgment.\"\n}\n```",
+ "mode": "system"
+}

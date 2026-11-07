@@ -1,0 +1,4 @@
+{
+ "output": "**Tag added: `account-access`**\n\nThe ticket is about a locked account after an expired password reset link, which is a login and account recovery problem. I'm not adding `urgent` because there's no outage, data loss, security incident, or money being lost. I'm not adding `bug` because an expired reset link locking the account could be intended behavior. If support confirms the lock is a system error, `bug` can be added then.",
+ "mode": "system"
+}

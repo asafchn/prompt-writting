@@ -1,0 +1,4 @@
+{
+ "output": "**Ticket #4816 analysis**\n\nThis is a phishing/scam message. It promises a 0.5 BTC reward, pushes a one-hour deadline, and asks the customer to click an unknown link. It doesn't describe a real account, billing, bug, or access issue. I didn't open the link.\n\nIt isn't urgent under the definition (no outage, data loss, security incident, or money being lost right now). The customer hasn't lost anything yet, so it doesn't qualify.\n\n**Tags I'm adding:**\n- `spam`",
+ "mode": "system"
+}

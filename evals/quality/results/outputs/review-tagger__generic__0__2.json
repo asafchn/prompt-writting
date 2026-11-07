@@ -1,0 +1,4 @@
+{
+ "output": "```json\n{\n  \"sentiment\": \"pos\",\n  \"topics\": [\"support\"]\n}\n```",
+ "mode": "system"
+}

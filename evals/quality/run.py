@@ -72,7 +72,12 @@ def extract(raw):
 
 
 # ---------- stage 1
+GENERIC = json.loads((HERE / "generic_prompts.json").read_text())
+
+
 def write_one(case, cond, k):
+    if cond == "generic":  # hand-written baseline, no writer model
+        return {"raw": GENERIC[case["id"]], "prompt": GENERIC[case["id"]]}
     def fn():
         sys_p = WRITER_SYS + (skill_block(cond) if cond in SKILLS else "")
         raw = claude(case["request"] + WRITER_SUFFIX, sys_p, WRITER_MODEL)

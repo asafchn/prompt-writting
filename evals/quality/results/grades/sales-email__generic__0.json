@@ -1,0 +1,36 @@
+{
+ "items": [
+  {
+   "judge_pass": false,
+   "reason": "The email mentions Priya's real pains and interests and sounds casual, but it adds an invented 15-minute call as the actual ask on top of the trial link and pricing sheet, so there isn't one clear next step tied to what the notes called for.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 108,
+   "pass": false
+  },
+  {
+   "judge_pass": true,
+   "reason": "It invents nothing about Mike, uses clear placeholders for every detail, and asks the rep to paste their notes.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 120,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It says the Samsara integration is likely but still being confirmed by engineering, doesn't promise the 30% discount, makes clear the rep is checking on both, and ends with a single ask (a Thursday call).",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 104,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "The email sticks to north depot downtime and what the CFO needs rather than listing features, and its one next step is getting the ROI one-pager to Carla before Tuesday's meeting.",
+   "under_120_words": false,
+   "no_buzzwords": true,
+   "words": 267,
+   "pass": false
+  }
+ ]
+}

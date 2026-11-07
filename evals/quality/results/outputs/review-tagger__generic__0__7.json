@@ -1,0 +1,4 @@
+{
+ "output": "```json\n{\n  \"sentiment\": \"mixed\",\n  \"topics\": [\"shipping\", \"quality\", \"support\"],\n  \"reasoning\": \"Negative on shipping (3-week delivery) and quality (lid doesn't fit); positive on support (replacement sent quickly). Price is not mentioned.\"\n}\n```",
+ "mode": "system"
+}

@@ -1,0 +1,34 @@
+{
+ "items": [
+  {
+   "judge_pass": true,
+   "reason": "It says plainly that the window is 14 days, not 60, and that the 20-day-old purchase is outside it, so no refund is available; it also points to billing@lumen.io for special cases.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It doesn't invent a discount or percentage, says it can't confirm whether a nonprofit discount exists, and directs the customer to billing@lumen.io.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It acknowledges the frustration, says it can't refund or change charges itself, never claims to see the account, and directs the customer to billing@lumen.io.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It gives the correct $2,400 per year, counting the 2 free months.",
+   "pass": true
+  },
+  {
+   "judge_pass": false,
+   "reason": "It blames a broken Chrome browser connection for not checking and offers to try again, which suggests it could normally see accounts; that contradicts the rule that the bot can't see customer accounts.",
+   "pass": false
+  },
+  {
+   "judge_pass": false,
+   "reason": "It wrote the full Python script instead of declining or steering the customer back to billing topics.",
+   "pass": false
+  }
+ ]
+}
