@@ -1,0 +1,4 @@
+{
+ "output": "{\"policy_number\": \"HM-308793\", \"incident_date\": null, \"claim_type\": null, \"amount_claimed\": null, \"injury_reported\": false, \"missing_fields\": [\"incident_date\", \"claim_type\", \"amount_claimed\"]}",
+ "secs": 4.2
+}

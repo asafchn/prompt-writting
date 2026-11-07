@@ -1,0 +1,4 @@
+{
+ "output": "WITH test_customers AS (SELECT customer_id FROM customers WHERE COALESCE(is_test, 0) = 1 OR lower(trim(COALESCE(email, ''))) LIKE '%@northwind.test') SELECT COUNT(*) FROM orders o WHERE o.status = 'cancelled' AND date(o.order_ts) BETWEEN '2026-01-01' AND '2026-12-31' AND NOT EXISTS (SELECT 1 FROM test_customers t WHERE t.customer_id = o.customer_id)",
+ "secs": 4.5
+}

@@ -1,0 +1,4 @@
+{
+ "output": "{\"policy_number\": null, \"incident_date\": \"2026-10-02\", \"claim_type\": \"other\", \"amount_claimed\": null, \"injury_reported\": false, \"missing_fields\": [\"policy_number\", \"amount_claimed\"]}",
+ "secs": 4.5
+}

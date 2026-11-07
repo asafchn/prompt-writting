@@ -1,0 +1,4 @@
+{
+ "output": "Brightwave Electronics support chat | ticket T-48518 | 2026-10-15 14:38 UTC\nAgent (Keiko): Hi, you're chatting with Keiko from Brightwave support. How can I help?\nCustomer: Hi, [NAME] here. Got an issue with a delivery.\nCustomer: The order number is NW-1907544, it's the Hazel desk lamp. It never arrived.\nAgent (Keiko): Thanks [NAME]. Could you confirm the email address on the account?\nCustomer: sure, it's [EMAIL]\nAgent (Keiko): For the replacement charge, which card should we use?\nCustomer: Use this one: [CARD-3338], exp 06/31.\nCustomer: If I'm not home my partner [NAME] can sign for it.\nAgent (Keiko): What's the best number to reach you on?\nCustomer: you can call me on [PHONE]\nAgent (Keiko): All sorted, you'll get a confirmation email shortly. Have a good day!",
+ "secs": 9.1
+}

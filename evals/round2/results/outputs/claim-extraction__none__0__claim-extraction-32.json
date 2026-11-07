@@ -1,0 +1,4 @@
+{
+ "output": "{\"policy_number\": \"HM-806288\", \"incident_date\": \"2026-09-16\", \"claim_type\": \"home_fire\", \"amount_claimed\": null, \"injury_reported\": false, \"missing_fields\": [\"amount_claimed\"]}",
+ "secs": 5.3
+}

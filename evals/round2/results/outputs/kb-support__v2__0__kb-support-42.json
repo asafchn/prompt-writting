@@ -1,0 +1,4 @@
+{
+ "output": "{\"answerable\": true, \"article_ids\": [\"KB-106\"], \"answer\": \"SAML single sign-on isn't included on Starter. It's available on Enterprise only, and it's set up under Admin > Authentication > SAML. All plans, Starter included, can sign in with Google.\"}",
+ "secs": 13.6
+}

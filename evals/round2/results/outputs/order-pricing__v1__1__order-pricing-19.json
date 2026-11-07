@@ -1,0 +1,4 @@
+{
+ "output": "{\"line_items\": [{\"sku\": \"PAP-LTR\", \"qty\": 25, \"line_total\": 154.14}, {\"sku\": \"TNR-205\", \"qty\": 2, \"line_total\": 179.98}, {\"sku\": \"MRK-DRY\", \"qty\": 10, \"line_total\": 75.53}], \"unknown_items\": [], \"coupon_applied\": null, \"subtotal\": 409.65, \"discount\": 0, \"shipping\": 0, \"tax\": 36.36, \"total\": 446.01}",
+ "secs": 15.5
+}

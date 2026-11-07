@@ -1,0 +1,4 @@
+{
+ "output": "{\"policy_number\": null, \"incident_date\": \"2026-10-01\", \"claim_type\": \"home_fire\", \"amount_claimed\": 1900, \"injury_reported\": false, \"missing_fields\": [\"policy_number\"]}",
+ "secs": 5.2
+}

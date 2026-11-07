@@ -1,0 +1,4 @@
+{
+ "output": "Priya Shah not in context; search.\n\n{\"tool\": \"search_contacts\", \"arguments\": {\"query\": \"Priya Shah\"}}",
+ "secs": 15.8
+}

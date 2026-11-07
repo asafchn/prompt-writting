@@ -1,0 +1,4 @@
+{
+ "output": "{\"answerable\": true, \"article_ids\": [\"KB-109\", \"KB-106\"], \"answer\": \"Yes, the API is available on Starter, with a rate limit of 100 requests per minute per API token. If you go over the limit, requests get HTTP 429 with a Retry-After header. SAML single sign-on isn't available on Starter because it's Enterprise only. All plans, including Starter, can sign in with Google.\"}",
+ "secs": 16.6
+}

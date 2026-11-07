@@ -1,0 +1,4 @@
+{
+ "output": "{\"answerable\": true, \"article_ids\": [\"KB-101\", \"KB-103\"], \"answer\": \"On a monthly plan, new members added mid-cycle are charged a prorated amount. Starter is $8 per member per month, so for 2 members with 11 of 31 days left the charge is $8 \u00d7 2 \u00d7 11 / 31 = $5.68 (excluding tax).\"}",
+ "secs": 14.4
+}

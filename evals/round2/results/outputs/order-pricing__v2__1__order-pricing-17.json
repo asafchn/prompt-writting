@@ -1,0 +1,4 @@
+{
+ "output": "{\"line_items\": [{\"sku\": \"COF-48\", \"qty\": 12, \"line_total\": 419.52}], \"unknown_items\": [], \"coupon_applied\": \"BREAK15\", \"subtotal\": 419.52, \"discount\": 62.93, \"shipping\": 0.00, \"tax\": 36.55, \"total\": 393.14}",
+ "secs": 25.6
+}

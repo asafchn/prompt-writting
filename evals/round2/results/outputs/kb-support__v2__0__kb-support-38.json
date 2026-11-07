@@ -1,0 +1,4 @@
+{
+ "output": "{\"answerable\": true, \"article_ids\": [\"KB-111\"], \"answer\": \"No, the Jira integration isn't included on Starter. You'll need Business or Enterprise to use it. After you upgrade, you can connect Jira under Settings > Integrations. Starter does include the Slack, GitHub and Google Drive integrations.\"}",
+ "secs": 13.9
+}

@@ -1,0 +1,4 @@
+{
+ "output": "{\"answerable\": true, \"article_ids\": [\"KB-101\"], \"answer\": \"Business costs $20 per member per month (USD, billed monthly, excluding tax). With annual billing you get 20% off the monthly per-member price.\"}\n\nWait, the annual mention would need KB-102. Let me give the final answer cleanly.\n\n{\"answerable\": true, \"article_ids\": [\"KB-101\"], \"answer\": \"Business costs $20 per member per month (USD, billed monthly, excluding tax).\"}",
+ "secs": 3.8
+}

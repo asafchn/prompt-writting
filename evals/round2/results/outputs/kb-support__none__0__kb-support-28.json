@@ -1,0 +1,4 @@
+{
+ "output": "{\"answerable\": true, \"article_ids\": [\"KB-108\"], \"answer\": \"Hi Maria, yes, you can still get it back. A deleted workspace can be restored for 14 days after it's deleted. You're at 10 days, so you have about 4 days left. Only the workspace owner can restore it, and they can do it under Admin > Danger zone > Delete workspace. After 14 days the workspace is permanently erased, so please restore it soon.\"}",
+ "secs": 14.0
+}

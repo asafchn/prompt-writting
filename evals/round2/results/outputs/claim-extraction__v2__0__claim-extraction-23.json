@@ -1,0 +1,4 @@
+{
+ "output": "{\"policy_number\": \"HM-802707\", \"incident_date\": null, \"claim_type\": \"home_theft\", \"amount_claimed\": 480, \"injury_reported\": false, \"missing_fields\": [\"incident_date\"]}",
+ "secs": 6.0
+}

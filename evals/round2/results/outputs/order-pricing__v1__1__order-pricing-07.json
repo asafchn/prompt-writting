@@ -1,0 +1,4 @@
+{
+ "output": "{\"line_items\": [{\"sku\": \"PEN-GEL\", \"qty\": 3, \"line_total\": 34.20}, {\"sku\": \"BND-2IN\", \"qty\": 5, \"line_total\": 21.75}], \"unknown_items\": [], \"coupon_applied\": null, \"subtotal\": 55.95, \"discount\": 0, \"shipping\": 45.00, \"tax\": 4.54, \"total\": 105.49}",
+ "secs": 15.2
+}

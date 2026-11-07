@@ -1,0 +1,4 @@
+{
+ "output": "{\"tool\": \"create_event\", \"arguments\": {\"title\": \"Call with Julia Santos\", \"start\": \"2026-11-06T10:00:00-05:00\", \"end\": \"2026-11-06T10:30:00-05:00\", \"attendee_ids\": [\"C-1189\"]}}",
+ "secs": 11.3
+}

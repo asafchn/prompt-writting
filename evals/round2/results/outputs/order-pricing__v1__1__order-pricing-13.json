@@ -1,0 +1,4 @@
+{
+ "output": "{\"line_items\": [{\"sku\": \"PEN-GEL\", \"qty\": 25, \"line_total\": 270.75}, {\"sku\": \"MRK-DRY\", \"qty\": 12, \"line_total\": 90.63}, {\"sku\": \"STP-HD\", \"qty\": 3, \"line_total\": 96.00}], \"unknown_items\": [], \"coupon_applied\": \"SAVE10\", \"subtotal\": 457.38, \"discount\": 45.74, \"shipping\": 0, \"tax\": 0, \"total\": 411.64}",
+ "secs": 14.6
+}

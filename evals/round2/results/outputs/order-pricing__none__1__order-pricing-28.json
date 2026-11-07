@@ -1,0 +1,4 @@
+{
+ "output": "{\"line_items\": [{\"sku\": \"TNR-205\", \"qty\": 3, \"line_total\": 269.97}, {\"sku\": \"PEN-GEL\", \"qty\": 10, \"line_total\": 108.30}], \"unknown_items\": [], \"coupon_applied\": \"TAKE25\", \"subtotal\": 378.27, \"discount\": 25.00, \"shipping\": 0.00, \"tax\": 36.21, \"total\": 389.48}",
+ "secs": 30.2
+}

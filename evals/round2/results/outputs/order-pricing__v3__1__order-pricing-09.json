@@ -1,0 +1,4 @@
+{
+ "output": "{\"line_items\": [{\"sku\": \"MRK-DRY\", \"qty\": 8, \"line_total\": 63.60}], \"unknown_items\": [], \"coupon_applied\": null, \"subtotal\": 63.60, \"discount\": 0.00, \"shipping\": 12.00, \"tax\": 7.75, \"total\": 83.35}",
+ "secs": 14.3
+}

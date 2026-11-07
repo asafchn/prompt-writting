@@ -1,0 +1,4 @@
+{
+ "output": "{\"line_items\": [{\"sku\": \"COF-48\", \"qty\": 5, \"line_total\": 184.00}, {\"sku\": \"MRK-DRY\", \"qty\": 6, \"line_total\": 47.70}], \"unknown_items\": [], \"coupon_applied\": \"BREAK15\", \"subtotal\": 231.70, \"discount\": 27.60, \"shipping\": 14.00, \"tax\": 17.99, \"total\": 236.09}",
+ "secs": 14.6
+}

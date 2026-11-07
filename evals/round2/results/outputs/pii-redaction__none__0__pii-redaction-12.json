@@ -1,0 +1,4 @@
+{
+ "output": "Brightwave Electronics support chat | ticket T-48444 | 2026-10-13 12:24 UTC\nAgent (Dana): Hello and welcome to Brightwave! I'm Dana, what can I do for you today?\nCustomer: hello my name is [NAME], i need help with an order\nCustomer: The order number is NW-8272277, it's the Milo kids tablet. It arrived damaged.\nAgent (Dana): Thanks [NAME]. Could you confirm the email address on the account?\nCustomer: It's [EMAIL]\nAgent (Dana): What's the best number to reach you on?\nCustomer: you can call me on [PHONE]\nAgent (Dana): All sorted, you'll get a confirmation email shortly. Have a good day!",
+ "secs": 6.2
+}

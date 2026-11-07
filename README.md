@@ -2,13 +2,18 @@
 
 | | |
 |---|---|
-| **Status** | Skill v1 recommended. Evaluation round 1 complete. |
+| **Status** | Skill v1 recommended. Evaluation rounds 1 and 2 complete. |
 | **Audience** | Developers who write system prompts, agent instructions or Claude skills |
 | **Reading time** | About 10 minutes. If you only have one, read [the summary](#summary). |
 | **Last updated** | 7 November 2026 |
 
 > [!NOTE]
-> <a id="summary"></a>**Summary.** We took a prompt that produced a striking published result, worked out *why* it is written the way it is, and packaged that pattern as a Claude skill called `prompt-writing`. Then we tested it the hard way. Claude wrote prompts with and without the skill, another model ran those prompts on tricky inputs, and we graded what came out. Prompts written with the skill were handled correctly **99%** of the time, versus **91%** without it. Most of the gain came from one case with strict rules, so treat it as promising rather than proven. Section 7 says exactly what we can and can't conclude.
+> <a id="summary"></a>**Summary.** We took a prompt that produced a striking published result, worked out *why* it is written the way it is, and packaged that pattern as a Claude skill called `prompt-writing`. Then we tested it twice.
+>
+> - **Round 1** (5 tasks, prompts run by Claude Haiku 5.5): prompts written with the skill were handled correctly **99%** of the time, versus **91%** without it. Most of that gain came from one task with strict rules.
+> - **Round 2** (10 harder tasks, 50 code-graded inputs each, 2,420 calls, prompts run by Claude Opus 5.5): **every** way of writing the prompt scored 99.8–100%. There was no detectable accuracy difference. The contenders differed on cost instead. A leaner version of the skill (v3) matched everyone's accuracy with **39% shorter prompts**.
+>
+> **The takeaway:** the skill helps most when a smaller model runs the prompt. With a frontier model, any complete prompt works, and the skill's job becomes keeping prompts complete without bloat. Section 7 has the details.
 
 ### On this page
 
@@ -126,6 +131,19 @@ Step by step:
 
 The full method, every written prompt, every output and every grade are in [`evals/`](evals).
 
+### Round 2: harder tasks, many more inputs
+
+Round 1 left two questions open: were the tasks too easy, and were there enough inputs? Round 2 ([`evals/round2`](evals/round2)) raised both:
+
+- **10 tasks with long, interacting rule sets and strict output contracts:** refund decisions, order pricing, ticket routing, SQL analytics, PII redaction, claim extraction, meeting action items, knowledge-base support, scheduling and tool calling.
+- **50 inputs per task** (20 standard, 20 edge, 10 adversarial), each with a gold answer **computed by code** and graded by code. No model judge.
+- **The prompts were run by Claude Opus 5.5 at medium effort**, the same for every contender.
+- **Self-correction built in:**
+  - an audit of every input that all contenders failed;
+  - a read-through of every failure;
+  - a v3 skill written from the 5 training tasks only, then judged on the 5 held-out tasks.
+- **Decision rules fixed before any results:** A beats B only if the 95% confidence interval of the difference excludes zero.
+
 ## 7. What we found
 
 <img src="docs/img/results.png" alt="Pass rates by case and condition: skill v1 99% overall, no skill 91%, skill v2 88%" width="100%">
@@ -152,19 +170,39 @@ The full method, every written prompt, every output and every grade are in [`eva
 
 **Limits.** 3 prompts per case per condition, one downstream model, one judge, and the skill handed to Claude directly rather than discovered on its own. That last point is a separate question, whether Claude picks up the skill unprompted; its test set is in [`evals/triggering/`](evals/triggering).
 
+### Round 2 results
+
+<img src="docs/img/round2.png" alt="Round 2: all contenders at 99.8-100% accuracy; skill v3 prompts 39% shorter than v1" width="100%">
+
+| All 10 tasks | Skill v1 | Skill v2 | No skill |
+|---|---|---|---|
+| Task success (95% CI) | 99.9% (99.4–100) | 99.9% (99.6–100) | 99.9% (99.6–100) |
+| Average prompt length | 1,999 words | 1,725 | 1,608 |
+
+**What this tells us**
+
+- **Accuracy hit the ceiling.** 7 of 10 tasks scored 100% for every contender on every input. Across 1,950 graded outputs there were only 3 failures, one per contender, and each was a real mistake. Every paired difference was "no detectable difference".
+- **Cost is where the contenders differ, and v1 leans the wrong way.** v1 writes the longest prompts, adding example galleries, failure lists and closing checklists, without gaining accuracy.
+- **v3 fixes that.** It was written from training-task data only. On the held-out tasks it scored 100% with prompts 39% shorter than v1's, and downstream calls averaged 10 s versus 14 s.
+- **By the pre-registered rule, v3 doesn't replace v1**, because it ties on accuracy rather than beating it. If cost matters to you, [`comparison/skill-v3`](comparison/skill-v3/SKILL.md) is the one to use.
+
+> [!NOTE]
+> **Self-correction caught a real test bug.** Four refund inputs were failed by every contender. They turned out to contain contradictory data, such as shipping charged on a digital download. The inputs were fixed, and every contender's outputs for them were regenerated. Every plan change and fix is logged in [`evals/round2/CORRECTIONS.md`](evals/round2/CORRECTIONS.md). Full numbers are in [`evals/round2/RESULTS.md`](evals/round2/RESULTS.md).
+
 ## 8. What's next
 
-1. **Harder cases.** Long agentic tasks, conflicting constraints, multi-turn conversations: cases where no-skill prompts fail often enough to measure.
-2. **More samples.** 8 prompts per case per condition, to bring the error bars under 3 points.
-3. **A fair test for v2.** Re-run with Opus 5 as the downstream model, where its tips actually apply.
-4. **Triggering.** Measure whether Claude reaches for the skill without being told, and tune the description using Anthropic's `skill-creator`.
+1. **Test where prompts still matter.** Run round 2's tasks with smaller deployed models (Haiku, low effort). Round 1 suggests that's where the skill pays off.
+2. **Test requests that leave rules unstated.** In round 2 every request spelled out every rule, so writing the prompt was mostly transcription. Requests that need intent inferred, and multi-turn agents, are the open question.
+3. **Decide on cost.** If a future decision rule counts prompt length, v3 is the natural candidate to replace v1.
+4. **Triggering.** Measure whether Claude reaches for the skill without being told, using [`evals/triggering`](evals/triggering).
 
 ## 9. What's in this repo
 
 ```text
 skills/prompt-writing/      the recommended skill (v1)
-comparison/                 v1 vs v2 vs no skill: both skills, side-by-side examples, analysis
+comparison/                 v1 vs v2 vs v3 vs no skill: the skills, side-by-side examples, analysis
 evals/quality/              the end-to-end evaluation: cases, harness, every prompt, output and grade
+evals/round2/               round 2: 10 tasks x 50 inputs, runner, reports, corrections, all results
 evals/triggering/           test set for "does Claude use the skill on its own?"
 source/                     the original task prompt we learned from (CC BY 4.0)
 docs/                       the HTML the figures on this page were rendered from, and the images

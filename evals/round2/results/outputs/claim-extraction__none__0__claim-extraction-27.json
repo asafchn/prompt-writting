@@ -1,0 +1,4 @@
+{
+ "output": "{\"policy_number\": null, \"incident_date\": \"2026-09-14\", \"claim_type\": \"motor_theft\", \"amount_claimed\": 760, \"injury_reported\": false, \"missing_fields\": [\"policy_number\"]}",
+ "secs": 4.8
+}

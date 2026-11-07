@@ -1,0 +1,4 @@
+{
+ "output": "{\"answerable\": true, \"article_ids\": [\"KB-105\"], \"answer\": \"You can turn on two-factor authentication under Settings > Security > Two-factor authentication. It works with authenticator apps and hardware security keys. SMS codes aren't supported.\"}",
+ "secs": 3.6
+}

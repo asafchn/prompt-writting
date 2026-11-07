@@ -1,0 +1,4 @@
+{
+ "output": "{\"tool\": \"create_event\", \"arguments\": {\"title\": \"Call with Maya Lindqvist about the pilot\", \"start\": \"2026-10-29T15:00:00-04:00\", \"end\": \"2026-10-29T15:45:00-04:00\", \"attendee_ids\": [\"C-1103\"]}}",
+ "secs": 11.7
+}

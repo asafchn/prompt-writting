@@ -1,0 +1,4 @@
+{
+ "output": "{\"policy_number\": \"MV-237947\", \"incident_date\": null, \"claim_type\": \"motor_collision\", \"amount_claimed\": 640, \"injury_reported\": false, \"missing_fields\": [\"incident_date\"]}",
+ "secs": 4.5
+}

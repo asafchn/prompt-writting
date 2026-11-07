@@ -1,0 +1,4 @@
+{
+ "output": "{\"tool\": null, \"clarify\": \"'closed-won-pending' isn't one of the stages I can set. The options are lead, qualified, proposal, negotiation, won or lost. Which one should Acme renewal move to?\"}",
+ "secs": 27.6
+}

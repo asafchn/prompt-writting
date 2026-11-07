@@ -1,0 +1,4 @@
+{
+ "output": "{\"line_items\": [{\"sku\": \"INK-C4\", \"qty\": 4, \"line_total\": 218.00}, {\"sku\": \"STP-HD\", \"qty\": 1, \"line_total\": 32.00}], \"unknown_items\": [], \"coupon_applied\": null, \"subtotal\": 250.00, \"discount\": 0.00, \"shipping\": 0.00, \"tax\": 0.00, \"total\": 250.00}",
+ "secs": 27.7
+}

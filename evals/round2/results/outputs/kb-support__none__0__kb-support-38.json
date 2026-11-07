@@ -1,0 +1,4 @@
+{
+ "output": "{\"answerable\": true, \"article_ids\": [\"KB-111\"], \"answer\": \"Hi! The Jira integration isn't available on Starter. You need the Business or Enterprise plan to use it. After you upgrade, you can connect Jira under Settings > Integrations.\"}",
+ "secs": 13.3
+}

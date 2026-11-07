@@ -1,0 +1,4 @@
+{
+ "output": "{\"answerable\": true, \"article_ids\": [\"KB-105\"], \"answer\": \"Good morning Maria! SMS codes aren't supported for two-factor authentication. Instead, you can use an authenticator app or a hardware security key. You can turn on 2FA under Settings > Security > Two-factor authentication.\"}",
+ "secs": 3.2
+}

@@ -1,0 +1,4 @@
+{
+ "output": "{\"tool\": \"create_event\", \"arguments\": {\"title\": \"Call with Ken Watanabe\", \"start\": \"2026-11-17T10:00:00+09:00\", \"end\": \"2026-11-17T10:30:00+09:00\", \"attendee_ids\": [\"C-1201\"]}}",
+ "secs": 23.9
+}

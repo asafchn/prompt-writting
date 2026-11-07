@@ -1,0 +1,4 @@
+{
+ "output": "{\"answerable\": true, \"article_ids\": [\"KB-109\"], \"answer\": \"On the Business plan, the API rate limit is 1,000 requests per minute per API token. If you go over the limit, requests get an HTTP 429 response with a Retry-After header.\"}",
+ "secs": 12.1
+}

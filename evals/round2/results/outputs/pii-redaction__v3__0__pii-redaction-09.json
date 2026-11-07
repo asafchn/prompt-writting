@@ -1,0 +1,4 @@
+{
+ "output": "Brightwave Electronics support chat | ticket T-48333 | 2026-10-10 19:03 UTC\nAgent (Marco): Hi, you're chatting with Marco from Brightwave support. How can I help?\nCustomer: Hi, this is [NAME]. I have a problem with my order.\nCustomer: The order number is NW-4002966, it's the Orion headphones. It never arrived.\nAgent (Marco): Thanks [NAME]. Could you confirm the email address on the account?\nCustomer: sure, it's [EMAIL]\nAgent (Marco): For the replacement charge, which card should we use?\nCustomer: Use this one: [CARD-1007], exp 03/31.\nAgent (Marco): All sorted, you'll get a confirmation email shortly. Have a good day!",
+ "secs": 11.1
+}

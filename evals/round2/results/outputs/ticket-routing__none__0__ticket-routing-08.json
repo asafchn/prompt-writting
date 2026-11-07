@@ -1,0 +1,4 @@
+{
+ "output": "{\"queue\": \"bugs\", \"priority\": \"P4\", \"escalate_to_human\": false}",
+ "secs": 12.1
+}

@@ -1,5 +1,8 @@
 # Skill vs. skill vs. no skill
 
+> [!NOTE]
+> Round 2 (10 harder tasks, 50 inputs each, prompts run by Opus 5.5) found no accuracy difference between any of these. Every contender scored 99.8–100%. v3 matched them all with the shortest prompts. See [`../evals/round2/RESULTS.md`](../evals/round2/RESULTS.md). The tables below are round 1.
+
 This folder holds the three contenders that were tested against each other, and real examples of what each one produced.
 
 | Contender | What it is | Overall pass rate |
@@ -7,6 +10,7 @@ This folder holds the three contenders that were tested against each other, and 
 | [`skill-v1/`](skill-v1/SKILL.md) | The skill distilled from the Astra weight-editing prompt. **Winner**, and identical to [`../skills/prompt-writing`](../skills/prompt-writing/SKILL.md). | **99% ± 1** |
 | [`skill-v2/`](skill-v2/SKILL.md) | v1 plus a "Writing for current Claude models" section based on Anthropic's [Prompting Claude Opus 5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5) guide. | 88% ± 6 |
 | No skill | Same model (Claude Opus 5), same request, no skill loaded. The baseline. | 91% ± 5 |
+| [`skill-v3/`](skill-v3/SKILL.md) | v1 plus a "keep it as short as the rules allow" section, written from round-2 training tasks. Added in round 2. | n/a (round 2: 100%, 39% shorter prompts than v1) |
 
 Pass rate = share of downstream test inputs handled correctly by a model (Claude Haiku 5.5) running the written prompt, averaged over 15 written prompts per contender. ± is one standard error. Full method: [`../evals/quality`](../evals/quality).
 

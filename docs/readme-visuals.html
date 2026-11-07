@@ -116,6 +116,23 @@
   .takeaways { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--rule); }
   .takeaways h3 { margin: 0 0 6px; font: 600 16px "Plex Sans"; }
   .takeaways p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+
+  /* ---------- round 2 ---------- */
+  #round2 h2 { font-size: 28px; margin-bottom: 6px; }
+  #round2 .sub { color: var(--ink-soft); margin: 0 0 28px; }
+  .r2 { display: grid; grid-template-columns: 1fr 1.25fr; gap: 56px; }
+  .r2 h3 { font: 600 17px "Source Serif", serif; margin: 0 0 4px; }
+  .r2 .note2 { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 18px; }
+  .acc { width: 100%; border-collapse: collapse; font-size: 15px; }
+  .acc td { padding: 9px 0; border-bottom: 1px solid var(--rule); }
+  .acc td.num { text-align: right; font: 500 15px "Plex Mono"; }
+  .acc td.ci { text-align: right; color: var(--ink-soft); font: 400 12.5px "Plex Mono"; width: 120px; }
+  .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 9px; vertical-align: 0; }
+  .lenrow { display: grid; grid-template-columns: 92px 1fr 64px; align-items: center; gap: 12px; margin-bottom: 12px; font-size: 14.5px; }
+  .lenbar { height: 22px; border-radius: 0 2px 2px 0; }
+  .lenrow .w { font: 500 13px "Plex Mono"; color: var(--ink); }
+  .lenrow .s { grid-column: 2 / 4; font: 400 12.5px "Plex Mono"; color: var(--ink-soft); margin-top: -8px; }
+  .verdict { margin-top: 28px; padding: 16px 18px; background: var(--paper); border-left: 3px solid var(--cobalt); font-size: 14.5px; line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -208,6 +225,34 @@
     <div><h3>Most cases hit the ceiling</h3><p>Four of five cases scored 89–100% for everyone, so harder cases are needed to see more.</p></div>
     <div><h3>v2 isn't proven, either way</h3><p>Its tips target Opus 5 as the reader of the prompt; this test used Haiku. Whiskers show one standard error.</p></div>
   </div>
+</figure>
+
+
+<!-- 6. Round 2 -->
+<figure id="round2">
+  <h2>Round 2: harder tasks, a stronger model, and a tie</h2>
+  <p class="sub">10 tasks × 50 code-graded inputs, prompts run by Opus 5.5 at medium effort. 2,420 calls.</p>
+  <div class="r2">
+    <div>
+      <h3>Accuracy: everyone at the ceiling</h3>
+      <p class="note2">Task success on the 5 held-out tasks, with 95% CIs. 7 of 10 tasks scored 100% for every contender.</p>
+      <table class="acc">
+        <tr><td><span class="sw" style="background:#7A4FD6"></span>Skill v3</td><td class="num">100.0%</td><td class="ci">100–100</td></tr>
+        <tr><td><span class="sw" style="background:var(--cobalt)"></span>Skill v1</td><td class="num">99.8%</td><td class="ci">99.2–100</td></tr>
+        <tr><td><span class="sw" style="background:var(--sea)"></span>Skill v2</td><td class="num">99.8%</td><td class="ci">99.2–100</td></tr>
+        <tr><td><span class="sw" style="background:var(--slate)"></span>No skill</td><td class="num">99.8%</td><td class="ci">99.2–100</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Cost: where the contenders actually differ</h3>
+      <p class="note2">Average written-prompt length on the held-out tasks, and mean time per downstream call.</p>
+      <div class="lenrow"><span>Skill v3</span><div class="lenbar" style="width:61.2%;background:#7A4FD6"></div><span class="w">1,176</span><span class="s">10 s per call</span></div>
+      <div class="lenrow"><span>No skill</span><div class="lenbar" style="width:81.1%;background:var(--slate)"></div><span class="w">1,557</span><span class="s">16 s per call</span></div>
+      <div class="lenrow"><span>Skill v2</span><div class="lenbar" style="width:83.6%;background:var(--sea)"></div><span class="w">1,606</span><span class="s">15 s per call</span></div>
+      <div class="lenrow"><span>Skill v1</span><div class="lenbar" style="width:100%;background:var(--cobalt)"></div><span class="w">1,921</span><span class="s">14 s per call</span></div>
+    </div>
+  </div>
+  <div class="verdict"><b>Verdict.</b> No contender beat another on accuracy, so by the rule fixed in advance, v1 stays the recommended skill. v3, which cuts repeated rules, long example galleries and closing checklists, matched everyone's accuracy with 39% shorter prompts than v1.</div>
 </figure>
 
 <script>

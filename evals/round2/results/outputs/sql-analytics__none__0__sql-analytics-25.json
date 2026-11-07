@@ -1,0 +1,4 @@
+{
+ "output": "WITH test_customers AS (SELECT customer_id FROM customers WHERE COALESCE(is_test, 0) = 1 OR lower(trim(COALESCE(email, ''))) LIKE '%@northwind.test') SELECT o.status, COUNT(*) FROM orders o LEFT JOIN customers c ON c.customer_id = o.customer_id WHERE date(o.order_ts) BETWEEN '2026-10-01' AND '2026-10-31' AND NOT EXISTS (SELECT 1 FROM test_customers t WHERE t.customer_id = o.customer_id) GROUP BY o.status",
+ "secs": 4.1
+}

@@ -1,0 +1,4 @@
+{
+ "output": "Brightwave Electronics support chat | ticket T-48185 | 2026-10-06 15:35 UTC\nAgent (Dana): Hi, you're chatting with Dana from Brightwave support. How can I help?\nCustomer: Hi, this is [NAME]. I have a problem with my order.\nCustomer: The order number is NW-4295713, it's the Aria speaker. It never arrived.\nAgent (Dana): Thanks [NAME]. Could you confirm the email address on the account?\nCustomer: sure, it's [EMAIL]\nAgent (Dana): Can you confirm the delivery address?\nCustomer: It's [ADDRESS], Manchester M4 1HN, UK.\nAgent (Dana): What's the best number to reach you on?\nCustomer: you can call me on [PHONE]\nCustomer: If I'm not home my cousin [NAME] can sign for it.\nAgent (Dana): Thanks, I've logged everything. Anything else I can help with?",
+ "secs": 6.5
+}

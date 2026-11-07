@@ -1,0 +1,4 @@
+{
+ "output": "{\"tool\": \"create_event\", \"arguments\": {\"title\": \"Meeting with Ken Watanabe\", \"start\": \"2026-11-18T14:00:00+09:00\", \"end\": \"2026-11-18T15:00:00+09:00\", \"attendee_ids\": [\"C-1201\"]}}",
+ "secs": 10.0
+}

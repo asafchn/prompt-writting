@@ -1,0 +1,4 @@
+{
+ "output": "{\"answerable\": true, \"article_ids\": [\"KB-115\"], \"answer\": \"The Business plan doesn't include an uptime SLA. Only Enterprise has one: a 99.9% monthly uptime SLA. You can check live status anytime at status.tandem.io.\"}",
+ "secs": 13.0
+}

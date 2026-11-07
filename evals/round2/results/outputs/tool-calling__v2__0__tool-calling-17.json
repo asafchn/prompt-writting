@@ -1,0 +1,4 @@
+{
+ "output": "{\"tool\": \"update_deal_stage\", \"arguments\": {\"deal_id\": \"D-304\", \"stage\": \"lost\"}}",
+ "secs": 12.6
+}

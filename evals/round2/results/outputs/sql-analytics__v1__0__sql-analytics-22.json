@@ -1,0 +1,4 @@
+{
+ "output": "WITH test_customers AS (SELECT customer_id FROM customers WHERE is_test = 1 OR lower(trim(email)) LIKE '%@northwind.test'), counted_orders AS (SELECT o.order_id, o.customer_id, date(o.order_ts) AS order_date FROM orders o WHERE o.status IN ('paid','shipped','delivered') AND NOT EXISTS (SELECT 1 FROM test_customers t WHERE t.customer_id = o.customer_id)), active_customers AS (SELECT DISTINCT co.customer_id FROM counted_orders co WHERE co.order_date BETWEEN '2026-08-03' AND '2026-10-31') SELECT COUNT(DISTINCT c.customer_id) FROM customers c JOIN counted_orders co ON co.customer_id = c.customer_id WHERE c.customer_id NOT IN (SELECT customer_id FROM test_customers) AND c.customer_id NOT IN (SELECT customer_id FROM active_customers)",
+ "secs": 7.6
+}

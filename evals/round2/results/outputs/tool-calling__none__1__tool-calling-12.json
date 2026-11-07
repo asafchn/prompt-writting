@@ -1,0 +1,4 @@
+{
+ "output": "{\"tool\": \"create_event\", \"arguments\": {\"title\": \"Lunch with Rachel Green\", \"start\": \"2026-11-17T12:30:00+09:00\", \"end\": \"2026-11-17T13:00:00+09:00\", \"attendee_ids\": [\"C-1233\"]}}",
+ "secs": 35.7
+}

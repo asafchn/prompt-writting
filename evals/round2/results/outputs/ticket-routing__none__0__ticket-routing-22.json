@@ -1,0 +1,4 @@
+{
+ "output": "{\"queue\": \"billing\", \"priority\": \"P3\", \"escalate_to_human\": false}",
+ "secs": 2.7
+}

@@ -1,0 +1,4 @@
+{
+ "output": "{\"answerable\": true, \"article_ids\": [\"KB-107\"], \"answer\": \"Workspace admins can export all workspace data as JSON or CSV from Admin > Data > Export. The export is emailed to you as a download link, and the link stays valid for 7 days. Each workspace can run one export every 24 hours.\"}",
+ "secs": 5.6
+}

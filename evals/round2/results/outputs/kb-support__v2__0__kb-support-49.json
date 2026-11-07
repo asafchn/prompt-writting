@@ -1,0 +1,4 @@
+{
+ "output": "{\"answerable\": true, \"article_ids\": [\"KB-108\"], \"answer\": \"For 14 days after a workspace is deleted, the owner can restore it from Admin > Danger zone > Delete workspace. After those 14 days it is permanently erased. Only the workspace owner can delete or restore a workspace.\"}",
+ "secs": 14.7
+}

@@ -1,0 +1,4 @@
+{
+ "output": "WITH test_customers AS (SELECT customer_id FROM customers WHERE COALESCE(is_test, 0) = 1 OR lower(trim(COALESCE(email, ''))) LIKE '%@northwind.test'), co AS (SELECT o.order_id, o.customer_id, date(o.order_ts) AS order_date, o.currency, fx.usd_per_unit AS rate FROM orders o LEFT JOIN fx_rates fx ON fx.currency = o.currency WHERE o.status IN ('paid', 'shipped', 'delivered') AND NOT EXISTS (SELECT 1 FROM test_customers t WHERE t.customer_id = o.customer_id)), lines AS (SELECT co.order_id, co.customer_id, co.order_date, oi.product_id, oi.quantity, oi.quantity * oi.unit_price * (1 - COALESCE(oi.discount_pct, 0) / 100.0) * co.rate AS line_usd FROM co JOIN order_items oi ON oi.order_id = co.order_id) SELECT p.category, SUM(l.line_usd) FROM lines l LEFT JOIN products p ON p.product_id = l.product_id WHERE l.order_date BETWEEN '2026-01-01' AND '2026-10-31' GROUP BY p.category ORDER BY 2 DESC, 1 LIMIT 3",
+ "secs": 7.2
+}

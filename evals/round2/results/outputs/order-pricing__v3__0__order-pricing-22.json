@@ -1,0 +1,4 @@
+{
+ "output": "{\"line_items\": [{\"sku\": \"PAP-LTR\", \"qty\": 50, \"line_total\": 285.56}], \"unknown_items\": [], \"coupon_applied\": null, \"subtotal\": 285.56, \"discount\": 0.00, \"shipping\": 0.00, \"tax\": 25.34, \"total\": 310.90}",
+ "secs": 10.0
+}

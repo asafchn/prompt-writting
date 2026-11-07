@@ -1,0 +1,81 @@
+{
+ "conds": [
+  "v3",
+  "v1",
+  "v2",
+  "none"
+ ],
+ "tasks": [
+  "refund-decisions",
+  "order-pricing",
+  "pii-redaction",
+  "meeting-actions",
+  "tool-calling"
+ ],
+ "task_success": {
+  "v3": {
+   "refund-decisions": 1.0,
+   "order-pricing": 1.0,
+   "pii-redaction": 1.0,
+   "meeting-actions": 1.0,
+   "tool-calling": 1.0
+  },
+  "v1": {
+   "refund-decisions": 1.0,
+   "order-pricing": 1.0,
+   "pii-redaction": 1.0,
+   "meeting-actions": 1.0,
+   "tool-calling": 0.99
+  },
+  "v2": {
+   "refund-decisions": 1.0,
+   "order-pricing": 0.99,
+   "pii-redaction": 1.0,
+   "meeting-actions": 1.0,
+   "tool-calling": 1.0
+  },
+  "none": {
+   "refund-decisions": 1.0,
+   "order-pricing": 1.0,
+   "pii-redaction": 1.0,
+   "meeting-actions": 0.99,
+   "tool-calling": 1.0
+  }
+ },
+ "macro": {
+  "v3": 1.0,
+  "v1": 0.998,
+  "v2": 0.998,
+  "none": 0.998
+ },
+ "ci": {
+  "v3": [
+   1.0,
+   1.0
+  ],
+  "v1": [
+   0.992,
+   1.0
+  ],
+  "v2": [
+   0.992,
+   1.0
+  ],
+  "none": [
+   0.992,
+   1.0
+  ]
+ },
+ "hard": {
+  "v3": 1.0,
+  "v1": 1.0,
+  "v2": 0.9966666666666667,
+  "none": 1.0
+ },
+ "format": {
+  "v3": 0.998,
+  "v1": 0.996,
+  "v2": 1.0,
+  "none": 0.998
+ }
+}

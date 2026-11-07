@@ -1,0 +1,4 @@
+{
+ "output": "WITH test_customers AS (SELECT customer_id FROM customers WHERE COALESCE(is_test, 0) = 1 OR lower(trim(COALESCE(email, ''))) LIKE '%@northwind.test') SELECT COALESCE(c.country, 'Unknown'), COUNT(*) FROM customers c WHERE NOT EXISTS (SELECT 1 FROM test_customers t WHERE t.customer_id = c.customer_id) GROUP BY 1",
+ "secs": 4.3
+}

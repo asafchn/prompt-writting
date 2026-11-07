@@ -1,0 +1,4 @@
+{
+ "output": "{\"line_items\": [{\"sku\": \"CHR-ERG\", \"qty\": 2, \"line_total\": 498.00}, {\"sku\": \"BND-2IN\", \"qty\": 12, \"line_total\": 49.59}], \"unknown_items\": [], \"coupon_applied\": null, \"subtotal\": 547.59, \"discount\": 0.00, \"shipping\": 0.00, \"tax\": 0.00, \"total\": 547.59}",
+ "secs": 29.7
+}

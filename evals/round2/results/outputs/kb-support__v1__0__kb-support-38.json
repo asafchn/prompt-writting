@@ -1,0 +1,4 @@
+{
+ "output": "{\"answerable\": true, \"article_ids\": [\"KB-111\"], \"answer\": \"No, the Jira integration isn't available on Starter. It requires the Business or Enterprise plan. Once you're on one of those plans, you can connect it under Settings > Integrations. Slack, GitHub and Google Drive integrations are available on all paid plans, including Starter.\"}",
+ "secs": 11.9
+}
