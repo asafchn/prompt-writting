@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Skill v1 recommended. Evaluation rounds 1 and 2 complete. |
+| **Status** | Skill v3 is the main skill (promoted after round 2). Evaluation rounds 1 and 2 complete. |
 | **Audience** | Developers who write system prompts, agent instructions or Claude skills |
 | **Reading time** | About 10 minutes. If you only have one, read [the summary](#summary). |
 | **Last updated** | 7 November 2026 |
@@ -109,7 +109,8 @@ The skill lives in [`skills/prompt-writing/SKILL.md`](skills/prompt-writing/SKIL
 1. **Gather the essentials**: objective, success criteria, resources, limits and end state. It asks only about what's missing and matters.
 2. **Size the prompt to the task.** A one-shot task (summarize, classify) gets a short prompt with format and examples. Multi-step or agentic work gets the full skeleton.
 3. **Write or review** the prompt using the principles above, and flag anti-patterns such as vague quality words, hidden success criteria, ALL-CAPS used instead of explanation, and missing stopping conditions.
-4. **Deliver** the prompt in one code block, plus two or three lines on design choices and assumptions to confirm.
+4. **Keep it as short as the rules allow** (added in v3). It states each rule once, gives 2 or 3 examples only where the rules leave doubt, and skips closing checklists that restate the rules.
+5. **Deliver** the prompt in one code block, plus two or three lines on design choices and assumptions to confirm.
 
 **To use it**, add the `skills/prompt-writing` folder as a skill wherever you use Claude (for Claude Code, skills live in a `.claude/skills/` folder). See Anthropic's [skills documentation](https://docs.claude.com) for your setup. Then ask for what you need in plain words, for example "rewrite the system message for our support bot, it keeps inventing policies".
 
@@ -123,7 +124,7 @@ Step by step:
 
 1. **Five realistic requests**, written the way people actually ask: a billing chatbot that invented a refund policy, a review tagger whose output is parsed with `json.loads`, a sales-email GPT with a strict voice and a 120-word limit, a code-review bot that nitpicks formatting, and an unattended overnight ticket-triage agent.
 2. **Claude Opus 5 writes the prompt** three times per request under each of three conditions:
-   - **skill v1**: the skill in this repo
+   - **skill v1**: the first version of the skill (the main skill until round 2)
    - **skill v2**: v1 plus tips from Anthropic's [Prompting Claude Opus 5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5) guide
    - **no skill**: the baseline
 3. **Claude Haiku 5.5 runs each prompt** on 4 to 8 test inputs built to probe the user's intent. They include a refund request outside the window, a sarcastic review, a prompt injection hidden inside a ticket, an emoji-only review, a demo note with almost no information, and a diff with a real bug among formatting noise.
@@ -184,7 +185,7 @@ Round 1 left two questions open: were the tasks too easy, and were there enough 
 - **Accuracy hit the ceiling.** 7 of 10 tasks scored 100% for every contender on every input. Across 1,950 graded outputs there were only 3 failures, one per contender, and each was a real mistake. Every paired difference was "no detectable difference".
 - **Cost is where the contenders differ, and v1 leans the wrong way.** v1 writes the longest prompts, adding example galleries, failure lists and closing checklists, without gaining accuracy.
 - **v3 fixes that.** It was written from training-task data only. On the held-out tasks it scored 100% with prompts 39% shorter than v1's, and downstream calls averaged 10 s versus 14 s.
-- **By the pre-registered rule, v3 doesn't replace v1**, because it ties on accuracy rather than beating it. If cost matters to you, [`comparison/skill-v3`](comparison/skill-v3/SKILL.md) is the one to use.
+- **v3 is now the main skill.** The pre-registered rule counted only accuracy, where v3 ties with v1 rather than beating it. So promoting v3 was a deliberate owner's decision on cost grounds: same accuracy, shorter prompts, faster calls. v1 is kept in [`comparison/skill-v1`](comparison/skill-v1/SKILL.md).
 
 > [!NOTE]
 > **Self-correction caught a real test bug.** Four refund inputs were failed by every contender. They turned out to contain contradictory data, such as shipping charged on a digital download. The inputs were fixed, and every contender's outputs for them were regenerated. Every plan change and fix is logged in [`evals/round2/CORRECTIONS.md`](evals/round2/CORRECTIONS.md). Full numbers are in [`evals/round2/RESULTS.md`](evals/round2/RESULTS.md).
@@ -193,13 +194,13 @@ Round 1 left two questions open: were the tasks too easy, and were there enough 
 
 1. **Test where prompts still matter.** Run round 2's tasks with smaller deployed models (Haiku, low effort). Round 1 suggests that's where the skill pays off.
 2. **Test requests that leave rules unstated.** In round 2 every request spelled out every rule, so writing the prompt was mostly transcription. Requests that need intent inferred, and multi-turn agents, are the open question.
-3. **Decide on cost.** If a future decision rule counts prompt length, v3 is the natural candidate to replace v1.
+3. **Confirm v3 on smaller models.** v3 was promoted on round-2 evidence (Opus 5.5 running the prompts). Re-running round 1's Haiku setup with v3 would check that shorter prompts don't cost accuracy where prompts matter more.
 4. **Triggering.** Measure whether Claude reaches for the skill without being told, using [`evals/triggering`](evals/triggering).
 
 ## 9. What's in this repo
 
 ```text
-skills/prompt-writing/      the recommended skill (v1)
+skills/prompt-writing/      the main skill (v3)
 comparison/                 v1 vs v2 vs v3 vs no skill: the skills, side-by-side examples, analysis
 evals/quality/              the end-to-end evaluation: cases, harness, every prompt, output and grade
 evals/round2/               round 2: 10 tasks x 50 inputs, runner, reports, corrections, all results

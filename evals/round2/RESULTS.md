@@ -1,6 +1,6 @@
 # Round 2 results
 
-**In one paragraph.** We built 10 harder tasks, each with a long rule set, a strict output contract and 50 code-graded inputs (20 standard, 20 edge, 10 adversarial). Opus 5.5 wrote the system prompts, and Opus 5.5 at medium effort ran them. **Every way of writing the prompt reached 99.8–100% task success**, so there is no detectable accuracy difference between skill v1, skill v2 and no skill. The difference that did show up is **cost**. Skill v3, written from training-task data to cut repetition, matched everyone's accuracy with **39% shorter prompts than v1**, and its downstream calls were about **29% faster**. By the decision rule fixed in advance, v3 does not replace v1, because it doesn't *beat* it on accuracy.
+**In one paragraph.** We built 10 harder tasks, each with a long rule set, a strict output contract and 50 code-graded inputs (20 standard, 20 edge, 10 adversarial). Opus 5.5 wrote the system prompts, and Opus 5.5 at medium effort ran them. **Every way of writing the prompt reached 99.8–100% task success**, so there is no detectable accuracy difference between skill v1, skill v2 and no skill. The difference that did show up is **cost**. Skill v3, written from training-task data to cut repetition, matched everyone's accuracy with **39% shorter prompts than v1**, and its downstream calls were about **29% faster**. By the decision rule fixed in advance, v3 doesn't *beat* v1 on accuracy. After the round, the owner promoted v3 to the main skill on cost grounds.
 
 ## What ran
 

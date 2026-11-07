@@ -143,8 +143,8 @@
   <h1>One great prompt, turned into a skill that writes the next ones</h1>
   <p class="lede">We took the task prompt MIT CSAIL researchers gave an AI to repair a language model's weights, distilled its structure, packaged it as a Claude skill, and measured whether it makes prompts that work.</p>
   <table>
-    <tr><td>Applies to</td><td>Claude skills, system prompts, agent task briefs</td><td>Status</td><td><span class="lozenge ok">Skill v1 recommended</span></td></tr>
-    <tr><td>Last updated</td><td>7 November 2026</td><td>Evidence</td><td><span class="lozenge info">5 cases, 45 prompts, 261 graded outputs</span></td></tr>
+    <tr><td>Applies to</td><td>Claude skills, system prompts, agent task briefs</td><td>Status</td><td><span class="lozenge ok">Skill v3 is the main skill</span></td></tr>
+    <tr><td>Last updated</td><td>7 November 2026</td><td>Evidence</td><td><span class="lozenge info">2 rounds, 15 tasks, 2,681 graded outputs</span></td></tr>
   </table>
   <div class="strip"></div>
 </figure>
@@ -218,7 +218,7 @@
 <!-- 5. Results -->
 <figure id="results">
   <h2>Results: share of test inputs handled correctly</h2>
-  <div class="legend"><span style="--c: var(--cobalt)">Skill v1 (recommended)</span><span style="--c: var(--sea)">Skill v2 (+ Opus 5 guidance)</span><span style="--c: var(--slate)">No skill</span></div>
+  <div class="legend"><span style="--c: var(--cobalt)">Skill v1</span><span style="--c: var(--sea)">Skill v2 (+ Opus 5 guidance)</span><span style="--c: var(--slate)">No skill</span></div>
   <div class="chart" id="chart"></div>
   <div class="takeaways">
     <div><h3>v1 helps most where rules are strict</h3><p>Sales email went from 58% to 100%: every email under 120 words with one next step.</p></div>
@@ -252,7 +252,7 @@
       <div class="lenrow"><span>Skill v1</span><div class="lenbar" style="width:100%;background:var(--cobalt)"></div><span class="w">1,921</span><span class="s">14 s per call</span></div>
     </div>
   </div>
-  <div class="verdict"><b>Verdict.</b> No contender beat another on accuracy, so by the rule fixed in advance, v1 stays the recommended skill. v3, which cuts repeated rules, long example galleries and closing checklists, matched everyone's accuracy with 39% shorter prompts than v1.</div>
+  <div class="verdict"><b>Verdict.</b> No contender beat another on accuracy. v3, which cuts repeated rules, long example galleries and closing checklists, matched everyone's accuracy with 39% shorter prompts than v1, so it is now the main skill.</div>
 </figure>
 
 <script>

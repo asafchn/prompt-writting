@@ -42,13 +42,24 @@ Write each as a short section with a plain header. Each answers one question the
 - **Pair restrictions with permissions.** Every "don't" should leave clear what is still fine.
 - **Prefer positive instructions.** "Write in prose paragraphs" works better than "don't use bullet points".
 - **Exact interfaces.** Show the literal format of tool calls, files and outputs. One correct example beats a description.
-- **Diverse examples.** If you give examples, give several that differ, so the model does not copy one surface pattern.
-- **Name the failure modes.** Tell the model the mistakes this kind of task usually produces.
+- **Examples only where the rules leave a doubt.** Give 2 or 3 short examples, chosen for the cases where a careful reader could still go wrong (a boundary, a precedence clash, an input that should be refused), and make them differ from each other. Don't add examples that only restate a rule already written.
+- **Name a failure mode once, next to its rule.** When a task has a known trap, put one sentence beside the rule it belongs to, not in a separate list that repeats the rules.
 - **Plan for long runs.** For long sessions, ask for a notes file or checkpoints, output-length limits, and backups of good intermediate results.
 - **Define done.** State the deliverable and the final report up front.
 
+### Keep it as short as the rules allow
+
+A capable model follows every rule it is given. It doesn't need a rule repeated, a checklist that restates the rules before it answers, or a long gallery of examples. Those add length and cost to every call, without making answers more correct. In testing, prompts that kept every rule but left out the repetition did just as well.
+
+- State each rule exactly once, in the section where it belongs.
+- Leave out "before you reply, check…" lists that only repeat earlier rules. Keep a check only when it asks for something the rules don't already cover.
+- Put reasons in a clause, not a paragraph.
+- After drafting, cut every sentence whose removal wouldn't change what the model does. The complete set of rules is the floor. Anything above it has to earn its place.
+
 ## 5. Anti-patterns to flag
 
+- Repeating a rule, or restating all of them in a closing checklist.
+- Example sections longer than the rules they illustrate.
 - Vague quality words with no criterion ("thorough", "high quality", "good").
 - Hidden or implied success criteria.
 - Rules with no reason, or rules that contradict each other.
