@@ -21,7 +21,7 @@
 2. [The prompt we learned from](#2-the-prompt-we-learned-from)
 3. [Who wrote it, and why we trusted it](#3-who-wrote-it-and-why-we-trusted-it)
 4. [What we distilled](#4-what-we-distilled)
-5. [The skill, and how to use it](#5-the-skill-and-how-to-use-it)
+5. [The skill, and how to use it](#5-the-skill-and-how-to-use-it) (including [the three versions](#the-three-versions-and-how-they-differ))
 6. [How we tested it](#6-how-we-tested-it)
 7. [What we found](#7-what-we-found)
 8. [What's next](#8-whats-next)
@@ -113,6 +113,21 @@ The skill lives in [`skills/prompt-writing/SKILL.md`](skills/prompt-writing/SKIL
 5. **Deliver** the prompt in one code block, plus two or three lines on design choices and assumptions to confirm.
 
 **To use it**, add the `skills/prompt-writing` folder as a skill wherever you use Claude (for Claude Code, skills live in a `.claude/skills/` folder). See Anthropic's [skills documentation](https://docs.claude.com) for your setup. Then ask for what you need in plain words, for example "rewrite the system message for our support bot, it keeps inventing policies".
+
+### The three versions, and how they differ
+
+All three versions share the same core: gather the essentials, size the prompt to the task, use the seven-part skeleton for agentic work, and follow the writing principles. They differ in one question: **what should a prompt add beyond the complete set of rules?**
+
+| | v1: Complete | v2: Model-aware | v3: Complete and lean (main) |
+|---|---|---|---|
+| **Approach** | Spell everything out. Rules, then examples, then a list of likely mistakes, then a checklist before answering. | v1, plus advice tuned to how Opus 5-generation models read prompts. | v1, plus a discipline: every sentence has to change what the model does. |
+| **What it adds** | Nothing beyond the core. Its habits come straight from the source prompt: name the failure modes, show examples. | A section on current models: ask for full coverage with severity labels instead of "only flag important issues", drop generic "double-check" steps, set output length explicitly, state the scope, cap delegation. | A section on brevity: state each rule once, give 2–3 examples only where the rules leave doubt, put each pitfall beside its rule, and skip checklists that restate the rules. |
+| **Its bet** | Redundancy is cheap insurance. A model told twice is less likely to slip. | The model running the prompt is a strong, literal reader, so old defensive habits backfire. | A capable model follows each rule it's given once; repetition costs tokens and time without adding accuracy. |
+| **Typical prompt** | Longest: about 1,900–2,000 words in round 2 | Medium: about 1,600–1,700 | Shortest: about 1,200 |
+| **How it did** | Won round 1 (Haiku running the prompts: 99% vs 91% with no skill). Tied in round 2. | Behind in round 1 (88%), where its tips didn't fit the smaller model. Tied in round 2. | Round 2 only: 100% on the held-out tasks, 39% shorter prompts than v1, and faster calls. |
+| **Where it lives** | [`comparison/skill-v1`](comparison/skill-v1/SKILL.md) | [`comparison/skill-v2`](comparison/skill-v2/SKILL.md) | [`skills/prompt-writing`](skills/prompt-writing/SKILL.md) (same file as [`comparison/skill-v3`](comparison/skill-v3/SKILL.md)) |
+
+**In short.** v1 makes prompts *complete*. v2 tried to make them *model-aware*, but its advice only fits the model it was written for. v3 keeps v1's completeness and removes the padding. With a strong model running the prompts, completeness is what matters for accuracy and length is pure cost, so v3 is the main skill. With a smaller model running the prompts, round 1 suggests v1's redundancy may still help, but v3 hasn't been tested there yet.
 
 ## 6. How we tested it
 
