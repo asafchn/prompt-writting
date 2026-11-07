@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt-writing skill: full review</title>
+<meta name="description" content="How a prompt from MIT CSAIL's weight-editing work became a Claude skill, and what two evaluation rounds showed.">
+<style>
+
+  @font-face { font-family: "Plex Sans"; src: url(fonts/ibm-plex-sans-latin-400-normal.woff2); font-weight: 400; }
+  @font-face { font-family: "Plex Sans"; src: url(fonts/ibm-plex-sans-latin-400-italic.woff2); font-weight: 400; font-style: italic; }
+  @font-face { font-family: "Plex Sans"; src: url(fonts/ibm-plex-sans-latin-500-normal.woff2); font-weight: 500; }
+  @font-face { font-family: "Plex Sans"; src: url(fonts/ibm-plex-sans-latin-600-normal.woff2); font-weight: 600; }
+  @font-face { font-family: "Plex Mono"; src: url(fonts/ibm-plex-mono-latin-400-normal.woff2); font-weight: 400; }
+  @font-face { font-family: "Plex Mono"; src: url(fonts/ibm-plex-mono-latin-500-normal.woff2); font-weight: 500; }
+  @font-face { font-family: "Source Serif"; src: url(fonts/source-serif-4-latin-400-normal.woff2); font-weight: 400; }
+  @font-face { font-family: "Source Serif"; src: url(fonts/source-serif-4-latin-600-normal.woff2); font-weight: 600; }
+
+  :root {
+    --paper: #F7F8FA;
+    --sheet: #FFFFFF;
+    --ink: #17213A;
+    --ink-soft: #4A5468;
+    --rule: #D6DCE6;
+    --cobalt: #2C5BE8;     /* skill v1, the winner */
+    --sea: #2A8F84;        /* skill v2 */
+    --slate: #9AA3B3;      /* no skill */
+    --marker: #FFE58A;     /* highlighter */
+    --marker-2: #CFE0FF;
+    --marker-3: #CDEFE7;
+    --marker-4: #FFD9CC;
+  }
+  * { box-sizing: border-box; }
+  
+  figure { margin: 0 auto 48px; width: 1120px; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 40px 48px; }
+  h1, h2 { font-family: "Source Serif", serif; font-weight: 600; letter-spacing: -0.01em; margin: 0; }
+  .cap { color: var(--ink-soft); font-size: 14px; margin-top: 20px; }
+
+  /* ---------- banner: a documentation page header ---------- */
+  #banner { padding: 0; overflow: hidden; }
+  #banner .crumbs { padding: 22px 48px 0; font-size: 14px; color: var(--ink-soft); }
+  #banner .crumbs span + span::before { content: "/"; margin: 0 10px; color: var(--rule); }
+  #banner h1 { padding: 14px 48px 0; font-size: 46px; line-height: 1.1; max-width: 900px; }
+  #banner .lede { padding: 14px 48px 0; font-size: 19px; color: var(--ink-soft); max-width: 820px; }
+  #banner table { margin: 28px 48px 34px; border-collapse: collapse; font-size: 14px; }
+  #banner td { padding: 6px 28px 6px 0; vertical-align: top; }
+  #banner td:first-child { color: var(--ink-soft); }
+  .lozenge { display: inline-block; padding: 1px 8px; border-radius: 3px; font-weight: 600; font-size: 12px; }
+  .lozenge.ok { background: #DDF5E6; color: #1C6B3C; }
+  .lozenge.info { background: #E3EBFF; color: #2448B8; }
+  #banner .strip { height: 8px; background: linear-gradient(90deg, var(--marker) 0 25%, var(--marker-2) 25% 50%, var(--marker-3) 50% 75%, var(--marker-4) 75%); }
+
+  /* ---------- anatomy: the source prompt, highlighted ---------- */
+  #anatomy h2 { font-size: 28px; }
+  #anatomy .sub { color: var(--ink-soft); margin: 6px 0 26px; }
+  .doc { display: grid; grid-template-columns: 1fr 300px; column-gap: 32px; }
+  .doc .src { font: 400 13.5px/1.75 "Plex Mono", monospace; color: var(--ink); }
+  .row { display: contents; }
+  .src p { margin: 0 0 12px; }
+  .src mark { padding: 2px 4px; border-radius: 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; color: inherit; }
+  .src b { font-weight: 500; }
+  .note { border-left: 3px solid var(--ink); padding: 2px 0 2px 14px; margin: 0 0 12px; font-size: 14.5px; line-height: 1.45; align-self: start; }
+  .note strong { display: block; font-weight: 600; font-size: 15px; }
+  .note em { font-style: italic; color: var(--ink-soft); }
+  .m1 { background: var(--marker); } .n1 { border-color: #E2B400; }
+  .m2 { background: var(--marker-2); } .n2 { border-color: var(--cobalt); }
+  .m3 { background: var(--marker-3); } .n3 { border-color: var(--sea); }
+  .m4 { background: var(--marker-4); } .n4 { border-color: #E07A5F; }
+  .elide { color: var(--slate); }
+
+  /* ---------- journey ---------- */
+  #journey h2, #pipeline h2, #results h2 { font-size: 28px; margin-bottom: 26px; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; }
+  .step { padding: 0 22px 0 0; }
+  .step .n { font: 600 15px "Plex Sans"; color: var(--cobalt); display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .step .n i { flex: 1; height: 2px; background: var(--rule); }
+  .step:last-child .n i { background: transparent; }
+  .step h3 { font: 600 19px/1.25 "Source Serif", serif; margin: 0 0 8px; }
+  .step p { margin: 0; font-size: 14.5px; color: var(--ink-soft); line-height: 1.5; }
+  .step .out { margin-top: 12px; font: 400 12.5px "Plex Mono"; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 3px; padding: 6px 8px; display: inline-block; }
+
+  /* ---------- pipeline ---------- */
+  .pipe { display: grid; grid-template-columns: 1fr 34px 1fr 34px 1fr 34px 0.8fr; align-items: stretch; }
+  .box { border: 1.5px solid var(--ink); border-radius: 4px; padding: 16px 16px 18px; background: var(--sheet); }
+  .box h3 { margin: 0 0 4px; font: 600 17px "Source Serif", serif; }
+  .box .who { font: 500 13px "Plex Mono"; color: var(--cobalt); margin-bottom: 10px; }
+  .box p { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.45; }
+  .box ul { margin: 8px 0 0; padding-left: 18px; font-size: 13.5px; color: var(--ink-soft); }
+  .arrow { align-self: center; text-align: center; font-size: 22px; color: var(--ink-soft); }
+  .box.final { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .box.final p, .box.final .who { color: #C9D3EA; }
+  .conds { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .chip { font-size: 12px; padding: 2px 8px; border-radius: 10px; color: #fff; font-weight: 500; }
+  .chip.v1 { background: var(--cobalt); } .chip.v2 { background: var(--sea); } .chip.no { background: var(--slate); }
+  .counts { margin-top: 22px; display: flex; gap: 40px; font-size: 14px; color: var(--ink-soft); }
+  .counts b { font: 600 22px "Source Serif"; color: var(--ink); display: block; }
+
+  /* ---------- results ---------- */
+  .legend { display: flex; gap: 22px; font-size: 14px; margin: -12px 0 22px; color: var(--ink-soft); }
+  .legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 7px; vertical-align: -1px; background: var(--c); }
+  .chart { display: grid; grid-template-columns: 170px 1fr; row-gap: 14px; }
+  .case { font-size: 15px; font-weight: 500; padding-top: 2px; }
+  .case small { display: block; font-weight: 400; color: var(--ink-soft); font-size: 12.5px; }
+  .bars { position: relative; }
+  .bar { position: relative; height: 15px; margin: 0 0 3px; }
+  .bar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--c); border-radius: 0 2px 2px 0; }
+  .bar .se { position: absolute; top: 7px; height: 1.5px; background: var(--ink); }
+  .bar .se::before, .bar .se::after { content: ""; position: absolute; top: -4px; width: 1.5px; height: 9.5px; background: var(--ink); }
+  .bar .se::before { left: 0; } .bar .se::after { right: 0; }
+  .bar .v { position: absolute; top: -2px; font: 500 12.5px "Plex Mono"; color: var(--ink); }
+  .grid { position: absolute; inset: -6px 0; pointer-events: none; }
+  .grid i { position: absolute; top: 0; bottom: 0; width: 1px; background: #EDF0F5; }
+  .overall { border-top: 1.5px solid var(--ink); padding-top: 14px; }
+  .overall .bar { height: 20px; }
+  .overall .bar .se { top: 9.5px; }
+  .axis { grid-column: 2; position: relative; height: 18px; font: 400 12px "Plex Mono"; color: var(--ink-soft); }
+  .axis span { position: absolute; transform: translateX(-50%); }
+  .takeaways { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  .takeaways h3 { margin: 0 0 6px; font: 600 16px "Plex Sans"; }
+  .takeaways p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+
+  /* ---------- round 2 ---------- */
+  #round2 h2 { font-size: 28px; margin-bottom: 6px; }
+  #round2 .sub { color: var(--ink-soft); margin: 0 0 28px; }
+  .r2 { display: grid; grid-template-columns: 1fr 1.25fr; gap: 56px; }
+  .r2 h3 { font: 600 17px "Source Serif", serif; margin: 0 0 4px; }
+  .r2 .note2 { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 18px; }
+  .acc { width: 100%; border-collapse: collapse; font-size: 15px; }
+  .acc td { padding: 9px 0; border-bottom: 1px solid var(--rule); }
+  .acc td.num { text-align: right; font: 500 15px "Plex Mono"; }
+  .acc td.ci { text-align: right; color: var(--ink-soft); font: 400 12.5px "Plex Mono"; width: 120px; }
+  .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 9px; vertical-align: 0; }
+  .lenrow { display: grid; grid-template-columns: 92px 1fr 64px; align-items: center; gap: 12px; margin-bottom: 12px; font-size: 14.5px; }
+  .lenbar { height: 22px; border-radius: 0 2px 2px 0; }
+  .lenrow .w { font: 500 13px "Plex Mono"; color: var(--ink); }
+  .lenrow .s { grid-column: 2 / 4; font: 400 12.5px "Plex Mono"; color: var(--ink-soft); margin-top: -8px; }
+  .verdict { margin-top: 28px; padding: 16px 18px; background: var(--paper); border-left: 3px solid var(--cobalt); font-size: 14.5px; line-height: 1.5; }
+
+  /* ---------- page ---------- */
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.6 "Plex Sans", system-ui, sans-serif; }
+  .layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 40px; max-width: 1480px; margin: 0 auto; padding: 32px 32px 80px; }
+  nav.rail { position: sticky; top: 24px; align-self: start; font-size: 14px; }
+  nav.rail .title { font: 600 15px "Source Serif", serif; margin: 0 0 12px; }
+  nav.rail ol { list-style: none; padding: 0; margin: 0; counter-reset: s; }
+  nav.rail li { margin: 0; }
+  nav.rail a { display: block; padding: 6px 10px; border-left: 2px solid var(--rule); color: var(--ink-soft); text-decoration: none; line-height: 1.35; }
+  nav.rail a:hover { color: var(--ink); border-color: var(--ink-soft); }
+  nav.rail a.on { color: var(--cobalt); border-color: var(--cobalt); font-weight: 500; }
+  nav.rail a:focus-visible, main a:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; }
+  main { min-width: 0; }
+  .sheet { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 40px 56px 56px; }
+  .sheet > :first-child { margin-top: 0; }
+  .sheet > h2 { font: 600 30px/1.2 "Source Serif", serif; margin: 56px 0 16px; padding-top: 8px; scroll-margin-top: 16px; }
+  .sheet > h3 { font: 600 21px/1.3 "Source Serif", serif; margin: 36px 0 10px; scroll-margin-top: 16px; }
+  .sheet > p, .sheet > ul > li, .sheet > ol > li { max-width: 76ch; }
+  .sheet li li { max-width: 72ch; }
+  main a { color: var(--cobalt); text-underline-offset: 2px; }
+  .sheet code { font: 400 0.88em "Plex Mono", monospace; background: var(--paper); border: 1px solid var(--rule); border-radius: 3px; padding: 1px 5px; }
+  .sheet > pre { background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 16px 18px; overflow-x: auto; }
+  .sheet > pre code { border: 0; padding: 0; background: none; font-size: 13.5px; line-height: 1.6; }
+  .table-scroll table { border-collapse: collapse; margin: 18px 0 24px; font-size: 14.5px; width: 100%; }
+  .table-scroll th, .table-scroll td { border: 1px solid var(--rule); padding: 8px 12px; text-align: left; vertical-align: top; }
+  .table-scroll th { background: var(--paper); font-weight: 600; }
+  .sheet > hr { border: 0; border-top: 1px solid var(--rule); margin: 40px 0; }
+  .table-scroll { overflow-x: auto; }
+  .callout { border: 1px solid var(--rule); border-left: 4px solid var(--c); background: var(--bg); border-radius: 4px; padding: 14px 18px; margin: 20px 0; }
+  .callout p, .callout li { max-width: none; }
+  .callout > :last-child { margin-bottom: 0; }
+  .callout-label { font-weight: 600; color: var(--c); font-size: 14px; margin-bottom: 4px; }
+  .callout.co-note { --c: #2448B8; --bg: #F3F6FF; }
+  .callout.co-tip { --c: #1C6B3C; --bg: #F1FAF4; }
+  .callout.co-important { --c: #6A3FC4; --bg: #F6F2FF; }
+  .callout.co-warning { --c: #9A6200; --bg: #FFF8E6; }
+  .callout.co-caution { --c: #B4361E; --bg: #FFF3F0; }
+  .fig-wrap { overflow-x: auto; margin: 28px -16px; padding: 0 16px; }
+  .fig-wrap figure { margin: 0 auto; width: auto; min-width: 860px; max-width: 1120px; }
+  #banner { margin-bottom: 8px; }
+  footer { color: var(--ink-soft); font-size: 13.5px; margin-top: 28px; }
+  @media (max-width: 700px) {
+    .fig-wrap #banner { min-width: 0; }
+    #banner h1 { font-size: 32px; padding: 12px 20px 0; }
+    #banner .crumbs, #banner .lede { padding-left: 20px; padding-right: 20px; }
+    #banner .lede { font-size: 17px; }
+    #banner table { margin: 20px; display: block; }
+    #banner td { display: block; padding: 2px 0; }
+  }
+  @media (max-width: 1100px) {
+    .layout { grid-template-columns: 1fr; padding: 16px; gap: 16px; }
+    nav.rail { position: static; }
+    .sheet { padding: 24px 18px 36px; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="rail" aria-label="Contents">
+    <p class="title">On this page</p>
+    <ol><li><a href="#1-why-we-built-a-prompt-writing-skill">1. Why we built a prompt-writing skill</a></li>
+<li><a href="#2-the-prompt-we-learned-from">2. The prompt we learned from</a></li>
+<li><a href="#3-who-wrote-it-and-why-we-trusted-it">3. Who wrote it, and why we trusted it</a></li>
+<li><a href="#4-what-we-distilled">4. What we distilled</a></li>
+<li><a href="#5-the-skill-and-how-to-use-it">5. The skill, and how to use it</a></li>
+<li><a href="#6-how-we-tested-it">6. How we tested it</a></li>
+<li><a href="#7-what-we-found">7. What we found</a></li>
+<li><a href="#8-what-s-next">8. What's next</a></li>
+<li><a href="#9-what-s-in-this-repo">9. What's in this repo</a></li>
+<li><a href="#10-sources-and-credits">10. Sources and credits</a></li></ol>
+  </nav>
+  <main>
+    <div class="sheet">
+<div class="fig-wrap"><figure id="banner">
+  <div class="crumbs"><span>Engineering</span><span>AI practices</span><span>Skills</span></div>
+  <h1>One great prompt, turned into a skill that writes the next ones</h1>
+  <p class="lede">We took the task prompt MIT CSAIL researchers gave an AI to repair a language model's weights, distilled its structure, packaged it as a Claude skill, and measured whether it makes prompts that work.</p>
+  <table>
+    <tr><td>Applies to</td><td>Claude skills, system prompts, agent task briefs</td><td>Status</td><td><span class="lozenge ok">Skill v3 is the main skill</span></td></tr>
+    <tr><td>Last updated</td><td>7 November 2026</td><td>Evidence</td><td><span class="lozenge info">2 rounds, 15 tasks, 2,681 graded outputs</span></td></tr>
+  </table>
+  <div class="strip"></div>
+</figure></div>
+<div class="table-scroll"><table>
+
+<tbody>
+<tr>
+<td><strong>Status</strong></td>
+<td>Skill v3 is the main skill (promoted after round 2). Evaluation rounds 1 and 2 complete.</td>
+</tr>
+<tr>
+<td><strong>Audience</strong></td>
+<td>Developers who write system prompts, agent instructions or Claude skills</td>
+</tr>
+<tr>
+<td><strong>Reading time</strong></td>
+<td>About 10 minutes. If you only have one, read <a href="#summary">the summary</a>.</td>
+</tr>
+<tr>
+<td><strong>Last updated</strong></td>
+<td>7 November 2026</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout co-note"><div class="callout-label">Note</div><p><a id="summary"></a><strong>Summary.</strong> We took a prompt that produced a striking published result, worked out <em>why</em> it is written the way it is, and packaged that pattern as a Claude skill called <code>prompt-writing</code>. Then we tested it twice.</p>
+<ul>
+<li><strong>Round 1</strong> (5 tasks, prompts run by Claude Haiku 5.5): prompts written with the skill were handled correctly <strong>99%</strong> of the time, versus <strong>91%</strong> without it. Most of that gain came from one task with strict rules.</li>
+<li><strong>Round 2</strong> (10 harder tasks, 50 code-graded inputs each, 2,420 calls, prompts run by Claude Opus 5.5): <strong>every</strong> way of writing the prompt scored 99.8–100%. There was no detectable accuracy difference. The contenders differed on cost instead. A leaner version of the skill (v3) matched everyone's accuracy with <strong>39% shorter prompts</strong>.</li>
+</ul>
+<p><strong>The takeaway:</strong> the skill helps most when a smaller model runs the prompt. With a frontier model, any complete prompt works, and the skill's job becomes keeping prompts complete without bloat. Section 7 has the details.</p></div>
+
+<div class="fig-wrap"><figure id="journey">
+  <h2>How we got here</h2>
+  <div class="steps">
+    <div class="step"><div class="n">1<i></i></div><h3>Read a prompt that worked</h3><p>The task prompt behind a published result: an AI raised a model's MATH-500 score from 7.9% to 48.1% by editing 0.016% of its weights.</p><span class="out">source/</span></div>
+    <div class="step"><div class="n">2<i></i></div><h3>Distill its structure</h3><p>Seven sections, each answering one question the model would otherwise guess, plus the writing habits that make them work.</p><span class="out">7 sections, 10 principles</span></div>
+    <div class="step"><div class="n">3<i></i></div><h3>Package it as a skill</h3><p>A Claude skill that gathers the essentials, sizes the prompt to the task, and writes or reviews prompts with that structure.</p><span class="out">skills/prompt-writing/</span></div>
+    <div class="step"><div class="n">4<i></i></div><h3>Test what it changes</h3><p>Judge each written prompt by what it makes another model do, against a version with Opus 5 tips and against no skill at all.</p><span class="out">evals/quality/</span></div>
+  </div>
+</figure></div>
+<hr />
+<h2 id="1-why-we-built-a-prompt-writing-skill">1. Why we built a prompt-writing skill</h2>
+<p>Most of us write prompts the way we write a quick Slack message: a goal, a few adjectives ("be thorough", "be helpful"), and hope. When the model misbehaves we add a rule, then another, until the prompt is a pile of patches nobody fully understands.</p>
+<p>Anthropic has been steering developers toward a different habit: <strong>let Claude write the prompt</strong>, then test it.</p>
+<ul>
+<li>In May 2024 the Claude Console gained a <strong>prompt generator</strong>. You describe the task, and Claude drafts a production-ready prompt template (<a href="https://claude.com/resources/articles/prompt-generator">announcement</a>).</li>
+<li>In October 2024 it added a <strong>prompt improver</strong>, which uses Claude to rewrite an existing prompt. Anthropic reported about 30% higher accuracy on a multilabel classification test, and 100% adherence to a word-count target on a summarization test (<a href="https://claude.com/blog/prompt-improver">announcement</a>).</li>
+<li>The Claude Cookbook ships a <strong>Metaprompt</strong>, a long prompt whose only job is to help Claude write good prompts for a new task (<a href="https://platform.claude.com/cookbook/misc-metaprompt">cookbook</a>).</li>
+</ul>
+<p>Those tools encode Anthropic's general advice. We wanted something more specific: a way of writing that has been shown to hold up when an AI works <strong>alone, for hours, with a real budget and real ways to cheat</strong>. So instead of starting from generic tips, we started from one prompt that demonstrably worked and asked what made it work.</p>
+<div class="callout co-tip"><div class="callout-label">Tip</div><p>A skill is a folder of instructions Claude loads when a task calls for it. Packaging the pattern as a skill means every developer on the team gets the same structure, without having to remember it.</p></div>
+
+<h2 id="2-the-prompt-we-learned-from">2. The prompt we learned from</h2>
+<p>On 2 November 2026, four researchers at MIT CSAIL published <em><a href="https://rikiyat.github.io/blog/weight-space-programming/">Sparks of Weight-Space Programming: LLMs can natively read &amp; write neural network weights</a></em>. Their claim is that a frontier model can read a neural network's raw weights, understand what the network does, and edit it directly, with no training loop.</p>
+<p>The experiment that caught our attention is the eighth one. The researchers gave OpenAI's GPT-6 Astra (the model the post calls "Astra") the weights of a small language model, Qwen3.5-0.8B, and asked it to make the model better at math by editing weights directly. With a budget of 50 forward passes, Astra:</p>
+<ul>
+<li>found that the model mostly failed by <strong>getting stuck in reasoning loops</strong> (85 of its first 96 practice answers hit the 32,768-token limit),</li>
+<li>traced the looping to one direction written by the MLPs in two layers,</li>
+<li>and removed it, changing <strong>0.016% of the weights</strong>.</li>
+</ul>
+<p>MATH-500 went from <strong>7.9% to 48.1%</strong> and GSM8K from 13.8% to 67.1%.</p>
+<p>The <strong>task prompt</strong> Astra received for that run is what this repo is built on. It is published with the full experiment logs (<a href="https://github.com/RikiyaT/lm_understand-logs">RikiyaT/lm_understand-logs</a>, CC BY 4.0), and a copy is in <a href="../source/astra_exp8_p50c_prompt.txt"><code>source/</code></a>.</p>
+<div class="callout co-important"><div class="callout-label">Important</div><p>We are not claiming the prompt caused the result; the model did the work. What the prompt shows is how to brief an autonomous agent on a hard, open-ended, gameable task. It has a precise goal, a visible grading rule, a hidden test set, hard budgets, named pitfalls, enforced limits and a defined end. That's the part we wanted to reuse.</p></div>
+
+<h2 id="3-who-wrote-it-and-why-we-trusted-it">3. Who wrote it, and why we trusted it</h2>
+<p>The post lists four authors, all at MIT CSAIL: <strong>Rikiya Takehi</strong> and <strong>Jayden Teoh</strong> (marked as joint first authors), <strong>Alex Zhang</strong>, and <strong>Omar Khattab</strong>.</p>
+<p>The reason we leaned on this prompt in particular is its senior author.</p>
+<p><strong>Omar Khattab</strong> is an Assistant Professor in MIT's Department of Electrical Engineering and Computer Science and a principal investigator at CSAIL (<a href="https://www.eecs.mit.edu/people/omar-khattab/">MIT EECS</a>, <a href="https://www.csail.mit.edu/person/omar-khattab">CSAIL</a>). Before MIT he created two widely used systems:</p>
+<ul>
+<li><strong><a href="https://arxiv.org/abs/2004.12832">ColBERT</a></strong>: a widely used neural retrieval model for matching queries against documents.</li>
+<li><strong><a href="https://arxiv.org/abs/2310.03714">DSPy</a></strong>: a framework built on the idea that you should not hand-craft prompts at all. You declare what each step of an LLM pipeline should do, and the framework compiles and optimizes the actual prompts against a metric.</li>
+</ul>
+<p>That second point is why his name mattered to us. His research argues that instructions to a language model should be <strong>engineered and measured, not improvised</strong>, and this prompt reads like that philosophy applied by hand. Every budget is a number, every interface has an exact format, the grading rule is spelled out, and the known ways to fool yourself are named in advance.</p>
+<p>We also trusted it because the evidence is open. The authors published every turn of every run, so the prompt can be read in context alongside what the model did with it.</p>
+<div class="callout co-caution"><div class="callout-label">Caution</div><p>Keep the claims in proportion. The work is a blog post, not a peer-reviewed paper. It relies on one model and small networks, and the authors themselves call the results very early. On a model that rarely loops (Gemma 3 270M), the same approach barely moved the score. We borrowed the <em>prompt-writing pattern</em>, not any claim about weight editing.</p></div>
+
+<h2 id="4-what-we-distilled">4. What we distilled</h2>
+<p>Reading the prompt closely, every section answers one question an autonomous agent would otherwise have to guess.</p>
+<div class="fig-wrap"><figure id="anatomy">
+  <h2>What we distilled: the anatomy of the source prompt</h2>
+  <p class="sub">Excerpts from the original task prompt, highlighted by the question each section answers for the model.</p>
+  <div class="doc">
+    <div class="src">
+      <p><mark class="m1"><b>TASK.</b> You are given the weights of a language model, Qwen3.5-0.8B (text part: 24 layers of width 1,024; …). Your job is to make it better at mathematics by EDITING ITS WEIGHTS DIRECTLY</mark></p>
+      <p><mark class="m1"><b>HOW IT WILL BE MEASURED.</b> … sampling with temperature 0.6, top_p 0.95 … the last \boxed{} answer is graded … You never see these benchmarks.</mark></p>
+    </div>
+    <div>
+      <div class="note n1"><strong>Goal and grading</strong>What am I changing, and how will I be judged? <em>Exact specs, visible grading rule, hidden test set.</em></div>
+    </div>
+    <div class="src">
+      <p><mark class="m2"><b>WHAT COUNTS.</b> … if the model often fails because it repeats itself and never finishes, finding and fixing what drives that repetition counts. Out of scope, and refused by save_edit: …</mark></p>
+    </div>
+    <div>
+      <div class="note n2"><strong>Scope</strong>What would count, and which shortcuts wouldn't? <em>An example of a good approach, limits enforced by the tool.</em></div>
+    </div>
+    <div class="src">
+      <p><mark class="m3"><b>WHAT YOU HAVE.</b> … A forward-pass tool with a budget of 50 forward passes in total … One execution may take up to 900 seconds and 96 GB …</mark></p>
+      <p><mark class="m3"><b>HOW TO WORK.</b> 1. Diagnose first. 2. Localize causally. … Accuracy over n generations has a standard error of about 50/sqrt(n) percentage points …</mark></p>
+    </div>
+    <div>
+      <div class="note n3"><strong>Tools and method</strong>What do I have, and how should I go about it? <em>Every budget as a number, known pitfalls named in advance.</em></div>
+    </div>
+    <div class="src">
+      <p><mark class="m4"><b>RULES.</b> Not allowed: (a) gradient descent or any other training … Allowed: any analysis of the weights …</mark></p>
+      <p><mark class="m4"><b>HOW THE SESSION RUNS.</b> It continues until all 50 forward passes are used … reply without a code block, saying what you changed, the evidence for it and why you expect it to help.</mark></p>
+    </div>
+    <div>
+      <div class="note n4"><strong>Rules and ending</strong>What is off limits, what is still fine, and when am I done? <em>Each "not allowed" paired with an "allowed", and a defined final report.</em></div>
+    </div>
+  </div>
+  <p class="cap">Source: RikiyaT/lm_understand-logs, exp8_math, by Rikiya Takehi, Jayden Teoh, Alex Zhang and Omar Khattab (MIT CSAIL), CC BY 4.0. Excerpts shortened; the full prompt is in <code>source/</code>.</p>
+</figure></div>
+<p>That gives a seven-part skeleton for any multi-step or agentic prompt:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Section</th>
+<th>The question it answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Task</strong></td>
+<td>What am I working on, exactly? (specs, not adjectives)</td>
+</tr>
+<tr>
+<td><strong>How it will be measured</strong></td>
+<td>How will my output be judged? (show the grading rule, even if the test set stays hidden)</td>
+</tr>
+<tr>
+<td><strong>What counts</strong></td>
+<td>What's in scope, with one good example, and which shortcuts won't count?</td>
+</tr>
+<tr>
+<td><strong>What you have</strong></td>
+<td>Which tools, data and budgets, as numbers, with exact call formats?</td>
+</tr>
+<tr>
+<td><strong>How to work</strong></td>
+<td>What method should I follow, and which pitfalls should I expect?</td>
+</tr>
+<tr>
+<td><strong>Rules</strong></td>
+<td>What's not allowed, and, just as clearly, what is still allowed?</td>
+</tr>
+<tr>
+<td><strong>How the session ends</strong></td>
+<td>When am I done, and what must my final report contain?</td>
+</tr>
+</tbody>
+</table></div>
+<p>Around the skeleton sit the writing habits that make it work: numbers over adjectives, say what you want and then how it could be gamed, explain the reason for each rule, pair every restriction with a permission, show exact interfaces, name the failure modes, and define "done" up front.</p>
+<h2 id="5-the-skill-and-how-to-use-it">5. The skill, and how to use it</h2>
+<p>The skill lives in <a href="../skills/prompt-writing/SKILL.md"><code>skills/prompt-writing/SKILL.md</code></a>. When Claude uses it, Claude will:</p>
+<ol>
+<li><strong>Gather the essentials</strong>: objective, success criteria, resources, limits and end state. It asks only about what's missing and matters.</li>
+<li><strong>Size the prompt to the task.</strong> A one-shot task (summarize, classify) gets a short prompt with format and examples. Multi-step or agentic work gets the full skeleton.</li>
+<li><strong>Write or review</strong> the prompt using the principles above, and flag anti-patterns such as vague quality words, hidden success criteria, ALL-CAPS used instead of explanation, and missing stopping conditions.</li>
+<li><strong>Keep it as short as the rules allow</strong> (added in v3). It states each rule once, gives 2 or 3 examples only where the rules leave doubt, and skips closing checklists that restate the rules.</li>
+<li><strong>Deliver</strong> the prompt in one code block, plus two or three lines on design choices and assumptions to confirm.</li>
+</ol>
+<p><strong>To use it</strong>, add the <code>skills/prompt-writing</code> folder as a skill wherever you use Claude (for Claude Code, skills live in a <code>.claude/skills/</code> folder). See Anthropic's <a href="https://docs.claude.com">skills documentation</a> for your setup. Then ask for what you need in plain words, for example "rewrite the system message for our support bot, it keeps inventing policies".</p>
+<h3 id="the-three-versions-and-how-they-differ">The three versions, and how they differ</h3>
+<p>All three versions share the same core: gather the essentials, size the prompt to the task, use the seven-part skeleton for agentic work, and follow the writing principles. They differ in one question: <strong>what should a prompt add beyond the complete set of rules?</strong></p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th></th>
+<th>v1: Complete</th>
+<th>v2: Model-aware</th>
+<th>v3: Complete and lean (main)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Approach</strong></td>
+<td>Spell everything out. Rules, then examples, then a list of likely mistakes, then a checklist before answering.</td>
+<td>v1, plus advice tuned to how Opus 5-generation models read prompts.</td>
+<td>v1, plus a discipline: every sentence has to change what the model does.</td>
+</tr>
+<tr>
+<td><strong>What it adds</strong></td>
+<td>Nothing beyond the core. Its habits come straight from the source prompt: name the failure modes, show examples.</td>
+<td>A section on current models: ask for full coverage with severity labels instead of "only flag important issues", drop generic "double-check" steps, set output length explicitly, state the scope, cap delegation.</td>
+<td>A section on brevity: state each rule once, give 2–3 examples only where the rules leave doubt, put each pitfall beside its rule, and skip checklists that restate the rules.</td>
+</tr>
+<tr>
+<td><strong>Its bet</strong></td>
+<td>Redundancy is cheap insurance. A model told twice is less likely to slip.</td>
+<td>The model running the prompt is a strong, literal reader, so old defensive habits backfire.</td>
+<td>A capable model follows each rule it's given once; repetition costs tokens and time without adding accuracy.</td>
+</tr>
+<tr>
+<td><strong>Typical prompt</strong></td>
+<td>Longest: about 1,900–2,000 words in round 2</td>
+<td>Medium: about 1,600–1,700</td>
+<td>Shortest: about 1,200</td>
+</tr>
+<tr>
+<td><strong>How it did</strong></td>
+<td>Won round 1 (Haiku running the prompts: 99% vs 91% with no skill). Tied in round 2.</td>
+<td>Behind in round 1 (88%), where its tips didn't fit the smaller model. Tied in round 2.</td>
+<td>Round 2 only: 100% on the held-out tasks, 39% shorter prompts than v1, and faster calls.</td>
+</tr>
+<tr>
+<td><strong>Where it lives</strong></td>
+<td><a href="../comparison/skill-v1/SKILL.md"><code>comparison/skill-v1</code></a></td>
+<td><a href="../comparison/skill-v2/SKILL.md"><code>comparison/skill-v2</code></a></td>
+<td><a href="../skills/prompt-writing/SKILL.md"><code>skills/prompt-writing</code></a> (same file as <a href="../comparison/skill-v3/SKILL.md"><code>comparison/skill-v3</code></a>)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>In short.</strong> v1 makes prompts <em>complete</em>. v2 tried to make them <em>model-aware</em>, but its advice only fits the model it was written for. v3 keeps v1's completeness and removes the padding. With a strong model running the prompts, completeness is what matters for accuracy and length is pure cost, so v3 is the main skill. With a smaller model running the prompts, round 1 suggests v1's redundancy may still help, but v3 hasn't been tested there yet.</p>
+<h2 id="6-how-we-tested-it">6. How we tested it</h2>
+<p>A prompt can read beautifully and still fail. So we judged each prompt only by <strong>what it makes another model do</strong>.</p>
+<div class="fig-wrap"><figure id="pipeline">
+  <h2>How the evaluation works</h2>
+  <div class="pipe">
+    <div class="box"><h3>A realistic request</h3><div class="who">5 cases</div><p>Billing chatbot, review tagger, sales-email GPT, code-review bot, overnight ticket triage, written the way people actually ask.</p></div>
+    <div class="arrow">→</div>
+    <div class="box"><h3>Claude writes the prompt</h3><div class="who">Opus 5, 3 times each</div><p>Same request under each condition:</p><div class="conds"><span class="chip v1">skill v1</span><span class="chip v2">skill v2</span><span class="chip no">no skill</span></div></div>
+    <div class="arrow">→</div>
+    <div class="box"><h3>Another model uses it</h3><div class="who">Haiku 5.5</div><p>The written prompt runs on tricky inputs that probe the intent:</p><ul><li>a refund outside the window</li><li>an injection inside a ticket</li><li>a bug hidden in noise</li></ul></div>
+    <div class="arrow">→</div>
+    <div class="box final"><h3>Graded</h3><div class="who">code + blind judge</div><p>Exact checks where possible; otherwise an Opus judge that doesn't know the condition.</p></div>
+  </div>
+  <div class="counts">
+    <div><b>45</b>prompts written</div>
+    <div><b>261</b>downstream outputs graded</div>
+    <div><b>29</b>test inputs across 5 cases</div>
+  </div>
+</figure></div>
+<p>Step by step:</p>
+<ol>
+<li><strong>Five realistic requests</strong>, written the way people actually ask: a billing chatbot that invented a refund policy, a review tagger whose output is parsed with <code>json.loads</code>, a sales-email GPT with a strict voice and a 120-word limit, a code-review bot that nitpicks formatting, and an unattended overnight ticket-triage agent.</li>
+<li><strong>Claude Opus 5 writes the prompt</strong> three times per request under each of three conditions:<ul>
+<li><strong>skill v1</strong>: the first version of the skill (the main skill until round 2)</li>
+<li><strong>skill v2</strong>: v1 plus tips from Anthropic's <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5">Prompting Claude Opus 5</a> guide</li>
+<li><strong>no skill</strong>: the baseline</li>
+</ul>
+</li>
+<li><strong>Claude Haiku 5.5 runs each prompt</strong> on 4 to 8 test inputs built to probe the user's intent. They include a refund request outside the window, a sarcastic review, a prompt injection hidden inside a ticket, an emoji-only review, a demo note with almost no information, and a diff with a real bug among formatting noise.</li>
+<li><strong>Grading.</strong> Code checks wherever exactness is possible: valid JSON, identical keys every time, allowed labels, word limit, banned buzzwords. Everywhere else, a blind Claude Opus 5 judge scores each output against a rubric written from the user's request, without knowing which condition produced it.</li>
+</ol>
+<p>The full method, every written prompt, every output and every grade are in <a href="../evals"><code>evals/</code></a>.</p>
+<h3 id="round-2-harder-tasks-many-more-inputs">Round 2: harder tasks, many more inputs</h3>
+<p>Round 1 left two questions open: were the tasks too easy, and were there enough inputs? Round 2 (<a href="../evals/round2"><code>evals/round2</code></a>) raised both:</p>
+<ul>
+<li><strong>10 tasks with long, interacting rule sets and strict output contracts:</strong> refund decisions, order pricing, ticket routing, SQL analytics, PII redaction, claim extraction, meeting action items, knowledge-base support, scheduling and tool calling.</li>
+<li><strong>50 inputs per task</strong> (20 standard, 20 edge, 10 adversarial), each with a gold answer <strong>computed by code</strong> and graded by code. No model judge.</li>
+<li><strong>The prompts were run by Claude Opus 5.5 at medium effort</strong>, the same for every contender.</li>
+<li><strong>Self-correction built in:</strong><ul>
+<li>an audit of every input that all contenders failed;</li>
+<li>a read-through of every failure;</li>
+<li>a v3 skill written from the 5 training tasks only, then judged on the 5 held-out tasks.</li>
+</ul>
+</li>
+<li><strong>Decision rules fixed before any results:</strong> A beats B only if the 95% confidence interval of the difference excludes zero.</li>
+</ul>
+<h2 id="7-what-we-found">7. What we found</h2>
+<div class="fig-wrap"><figure id="results">
+  <h2>Results: share of test inputs handled correctly</h2>
+  <div class="legend"><span style="--c: var(--cobalt)">Skill v1</span><span style="--c: var(--sea)">Skill v2 (+ Opus 5 guidance)</span><span style="--c: var(--slate)">No skill</span></div>
+  <div class="chart" id="chart"></div>
+  <div class="takeaways">
+    <div><h3>v1 helps most where rules are strict</h3><p>Sales email went from 58% to 100%: every email under 120 words with one next step.</p></div>
+    <div><h3>Most cases hit the ceiling</h3><p>Four of five cases scored 89–100% for everyone, so harder cases are needed to see more.</p></div>
+    <div><h3>v2 isn't proven, either way</h3><p>Its tips target Opus 5 as the reader of the prompt; this test used Haiku. Whiskers show one standard error.</p></div>
+  </div>
+</figure></div>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th></th>
+<th>Skill v1</th>
+<th>Skill v2</th>
+<th>No skill</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Overall pass rate</td>
+<td><strong>99% ± 1</strong></td>
+<td>88% ± 6</td>
+<td>91% ± 5</td>
+</tr>
+<tr>
+<td>Paired difference vs. no skill</td>
+<td><strong>+8.3 ± 5.5 points</strong></td>
+<td>−2.1 ± 6.6 points</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>What this tells us</strong></p>
+<ul>
+<li><strong>The skill helps most where the rules are strict.</strong> On the sales-email case, prompts written with v1 led to emails that stayed under 120 words with a single next step every time (100%). Without the skill, several emails ran to 125 to 278 words, and the pass rate was 58%.</li>
+<li><strong>Most of our cases were too easy.</strong> Four of five cases scored 89 to 100% for every condition, so they couldn't tell the conditions apart. The overall gain is about 1.5 standard errors: encouraging, not conclusive.</li>
+<li><strong>Adding the Opus 5 tips (v2) did not help here, but that isn't a fair verdict on them.</strong> That guide describes how Opus 5 behaves when it <em>runs</em> a prompt; our prompts were run by Haiku. v2 did show one real benefit, covered in <a href="../comparison"><code>comparison/</code></a>.</li>
+</ul>
+<div class="callout co-warning"><div class="callout-label">Warning</div><p><strong>We corrected three things after the first pass</strong>, and applied each correction to all three conditions:</p>
+<ol>
+<li>One test diff we had labelled "clean" actually breaks callers that pass a keyword argument. v2's prompts caught it, which exposed our mistake, so the rubric now accepts that finding.</li>
+<li>One review label ("late, but worth every penny") was debatable, so it now accepts positive or mixed.</li>
+<li>One downstream reply picked up account details from the test environment, and was regenerated.</li>
+</ol>
+<p>Details: <a href="../evals/README.md"><code>evals/README.md</code></a>.</p></div>
+
+<p><strong>Limits.</strong> 3 prompts per case per condition, one downstream model, one judge, and the skill handed to Claude directly rather than discovered on its own. That last point is a separate question, whether Claude picks up the skill unprompted; its test set is in <a href="../evals/triggering"><code>evals/triggering/</code></a>.</p>
+<h3 id="round-2-results">Round 2 results</h3>
+<div class="fig-wrap"><figure id="round2">
+  <h2>Round 2: harder tasks, a stronger model, and a tie</h2>
+  <p class="sub">10 tasks × 50 code-graded inputs, prompts run by Opus 5.5 at medium effort. 2,420 calls.</p>
+  <div class="r2">
+    <div>
+      <h3>Accuracy: everyone at the ceiling</h3>
+      <p class="note2">Task success on the 5 held-out tasks, with 95% CIs. 7 of 10 tasks scored 100% for every contender.</p>
+      <table class="acc">
+        <tr><td><span class="sw" style="background:#7A4FD6"></span>Skill v3</td><td class="num">100.0%</td><td class="ci">100–100</td></tr>
+        <tr><td><span class="sw" style="background:var(--cobalt)"></span>Skill v1</td><td class="num">99.8%</td><td class="ci">99.2–100</td></tr>
+        <tr><td><span class="sw" style="background:var(--sea)"></span>Skill v2</td><td class="num">99.8%</td><td class="ci">99.2–100</td></tr>
+        <tr><td><span class="sw" style="background:var(--slate)"></span>No skill</td><td class="num">99.8%</td><td class="ci">99.2–100</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Cost: where the contenders actually differ</h3>
+      <p class="note2">Average written-prompt length on the held-out tasks, and mean time per downstream call.</p>
+      <div class="lenrow"><span>Skill v3</span><div class="lenbar" style="width:61.2%;background:#7A4FD6"></div><span class="w">1,176</span><span class="s">10 s per call</span></div>
+      <div class="lenrow"><span>No skill</span><div class="lenbar" style="width:81.1%;background:var(--slate)"></div><span class="w">1,557</span><span class="s">16 s per call</span></div>
+      <div class="lenrow"><span>Skill v2</span><div class="lenbar" style="width:83.6%;background:var(--sea)"></div><span class="w">1,606</span><span class="s">15 s per call</span></div>
+      <div class="lenrow"><span>Skill v1</span><div class="lenbar" style="width:100%;background:var(--cobalt)"></div><span class="w">1,921</span><span class="s">14 s per call</span></div>
+    </div>
+  </div>
+  <div class="verdict"><b>Verdict.</b> No contender beat another on accuracy. v3, which cuts repeated rules, long example galleries and closing checklists, matched everyone's accuracy with 39% shorter prompts than v1, so it is now the main skill.</div>
+</figure></div>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>All 10 tasks</th>
+<th>Skill v1</th>
+<th>Skill v2</th>
+<th>No skill</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Task success (95% CI)</td>
+<td>99.9% (99.4–100)</td>
+<td>99.9% (99.6–100)</td>
+<td>99.9% (99.6–100)</td>
+</tr>
+<tr>
+<td>Average prompt length</td>
+<td>1,999 words</td>
+<td>1,725</td>
+<td>1,608</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>What this tells us</strong></p>
+<ul>
+<li><strong>Accuracy hit the ceiling.</strong> 7 of 10 tasks scored 100% for every contender on every input. Across 1,950 graded outputs there were only 3 failures, one per contender, and each was a real mistake. Every paired difference was "no detectable difference".</li>
+<li><strong>Cost is where the contenders differ, and v1 leans the wrong way.</strong> v1 writes the longest prompts, adding example galleries, failure lists and closing checklists, without gaining accuracy.</li>
+<li><strong>v3 fixes that.</strong> It was written from training-task data only. On the held-out tasks it scored 100% with prompts 39% shorter than v1's, and downstream calls averaged 10 s versus 14 s.</li>
+<li><strong>v3 is now the main skill.</strong> The pre-registered rule counted only accuracy, where v3 ties with v1 rather than beating it. So promoting v3 was a deliberate owner's decision on cost grounds: same accuracy, shorter prompts, faster calls. v1 is kept in <a href="../comparison/skill-v1/SKILL.md"><code>comparison/skill-v1</code></a>.</li>
+</ul>
+<div class="callout co-note"><div class="callout-label">Note</div><p><strong>Self-correction caught a real test bug.</strong> Four refund inputs were failed by every contender. They turned out to contain contradictory data, such as shipping charged on a digital download. The inputs were fixed, and every contender's outputs for them were regenerated. Every plan change and fix is logged in <a href="../evals/round2/CORRECTIONS.md"><code>evals/round2/CORRECTIONS.md</code></a>. Full numbers are in <a href="../evals/round2/RESULTS.md"><code>evals/round2/RESULTS.md</code></a>.</p></div>
+
+<h2 id="8-what-s-next">8. What's next</h2>
+<ol>
+<li><strong>Test where prompts still matter.</strong> Run round 2's tasks with smaller deployed models (Haiku, low effort). Round 1 suggests that's where the skill pays off.</li>
+<li><strong>Test requests that leave rules unstated.</strong> In round 2 every request spelled out every rule, so writing the prompt was mostly transcription. Requests that need intent inferred, and multi-turn agents, are the open question.</li>
+<li><strong>Confirm v3 on smaller models.</strong> v3 was promoted on round-2 evidence (Opus 5.5 running the prompts). Re-running round 1's Haiku setup with v3 would check that shorter prompts don't cost accuracy where prompts matter more.</li>
+<li><strong>Triggering.</strong> Measure whether Claude reaches for the skill without being told, using <a href="../evals/triggering"><code>evals/triggering</code></a>.</li>
+</ol>
+<h2 id="9-what-s-in-this-repo">9. What's in this repo</h2>
+<pre><code class="language-text">skills/prompt-writing/      the main skill (v3)
+comparison/                 v1 vs v2 vs v3 vs no skill: the skills, side-by-side examples, analysis
+evals/quality/              the end-to-end evaluation: cases, harness, every prompt, output and grade
+evals/round2/               round 2: 10 tasks x 50 inputs, runner, reports, corrections, all results
+evals/triggering/           test set for &quot;does Claude use the skill on its own?&quot;
+source/                     the original task prompt we learned from (CC BY 4.0)
+docs/                       the HTML the figures on this page were rendered from, and the images
+</code></pre>
+<h2 id="10-sources-and-credits">10. Sources and credits</h2>
+<ul>
+<li>Takehi, Teoh, Zhang, Khattab. <a href="https://rikiyat.github.io/blog/weight-space-programming/">Sparks of Weight-Space Programming</a>, MIT CSAIL, 2 November 2026. Logs and prompts: <a href="https://github.com/RikiyaT/lm_understand-logs">RikiyaT/lm_understand-logs</a>, licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. The copy in <code>source/</code> is unchanged apart from its attribution header.</li>
+<li>Khattab et al. <a href="https://arxiv.org/abs/2310.03714">DSPy: Compiling Declarative Language Model Calls into Self-Improving Pipelines</a>, 2023.</li>
+<li>Khattab and Zaharia. <a href="https://arxiv.org/abs/2004.12832">ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT</a>, 2020.</li>
+<li>Anthropic. <a href="https://claude.com/resources/articles/prompt-generator">Prompt generator</a>, <a href="https://claude.com/blog/prompt-improver">Prompt improver</a>, <a href="https://platform.claude.com/cookbook/misc-metaprompt">Metaprompt</a>, <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5">Prompting Claude Opus 5</a>.</li>
+</ul>
+    </div>
+    <footer>Generated from <code>docs/FULL_WRITEUP.md</code> and <code>docs/readme-visuals.html</code> by <code>docs/build_full_review.py</code>.</footer>
+  </main>
+</div>
+<script>
+
+  const data = [
+    ["Billing chatbot", "6 inputs", [94, 6], [89, 6], [94, 6]],
+    ["Review tagger", "8 inputs, JSON", [100, 0], [100, 0], [100, 0]],
+    ["Sales email", "4 inputs", [100, 0], [58, 22], [58, 17]],
+    ["Code-review bot", "4 diffs", [100, 0], [100, 0], [100, 0]],
+    ["Ticket triage", "7 tickets", [100, 0], [95, 5], [100, 0]],
+    ["Overall", "15 prompts each", [99, 1], [88, 6], [91, 5]],
+  ];
+  const colors = ["var(--cobalt)", "var(--sea)", "var(--slate)"];
+  const chart = document.getElementById("chart");
+  const MIN = 0, MAX = 100;
+  const pct = v => (v - MIN) / (MAX - MIN) * 88;   // leave room for labels at the right
+  data.forEach(([name, sub, ...vals], idx) => {
+    const last = idx === data.length - 1;
+    const c = document.createElement("div"); c.className = "case" + (last ? " overall" : "");
+    c.innerHTML = `${name}<small>${sub}</small>`;
+    const b = document.createElement("div"); b.className = "bars" + (last ? " overall" : "");
+    b.innerHTML = `<div class="grid">${[0,25,50,75,100].map(t => `<i style="left:${pct(t)}%"></i>`).join("")}</div>` +
+      vals.map(([m, se], i) => `<div class="bar" style="--c:${colors[i]}"><div class="fill" style="width:${pct(m)}%"></div>` +
+        (se ? `<div class="se" style="left:${pct(Math.max(0, m - se))}%;width:${pct(Math.min(100, m + se)) - pct(Math.max(0, m - se))}%"></div>` : "") +
+        `<span class="v" style="left:calc(${pct(Math.min(100, m + se))}% + 8px)">${m}%</span></div>`).join("");
+    chart.append(c, b);
+  });
+  const ax = document.createElement("div"); ax.className = "axis";
+  ax.innerHTML = [0,25,50,75,100].map(t => `<span style="left:${pct(t)}%">${t}%</span>`).join("");
+  chart.append(document.createElement("div"), ax);
+
+  // highlight the current section in the contents rail
+  const links = [...document.querySelectorAll("nav.rail a")];
+  const map = new Map(links.map(a => [a.getAttribute("href").slice(1), a]));
+  const obs = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) { links.forEach(a => a.classList.remove("on")); map.get(e.target.id)?.classList.add("on"); } });
+  }, { rootMargin: "0px 0px -70% 0px" });
+  document.querySelectorAll("main h2[id]").forEach(h => obs.observe(h));
+</script>
+</body>
+</html>
