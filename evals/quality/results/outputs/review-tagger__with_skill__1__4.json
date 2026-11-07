@@ -1,0 +1,4 @@
+{
+ "output": "{\"sentiment\": \"neg\", \"topics\": [\"shipping\", \"quality\", \"support\"]}",
+ "mode": "template"
+}

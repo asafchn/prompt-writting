@@ -1,0 +1,4 @@
+{
+ "output": "**Review summary:** Risk: low. No blocking issues found.\n\n### \u2753 Questions\n- `utils/strings.py` L2: The parameter was renamed from `s` to `text`, so any caller that passes `slug(s=...)` by keyword will now raise `TypeError`. I assume callers pass the value positionally, which the alias keeps working. If any call site uses the keyword form, keep the old parameter name or add a compatibility shim.",
+ "mode": "system"
+}

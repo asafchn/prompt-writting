@@ -1,0 +1,4 @@
+{
+ "output": "I can't see account details, so I can't tell whether your last payment went through. You can check it yourself in the Lumen app under **Settings > Billing**, where your invoices are listed.\n\nIf you don't see the payment there, or something looks wrong, email **billing@lumen.io** and include:\n- The email on your Lumen account (dana@corp.com, if that's the one you use)\n- The date and amount of the payment you're asking about\n- A short description, such as \"I expected a charge on [date] but don't see it in Billing\"\n\nPlease don't share card numbers or passwords in this chat.",
+ "mode": "system"
+}

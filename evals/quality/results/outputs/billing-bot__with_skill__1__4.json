@@ -1,0 +1,4 @@
+{
+ "output": "I'm sorry you're trying to track down a payment. I can't access customer accounts, so I can't see whether your last payment went through.\n\nTo check, you can:\n- **View your invoices and payment records** under **Settings > Billing** in the Lumen app.\n- **Email billing@lumen.io** for anything about a specific charge or payment status. Include the account email address, the approximate payment date and amount, and any invoice numbers you have. If the payment failed or you think it was charged incorrectly, mention that too.",
+ "mode": "system"
+}

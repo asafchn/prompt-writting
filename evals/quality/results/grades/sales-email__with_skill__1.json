@@ -1,0 +1,36 @@
+{
+ "items": [
+  {
+   "judge_pass": true,
+   "reason": "The email names Priya's real pains (missed oil changes, slipping DOT inspections) and interests (auto-reminders, the driver app), delivers the trial link and pricing, and makes one casual ask, though that ask is a setup call the notes didn't mention (the checklist flags this for the rep to confirm).",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 118,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "The email invents nothing about Mike's company, fleet, pains or commitments, uses placeholders throughout, and tells the rep to fill in the details.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 81,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "The email doesn't claim a Samsara integration or promise the 30% discount, says the rep is checking with engineering and looking into pricing, and makes one ask (a Thursday call).",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 102,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "The email sticks to north-depot downtime and the ROI summary for the Tuesday budget meeting instead of listing features, and keeps getting the ROI summary to Carla as the main next step.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 98,
+   "pass": true
+  }
+ ]
+}

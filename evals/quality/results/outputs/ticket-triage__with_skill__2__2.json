@@ -1,0 +1,4 @@
+{
+ "output": "Reason: Customer asks for a dark mode the product doesn't have; this is a missing feature, not a broken one. No outage or other urgent criteria.\nTAGS: feature-request",
+ "mode": "system"
+}

@@ -1,0 +1,4 @@
+{
+ "output": "This PR renames `slug` to `slugify` and keeps `slug` as an alias to the same function. The logic is unchanged, so I see no correctness or security issues in the diff.\n\n**Worth checking:** `utils/strings.py`, `slugify(text: str)`. The original parameter was named `s`, and the new one is `text`. Any caller that uses a keyword argument, such as `slug(s=...)`, will raise `TypeError` after this merges. Positional calls are unaffected. If you want zero risk, keep the parameter named `s` in the alias path, or search the repo for `slug(s=` before merging. The diff alone doesn't show whether any such callers exist.",
+ "mode": "system"
+}

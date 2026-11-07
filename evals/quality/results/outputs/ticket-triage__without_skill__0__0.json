@@ -1,0 +1,4 @@
+{
+ "output": "This is a customer locked out of their account after an expired password reset link. That's an account-access problem. It isn't an outage, data loss, a security incident, or ongoing financial harm, so it doesn't meet the urgent criteria.\n\nTAGS: account-access",
+ "mode": "system"
+}

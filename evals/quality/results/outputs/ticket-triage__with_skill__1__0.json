@@ -1,0 +1,4 @@
+{
+ "output": "The customer's password reset link expired and their account now shows as locked. Nothing points to a compromise, and this is one person locked out of their own account, so it's account-access only. Not urgent.\n\nTAGS: account-access",
+ "mode": "system"
+}

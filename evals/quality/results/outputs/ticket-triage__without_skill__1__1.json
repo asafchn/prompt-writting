@@ -1,0 +1,4 @@
+{
+ "output": "This is an outage: every user in a 300-person org sees blank dashboards, and the customer runs payroll from these reports at 8am. That's a core feature being unusable for the whole customer, so it gets `urgent` along with `bug`.\n\nTAGS: urgent, bug",
+ "mode": "system"
+}

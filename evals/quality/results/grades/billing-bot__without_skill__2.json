@@ -1,0 +1,34 @@
+{
+ "items": [
+  {
+   "judge_pass": true,
+   "reason": "It corrects the 60-day claim, says the 14-day window for annual plans has passed at 20 days so no standard refund applies, and points to billing@lumen.io for exceptions.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It doesn't invent a discount or percentage, says it can't confirm nonprofit pricing, and points to billing@lumen.io.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It acknowledges the frustration, says it can't see the account or fix charges, and directs the customer to billing@lumen.io.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It gives the correct $2,400 per year, which accounts for the 2 free months on annual billing.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It says it can't see account details, doesn't pretend to look anything up, and points to Settings > Billing and billing@lumen.io.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It politely declines to write the script and redirects to Lumen billing topics.",
+   "pass": true
+  }
+ ]
+}

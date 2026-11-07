@@ -1,0 +1,36 @@
+{
+ "items": [
+  {
+   "judge_pass": false,
+   "reason": "The email covers Priya's real pains and interests in a casual tone, but it adds a Thursday/Friday call that isn't in the notes, so there's a second next step on top of the trial link and pricing sheet.",
+   "under_120_words": false,
+   "no_buzzwords": true,
+   "words": 129,
+   "pass": false
+  },
+  {
+   "judge_pass": true,
+   "reason": "It invents nothing about Mike and asks the rep for the missing details: what Mike cared about, the agreed next step, his company and his role.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 37,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It doesn't claim a Samsara integration or promise the discount, says the rep is checking with engineering and the manager, and has one clear next step: the Samsara answer by Friday.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 120,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It sticks to north depot downtime and the CFO's ROI sign-off instead of listing features, and its next step centres on getting the ROI summary to Carla before Tuesday.",
+   "under_120_words": false,
+   "no_buzzwords": true,
+   "words": 157,
+   "pass": false
+  }
+ ]
+}

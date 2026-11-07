@@ -1,0 +1,4 @@
+{
+ "output": "**Summary:** The PR renames `slug` to `slugify` (same lowercase and hyphen logic) and keeps `slug` as an alias, so existing positional callers keep working. One backwards-compatibility gap remains.\n\n### \ud83d\udfe1 Should consider\n- **utils/strings.py:1**: The parameter was renamed from `s` to `text`, and the alias is the same function object, so keyword callers such as `slug(s=\"Hello World\")` now raise `TypeError`. The alias only preserves positional calls. Fix: keep the parameter name `s` in `slugify`, or add a small wrapper for `slug` that accepts `s` and forwards it. Add a test that calls `slug(s=...)`.\n\nI could not post this to the PR because I have no PR-comment tool in this session. Please paste it on the PR, or tell me how you'd like it delivered.",
+ "mode": "system"
+}

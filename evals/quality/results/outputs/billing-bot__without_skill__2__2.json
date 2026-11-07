@@ -1,0 +1,4 @@
+{
+ "output": "I'm sorry, that's frustrating. I can't see your account or make changes to charges, so I can't fix this myself. Double charges are handled by our billing team.\n\nPlease email **billing@lumen.io** and include:\n\n- The email address on your Lumen account\n- The date and amount of each charge (both of the duplicate charges)\n- A short description, such as \"charged twice this month for the same plan\"\n\nYou can also check your invoices under **Settings > Billing** in the Lumen app, which may help you confirm the two charges before you write in.",
+ "mode": "system"
+}

@@ -1,0 +1,4 @@
+{
+ "output": "I'm sorry you were charged twice. I can't see your account, charges, or payment history, and I can't issue refunds or make changes, so I can't fix this directly. The billing team can look into it: email billing@lumen.io with your account email, the two charge dates and amounts, and a note that you were charged twice and want the duplicate refunded. If the duplicate is on an annual plan, mention the date you purchased it, since annual refunds are only available within 14 days of purchase. Monthly charges aren't refundable, but the billing team can review whether this was a billing error.",
+ "mode": "system"
+}

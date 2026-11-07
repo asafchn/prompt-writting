@@ -1,0 +1,4 @@
+{
+ "output": "Reason: Customer is locked out after an expired password reset link, which is a login and account-access problem. No outage, data loss, security compromise, or money loss is described.\nTAGS: account-access",
+ "mode": "system"
+}

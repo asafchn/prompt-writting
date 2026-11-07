@@ -1,0 +1,4 @@
+{
+ "output": "This is a phishing message. It's an unsolicited \"claim your reward\" link with an artificial one-hour deadline, and it has nothing to do with a real product issue. I'm confident it isn't a real customer, so it gets spam and no other tags.\n\nTAGS: spam",
+ "mode": "system"
+}

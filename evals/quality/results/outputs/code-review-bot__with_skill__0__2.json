@@ -1,0 +1,4 @@
+{
+ "output": "**Review summary:** low risk; the only issue is a minor keyword-argument break from renaming the parameter `s` to `text`.\n\n### Findings\n\n**1. [Minor] Renamed parameter breaks keyword callers of `slug`** \u2014 `utils/strings.py:1`\nThe parameter changed from `s` to `text`, so any caller using `slug(s=...)` now raises `TypeError`. Positional calls are unaffected, and the alias `slug = slugify` keeps the function object identical otherwise. If keyword callers are possible, keep the old name in the signature, for example `def slugify(s: str) -> str:` (or accept both), or confirm no caller passes `s=` by keyword.",
+ "mode": "system"
+}

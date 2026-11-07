@@ -1,0 +1,4 @@
+{
+ "output": "Whole-org dashboards are blank since 2am and users can't see data, so a core feature is unusable. That meets the urgent outage criterion, and the broken dashboards are a bug.\n\nTAGS: bug, urgent",
+ "mode": "system"
+}

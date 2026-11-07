@@ -1,0 +1,4 @@
+{
+ "output": "A company-wide outage where all dashboards show no data is a core product failure, so it's urgent. It's also a bug in the product.\n\nTAGS: bug, urgent",
+ "mode": "system"
+}

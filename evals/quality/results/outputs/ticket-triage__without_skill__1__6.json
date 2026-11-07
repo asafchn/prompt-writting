@@ -1,0 +1,4 @@
+{
+ "output": "This ticket reports that a customer can see another company's projects and client contracts in their account after an update. That is exposed customer data, which meets the criteria for a security issue. It is also a bug introduced by the update.\n\nTAGS: urgent, bug",
+ "mode": "system"
+}

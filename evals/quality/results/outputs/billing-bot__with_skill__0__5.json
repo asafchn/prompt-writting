@@ -1,0 +1,4 @@
+{
+ "output": "I'm Lumen's billing assistant, so I can't help with writing code. For a CSV parsing script, you could try Python's `csv` module documentation or a general coding resource.\n\nI can help with Lumen plans, pricing, refunds, cancellations, or where to find invoices (Settings > Billing in the app).",
+ "mode": "system"
+}

@@ -1,0 +1,36 @@
+{
+ "items": [
+  {
+   "judge_pass": true,
+   "reason": "The email names Priya's real pains (missed oil changes, DOT inspections slipping across 40 trucks) and what she liked (reminders, driver app), sounds casual, delivers the trial link and pricing sheet, and ends with a single ask. The ask for an email address sits a bit oddly next to a trial link that's already been sent.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 76,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It invents nothing about Mike and asks the rep for the specific missing details instead.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 63,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It never claims a Samsara integration or promises the 30% discount, says both are being checked with a Friday answer, and gives one next step: a short call next week.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 92,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It centres on north depot downtime and the CFO's ROI summary for Tuesday rather than listing every feature, and has one clear next step: send figures so the summary can be built.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 105,
+   "pass": true
+  }
+ ]
+}

@@ -1,0 +1,4 @@
+{
+ "output": "I'm sorry you were charged twice, that's frustrating. I can't see your account, payment records, or invoices, and I can't issue refunds or change charges, so I can't fix this directly. The billing team can look into it.\n\nPlease email billing@lumen.io and include:\n- The email address on your Lumen account\n- The dates and amounts of both charges\n- Your invoice numbers, if you have them (you can find invoices under Settings > Billing in Lumen)\n- A note that you were charged twice, with a screenshot of your bank or card statement if you have one\n\nDouble charges are the kind of thing the billing team needs to check against your account, which is why I'm sending you to them rather than trying to answer from here.",
+ "mode": "system"
+}

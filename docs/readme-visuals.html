@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt-writing skill: README figures</title>
+<style>
+  @font-face { font-family: "Plex Sans"; src: url(fonts/ibm-plex-sans-latin-400-normal.woff2); font-weight: 400; }
+  @font-face { font-family: "Plex Sans"; src: url(fonts/ibm-plex-sans-latin-400-italic.woff2); font-weight: 400; font-style: italic; }
+  @font-face { font-family: "Plex Sans"; src: url(fonts/ibm-plex-sans-latin-500-normal.woff2); font-weight: 500; }
+  @font-face { font-family: "Plex Sans"; src: url(fonts/ibm-plex-sans-latin-600-normal.woff2); font-weight: 600; }
+  @font-face { font-family: "Plex Mono"; src: url(fonts/ibm-plex-mono-latin-400-normal.woff2); font-weight: 400; }
+  @font-face { font-family: "Plex Mono"; src: url(fonts/ibm-plex-mono-latin-500-normal.woff2); font-weight: 500; }
+  @font-face { font-family: "Source Serif"; src: url(fonts/source-serif-4-latin-400-normal.woff2); font-weight: 400; }
+  @font-face { font-family: "Source Serif"; src: url(fonts/source-serif-4-latin-600-normal.woff2); font-weight: 600; }
+
+  :root {
+    --paper: #F7F8FA;
+    --sheet: #FFFFFF;
+    --ink: #17213A;
+    --ink-soft: #4A5468;
+    --rule: #D6DCE6;
+    --cobalt: #2C5BE8;     /* skill v1, the winner */
+    --sea: #2A8F84;        /* skill v2 */
+    --slate: #9AA3B3;      /* no skill */
+    --marker: #FFE58A;     /* highlighter */
+    --marker-2: #CFE0FF;
+    --marker-3: #CDEFE7;
+    --marker-4: #FFD9CC;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.5 "Plex Sans", sans-serif; }
+  figure { margin: 0 auto 48px; width: 1120px; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 40px 48px; }
+  h1, h2 { font-family: "Source Serif", serif; font-weight: 600; letter-spacing: -0.01em; margin: 0; }
+  .cap { color: var(--ink-soft); font-size: 14px; margin-top: 20px; }
+
+  /* ---------- banner: a documentation page header ---------- */
+  #banner { padding: 0; overflow: hidden; }
+  #banner .crumbs { padding: 22px 48px 0; font-size: 14px; color: var(--ink-soft); }
+  #banner .crumbs span + span::before { content: "/"; margin: 0 10px; color: var(--rule); }
+  #banner h1 { padding: 14px 48px 0; font-size: 46px; line-height: 1.1; max-width: 900px; }
+  #banner .lede { padding: 14px 48px 0; font-size: 19px; color: var(--ink-soft); max-width: 820px; }
+  #banner table { margin: 28px 48px 34px; border-collapse: collapse; font-size: 14px; }
+  #banner td { padding: 6px 28px 6px 0; vertical-align: top; }
+  #banner td:first-child { color: var(--ink-soft); }
+  .lozenge { display: inline-block; padding: 1px 8px; border-radius: 3px; font-weight: 600; font-size: 12px; }
+  .lozenge.ok { background: #DDF5E6; color: #1C6B3C; }
+  .lozenge.info { background: #E3EBFF; color: #2448B8; }
+  #banner .strip { height: 8px; background: linear-gradient(90deg, var(--marker) 0 25%, var(--marker-2) 25% 50%, var(--marker-3) 50% 75%, var(--marker-4) 75%); }
+
+  /* ---------- anatomy: the source prompt, highlighted ---------- */
+  #anatomy h2 { font-size: 28px; }
+  #anatomy .sub { color: var(--ink-soft); margin: 6px 0 26px; }
+  .doc { display: grid; grid-template-columns: 1fr 300px; column-gap: 32px; }
+  .doc .src { font: 400 13.5px/1.75 "Plex Mono", monospace; color: var(--ink); }
+  .row { display: contents; }
+  .src p { margin: 0 0 12px; }
+  .src mark { padding: 2px 4px; border-radius: 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; color: inherit; }
+  .src b { font-weight: 500; }
+  .note { border-left: 3px solid var(--ink); padding: 2px 0 2px 14px; margin: 0 0 12px; font-size: 14.5px; line-height: 1.45; align-self: start; }
+  .note strong { display: block; font-weight: 600; font-size: 15px; }
+  .note em { font-style: italic; color: var(--ink-soft); }
+  .m1 { background: var(--marker); } .n1 { border-color: #E2B400; }
+  .m2 { background: var(--marker-2); } .n2 { border-color: var(--cobalt); }
+  .m3 { background: var(--marker-3); } .n3 { border-color: var(--sea); }
+  .m4 { background: var(--marker-4); } .n4 { border-color: #E07A5F; }
+  .elide { color: var(--slate); }
+
+  /* ---------- journey ---------- */
+  #journey h2, #pipeline h2, #results h2 { font-size: 28px; margin-bottom: 26px; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; }
+  .step { padding: 0 22px 0 0; }
+  .step .n { font: 600 15px "Plex Sans"; color: var(--cobalt); display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .step .n i { flex: 1; height: 2px; background: var(--rule); }
+  .step:last-child .n i { background: transparent; }
+  .step h3 { font: 600 19px/1.25 "Source Serif", serif; margin: 0 0 8px; }
+  .step p { margin: 0; font-size: 14.5px; color: var(--ink-soft); line-height: 1.5; }
+  .step .out { margin-top: 12px; font: 400 12.5px "Plex Mono"; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 3px; padding: 6px 8px; display: inline-block; }
+
+  /* ---------- pipeline ---------- */
+  .pipe { display: grid; grid-template-columns: 1fr 34px 1fr 34px 1fr 34px 0.8fr; align-items: stretch; }
+  .box { border: 1.5px solid var(--ink); border-radius: 4px; padding: 16px 16px 18px; background: var(--sheet); }
+  .box h3 { margin: 0 0 4px; font: 600 17px "Source Serif", serif; }
+  .box .who { font: 500 13px "Plex Mono"; color: var(--cobalt); margin-bottom: 10px; }
+  .box p { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.45; }
+  .box ul { margin: 8px 0 0; padding-left: 18px; font-size: 13.5px; color: var(--ink-soft); }
+  .arrow { align-self: center; text-align: center; font-size: 22px; color: var(--ink-soft); }
+  .box.final { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .box.final p, .box.final .who { color: #C9D3EA; }
+  .conds { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .chip { font-size: 12px; padding: 2px 8px; border-radius: 10px; color: #fff; font-weight: 500; }
+  .chip.v1 { background: var(--cobalt); } .chip.v2 { background: var(--sea); } .chip.no { background: var(--slate); }
+  .counts { margin-top: 22px; display: flex; gap: 40px; font-size: 14px; color: var(--ink-soft); }
+  .counts b { font: 600 22px "Source Serif"; color: var(--ink); display: block; }
+
+  /* ---------- results ---------- */
+  .legend { display: flex; gap: 22px; font-size: 14px; margin: -12px 0 22px; color: var(--ink-soft); }
+  .legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 7px; vertical-align: -1px; background: var(--c); }
+  .chart { display: grid; grid-template-columns: 170px 1fr; row-gap: 14px; }
+  .case { font-size: 15px; font-weight: 500; padding-top: 2px; }
+  .case small { display: block; font-weight: 400; color: var(--ink-soft); font-size: 12.5px; }
+  .bars { position: relative; }
+  .bar { position: relative; height: 15px; margin: 0 0 3px; }
+  .bar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--c); border-radius: 0 2px 2px 0; }
+  .bar .se { position: absolute; top: 7px; height: 1.5px; background: var(--ink); }
+  .bar .se::before, .bar .se::after { content: ""; position: absolute; top: -4px; width: 1.5px; height: 9.5px; background: var(--ink); }
+  .bar .se::before { left: 0; } .bar .se::after { right: 0; }
+  .bar .v { position: absolute; top: -2px; font: 500 12.5px "Plex Mono"; color: var(--ink); }
+  .grid { position: absolute; inset: -6px 0; pointer-events: none; }
+  .grid i { position: absolute; top: 0; bottom: 0; width: 1px; background: #EDF0F5; }
+  .overall { border-top: 1.5px solid var(--ink); padding-top: 14px; }
+  .overall .bar { height: 20px; }
+  .overall .bar .se { top: 9.5px; }
+  .axis { grid-column: 2; position: relative; height: 18px; font: 400 12px "Plex Mono"; color: var(--ink-soft); }
+  .axis span { position: absolute; transform: translateX(-50%); }
+  .takeaways { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  .takeaways h3 { margin: 0 0 6px; font: 600 16px "Plex Sans"; }
+  .takeaways p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<!-- 1. Banner -->
+<figure id="banner">
+  <div class="crumbs"><span>Engineering</span><span>AI practices</span><span>Skills</span></div>
+  <h1>One great prompt, turned into a skill that writes the next ones</h1>
+  <p class="lede">We took the task prompt MIT CSAIL researchers gave an AI to repair a language model's weights, distilled its structure, packaged it as a Claude skill, and measured whether it makes prompts that work.</p>
+  <table>
+    <tr><td>Applies to</td><td>Claude skills, system prompts, agent task briefs</td><td>Status</td><td><span class="lozenge ok">Skill v1 recommended</span></td></tr>
+    <tr><td>Last updated</td><td>7 November 2026</td><td>Evidence</td><td><span class="lozenge info">5 cases, 45 prompts, 261 graded outputs</span></td></tr>
+  </table>
+  <div class="strip"></div>
+</figure>
+
+<!-- 2. Anatomy of the source prompt -->
+<figure id="anatomy">
+  <h2>What we distilled: the anatomy of the source prompt</h2>
+  <p class="sub">Excerpts from the original task prompt, highlighted by the question each section answers for the model.</p>
+  <div class="doc">
+    <div class="src">
+      <p><mark class="m1"><b>TASK.</b> You are given the weights of a language model, Qwen3.5-0.8B (text part: 24 layers of width 1,024; …). Your job is to make it better at mathematics by EDITING ITS WEIGHTS DIRECTLY</mark></p>
+      <p><mark class="m1"><b>HOW IT WILL BE MEASURED.</b> … sampling with temperature 0.6, top_p 0.95 … the last \boxed{} answer is graded … You never see these benchmarks.</mark></p>
+    </div>
+    <div>
+      <div class="note n1"><strong>Goal and grading</strong>What am I changing, and how will I be judged? <em>Exact specs, visible grading rule, hidden test set.</em></div>
+    </div>
+    <div class="src">
+      <p><mark class="m2"><b>WHAT COUNTS.</b> … if the model often fails because it repeats itself and never finishes, finding and fixing what drives that repetition counts. Out of scope, and refused by save_edit: …</mark></p>
+    </div>
+    <div>
+      <div class="note n2"><strong>Scope</strong>What would count, and which shortcuts wouldn't? <em>An example of a good approach, limits enforced by the tool.</em></div>
+    </div>
+    <div class="src">
+      <p><mark class="m3"><b>WHAT YOU HAVE.</b> … A forward-pass tool with a budget of 50 forward passes in total … One execution may take up to 900 seconds and 96 GB …</mark></p>
+      <p><mark class="m3"><b>HOW TO WORK.</b> 1. Diagnose first. 2. Localize causally. … Accuracy over n generations has a standard error of about 50/sqrt(n) percentage points …</mark></p>
+    </div>
+    <div>
+      <div class="note n3"><strong>Tools and method</strong>What do I have, and how should I go about it? <em>Every budget as a number, known pitfalls named in advance.</em></div>
+    </div>
+    <div class="src">
+      <p><mark class="m4"><b>RULES.</b> Not allowed: (a) gradient descent or any other training … Allowed: any analysis of the weights …</mark></p>
+      <p><mark class="m4"><b>HOW THE SESSION RUNS.</b> It continues until all 50 forward passes are used … reply without a code block, saying what you changed, the evidence for it and why you expect it to help.</mark></p>
+    </div>
+    <div>
+      <div class="note n4"><strong>Rules and ending</strong>What is off limits, what is still fine, and when am I done? <em>Each "not allowed" paired with an "allowed", and a defined final report.</em></div>
+    </div>
+  </div>
+  <p class="cap">Source: RikiyaT/lm_understand-logs, exp8_math, by Rikiya Takehi, Jayden Teoh, Alex Zhang and Omar Khattab (MIT CSAIL), CC BY 4.0. Excerpts shortened; the full prompt is in <code>source/</code>.</p>
+</figure>
+
+<!-- 3. Journey -->
+<figure id="journey">
+  <h2>How we got here</h2>
+  <div class="steps">
+    <div class="step"><div class="n">1<i></i></div><h3>Read a prompt that worked</h3><p>The task prompt behind a published result: an AI raised a model's MATH-500 score from 7.9% to 48.1% by editing 0.016% of its weights.</p><span class="out">source/</span></div>
+    <div class="step"><div class="n">2<i></i></div><h3>Distill its structure</h3><p>Seven sections, each answering one question the model would otherwise guess, plus the writing habits that make them work.</p><span class="out">7 sections, 10 principles</span></div>
+    <div class="step"><div class="n">3<i></i></div><h3>Package it as a skill</h3><p>A Claude skill that gathers the essentials, sizes the prompt to the task, and writes or reviews prompts with that structure.</p><span class="out">skills/prompt-writing/</span></div>
+    <div class="step"><div class="n">4<i></i></div><h3>Test what it changes</h3><p>Judge each written prompt by what it makes another model do, against a version with Opus 5 tips and against no skill at all.</p><span class="out">evals/quality/</span></div>
+  </div>
+</figure>
+
+<!-- 4. Pipeline -->
+<figure id="pipeline">
+  <h2>How the evaluation works</h2>
+  <div class="pipe">
+    <div class="box"><h3>A realistic request</h3><div class="who">5 cases</div><p>Billing chatbot, review tagger, sales-email GPT, code-review bot, overnight ticket triage, written the way people actually ask.</p></div>
+    <div class="arrow">→</div>
+    <div class="box"><h3>Claude writes the prompt</h3><div class="who">Opus 5, 3 times each</div><p>Same request under each condition:</p><div class="conds"><span class="chip v1">skill v1</span><span class="chip v2">skill v2</span><span class="chip no">no skill</span></div></div>
+    <div class="arrow">→</div>
+    <div class="box"><h3>Another model uses it</h3><div class="who">Haiku 5.5</div><p>The written prompt runs on tricky inputs that probe the intent:</p><ul><li>a refund outside the window</li><li>an injection inside a ticket</li><li>a bug hidden in noise</li></ul></div>
+    <div class="arrow">→</div>
+    <div class="box final"><h3>Graded</h3><div class="who">code + blind judge</div><p>Exact checks where possible; otherwise an Opus judge that doesn't know the condition.</p></div>
+  </div>
+  <div class="counts">
+    <div><b>45</b>prompts written</div>
+    <div><b>261</b>downstream outputs graded</div>
+    <div><b>29</b>test inputs across 5 cases</div>
+  </div>
+</figure>
+
+<!-- 5. Results -->
+<figure id="results">
+  <h2>Results: share of test inputs handled correctly</h2>
+  <div class="legend"><span style="--c: var(--cobalt)">Skill v1 (recommended)</span><span style="--c: var(--sea)">Skill v2 (+ Opus 5 guidance)</span><span style="--c: var(--slate)">No skill</span></div>
+  <div class="chart" id="chart"></div>
+  <div class="takeaways">
+    <div><h3>v1 helps most where rules are strict</h3><p>Sales email went from 58% to 100%: every email under 120 words with one next step.</p></div>
+    <div><h3>Most cases hit the ceiling</h3><p>Four of five cases scored 89–100% for everyone, so harder cases are needed to see more.</p></div>
+    <div><h3>v2 isn't proven, either way</h3><p>Its tips target Opus 5 as the reader of the prompt; this test used Haiku. Whiskers show one standard error.</p></div>
+  </div>
+</figure>
+
+<script>
+  const data = [
+    ["Billing chatbot", "6 inputs", [94, 6], [89, 6], [94, 6]],
+    ["Review tagger", "8 inputs, JSON", [100, 0], [100, 0], [100, 0]],
+    ["Sales email", "4 inputs", [100, 0], [58, 22], [58, 17]],
+    ["Code-review bot", "4 diffs", [100, 0], [100, 0], [100, 0]],
+    ["Ticket triage", "7 tickets", [100, 0], [95, 5], [100, 0]],
+    ["Overall", "15 prompts each", [99, 1], [88, 6], [91, 5]],
+  ];
+  const colors = ["var(--cobalt)", "var(--sea)", "var(--slate)"];
+  const chart = document.getElementById("chart");
+  const MIN = 0, MAX = 100;
+  const pct = v => (v - MIN) / (MAX - MIN) * 88;   // leave room for labels at the right
+  data.forEach(([name, sub, ...vals], idx) => {
+    const last = idx === data.length - 1;
+    const c = document.createElement("div"); c.className = "case" + (last ? " overall" : "");
+    c.innerHTML = `${name}<small>${sub}</small>`;
+    const b = document.createElement("div"); b.className = "bars" + (last ? " overall" : "");
+    b.innerHTML = `<div class="grid">${[0,25,50,75,100].map(t => `<i style="left:${pct(t)}%"></i>`).join("")}</div>` +
+      vals.map(([m, se], i) => `<div class="bar" style="--c:${colors[i]}"><div class="fill" style="width:${pct(m)}%"></div>` +
+        (se ? `<div class="se" style="left:${pct(Math.max(0, m - se))}%;width:${pct(Math.min(100, m + se)) - pct(Math.max(0, m - se))}%"></div>` : "") +
+        `<span class="v" style="left:calc(${pct(Math.min(100, m + se))}% + 8px)">${m}%</span></div>`).join("");
+    chart.append(c, b);
+  });
+  const ax = document.createElement("div"); ax.className = "axis";
+  ax.innerHTML = [0,25,50,75,100].map(t => `<span style="left:${pct(t)}%">${t}%</span>`).join("");
+  chart.append(document.createElement("div"), ax);
+</script>
+</body>
+</html>

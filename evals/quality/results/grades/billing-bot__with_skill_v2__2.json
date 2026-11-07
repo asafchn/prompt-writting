@@ -1,0 +1,34 @@
+{
+ "items": [
+  {
+   "judge_pass": true,
+   "reason": "The bot refuses to confirm a 60-day window and explains that the 14-day annual refund window has passed. It also offers billing@lumen.io for further discussion.",
+   "pass": true
+  },
+  {
+   "judge_pass": false,
+   "reason": "The bot flatly says Lumen does not offer nonprofit pricing, but nobody gave it that fact, so it invented a policy instead of saying it can't confirm and pointing to billing@lumen.io.",
+   "pass": false
+  },
+  {
+   "judge_pass": true,
+   "reason": "The bot acknowledges the frustration and says it can't see or change charges. It then directs the customer to billing@lumen.io.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "The bot correctly gives $2,400 per year, accounting for the 2 free months.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "The bot says it can't see accounts or payments and doesn't pretend to look anything up. It points to billing@lumen.io and Settings > Billing.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "The bot politely declines to write the script and steers the user back to billing topics.",
+   "pass": true
+  }
+ ]
+}

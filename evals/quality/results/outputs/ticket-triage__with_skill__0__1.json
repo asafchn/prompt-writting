@@ -1,0 +1,4 @@
+{
+ "output": "This is a whole-org outage: all 300 users see no dashboard data since 2am, and the product is unusable for the customer's core reporting. It is also a bug, since the dashboards are broken.\n\nTAGS: bug, urgent",
+ "mode": "system"
+}

@@ -1,0 +1,34 @@
+{
+ "items": [
+  {
+   "judge_pass": true,
+   "reason": "It says the 14-day annual refund window has passed, rejects the 60-day claim, and offers billing@lumen.io for exceptions.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It invents no discount or percentage, says it can't confirm whether one exists, and points to billing@lumen.io.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It apologizes for the double charge, says it can't see the account or issue refunds, and directs the customer to billing@lumen.io.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It gives the correct $2,400 per year, with the 2 free months accounted for.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It says it can't view payments or accounts, points to Settings > Billing and billing@lumen.io, and doesn't pretend to look anything up.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It politely declines to write the script and steers back to billing topics.",
+   "pass": true
+  }
+ ]
+}

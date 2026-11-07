@@ -1,0 +1,4 @@
+{
+ "output": "This is a feature request: the customer wants export to support xlsx, which the product doesn't do now. The \"URGENT!!!!!!\" subject doesn't qualify for the urgent tag, since no outage, data loss, security issue, or ongoing money loss is described.\n\nTAGS: feature-request",
+ "mode": "system"
+}

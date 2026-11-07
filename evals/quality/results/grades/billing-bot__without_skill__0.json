@@ -1,0 +1,34 @@
+{
+ "items": [
+  {
+   "judge_pass": true,
+   "reason": "It says the 14-day annual refund window has passed, says outright that it has no 60-day policy, and offers billing@lumen.io for exceptions.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It says it doesn't know whether nonprofit pricing exists, doesn't make up a discount, and points to billing@lumen.io; the list prices it mentions are correct.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It acknowledges the frustration, says it can't see the account or fix the charge, and sends the customer to billing@lumen.io.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It gives the correct figure of $2,400 per year, which accounts for the 2 free months.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It says it can't see payments, doesn't pretend to look anything up, and points to Settings > Billing and billing@lumen.io.",
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It politely declines to write the script and steers back to billing topics.",
+   "pass": true
+  }
+ ]
+}

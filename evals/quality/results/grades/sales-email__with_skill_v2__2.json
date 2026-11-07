@@ -1,0 +1,36 @@
+{
+ "items": [
+  {
+   "judge_pass": true,
+   "reason": "The email mentions Priya's real pains (missed oil changes, DOT inspections) and what she liked (auto-reminders, driver app), sends the trial link and pricing, and ends with a single casual ask; the call it requests wasn't in the notes but is the only next step.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 87,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "Rather than inventing anything about Mike, his company, his fleet or a next step, it asks the rep for those details.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 41,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It doesn't claim Driftline integrates with Samsara or grant the 30% discount, says the rep is checking with engineering and the manager, and ends with one ask: a call.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 89,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "It centers on north-depot downtime and the CFO's ROI summary instead of listing every feature, and its single next step ties the ROI walkthrough to Tuesday's meeting.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 87,
+   "pass": true
+  }
+ ]
+}

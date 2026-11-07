@@ -1,0 +1,4 @@
+{
+ "output": "This is a login problem: the reset link expired and the customer says the account is now locked. That's `account-access`. It isn't `urgent`, since it's one customer's account and no outage, data loss, or security incident is described. The lockout may be a side effect of the failed reset attempts, but that's still an access issue, not a bug.\n\nTAGS: account-access",
+ "mode": "system"
+}

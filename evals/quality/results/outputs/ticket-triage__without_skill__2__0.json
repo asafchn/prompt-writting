@@ -1,0 +1,4 @@
+{
+ "output": "This is an account-access issue: the customer can't log in after a password reset, and their account shows as locked. It doesn't describe an outage, data loss, a security compromise, or ongoing money loss, so it isn't urgent. It's a real customer request, not spam, and the lockout doesn't point to a product bug.\n\nTAGS: account-access",
+ "mode": "system"
+}

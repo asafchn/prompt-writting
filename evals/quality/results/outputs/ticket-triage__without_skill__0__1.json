@@ -1,0 +1,4 @@
+{
+ "output": "This is an org-wide outage: all dashboards are blank for about 300 users since 2am, and the customer runs payroll from these reports at 8am. That is a core part of the service being unusable, so it is urgent and a bug.\n\nI don't have a Zendesk tagging tool in this session, so these tags are recommended but not applied to the ticket.\n\nTAGS: bug, urgent",
+ "mode": "system"
+}

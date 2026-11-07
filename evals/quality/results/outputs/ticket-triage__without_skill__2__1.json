@@ -1,0 +1,4 @@
+{
+ "output": "The customer reports that all dashboards are blank for their whole organization (about 300 users) since about 2am. That's a core part of the product being unusable right now, which fits the outage category for urgent. It's also broken existing behavior, so bug applies. Urgent needs a companion tag, and bug is the right one. There's no sign of account access, billing, or spam.\n\nTAGS: bug, urgent",
+ "mode": "system"
+}

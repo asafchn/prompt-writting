@@ -1,0 +1,4 @@
+{
+ "output": "I'm sorry, a double charge is frustrating. I can't access accounts or change charges, so I can't fix it myself. The billing team can investigate and correct it.\n\nPlease email **billing@lumen.io** with:\n- The email address on your Lumen account\n- The dates and amounts of both charges\n- Invoice numbers, if you have them (you can find invoices under Settings > Billing in the Lumen app)",
+ "mode": "system"
+}

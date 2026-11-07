@@ -1,0 +1,4 @@
+{
+ "output": "REASON: Single user locked out after an expired password reset link, with no sign of compromise or outage, so it's account access only.\nTAGS: account-access",
+ "mode": "system"
+}

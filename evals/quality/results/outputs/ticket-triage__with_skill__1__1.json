@@ -1,0 +1,4 @@
+{
+ "output": "Dashboards are blank for all 300 users in the org, which looks like a product bug (data not displaying). It is urgent because the whole org has been unable to use a core feature since about 2am, and they need the reports for payroll at 8am. This is an outage, not a single-user or cosmetic issue.\n\nTAGS: bug, urgent",
+ "mode": "system"
+}

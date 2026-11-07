@@ -1,0 +1,4 @@
+{
+ "output": "Reason: Dashboards show no data for the whole org since 2am, a core feature is unusable for 300 users, and payroll depends on it.\nTAGS: bug, urgent",
+ "mode": "system"
+}

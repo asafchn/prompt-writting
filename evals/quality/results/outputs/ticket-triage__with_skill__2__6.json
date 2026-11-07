@@ -1,0 +1,4 @@
+{
+ "output": "Reason: Customer sees another company's projects and client contracts after an update, which is a bug causing exposed data. Exposure is ongoing, so urgent.\nTAGS: bug, urgent",
+ "mode": "system"
+}

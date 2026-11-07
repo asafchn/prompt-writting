@@ -1,0 +1,4 @@
+{
+ "output": "The customer is locked out after an expired password reset link, which is an account-access problem. Nothing in the ticket describes an outage, data loss, a security compromise, or lost money, so it isn't urgent.\n\nTAGS: account-access",
+ "mode": "system"
+}

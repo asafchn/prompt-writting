@@ -1,0 +1,4 @@
+{
+ "output": "Subject: quick follow-up from today\n\nHi Mike,\n\n[one specific thing he mentioned, like fleet size or a scheduling headache]. That's the kind of problem Driftline is built for. It tracks upcoming service and flags it ahead of time, so nobody on your team has to remember to check.\n\n[If a concern came up, one honest sentence about it here. If not, delete this line.]\n\nWould you be up for a 20-minute follow-up on [day/time] so we can walk through how it would work for your setup? If someone else on your team should be in it, feel free to add them.\n\nThanks,\n[Your name]\n\nNote: Your notes didn't include what Mike cares about, any concerns, or an agreed next step, so I used a placeholder for the first detail and suggested a short follow-up call. If you agreed on something else, like a trial or a demo for his shop lead, swap it in.",
+ "mode": "system"
+}

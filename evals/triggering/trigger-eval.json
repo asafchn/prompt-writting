@@ -1,0 +1,22 @@
+[
+  {"query": "i'm setting up a claude agent that triages our zendesk tickets overnight. it gets read access to tickets and can add tags, nothing else. it'll run unattended from 1am to 6am. what should i actually tell it so it doesn't go off the rails?", "should_trigger": true},
+  {"query": "my teammate wrote the instructions for our code-review bot and it keeps leaving nitpicks about formatting instead of catching real bugs. the whole thing currently says: 'You are a senior engineer. Review PRs thoroughly. Be helpful and constructive.' how do we fix it", "should_trigger": true},
+  {"query": "We're building an internal benchmark where an LLM agent optimizes slow SQL queries against a read-only Postgres replica. It gets 40 tool calls and is scored on p95 latency vs the original query. I need the task description the agent sees at the start of each episode.", "should_trigger": true},
+  {"query": "can you rewrite the system message for our billing support chatbot? right now it's two lines ('be friendly, answer billing questions') and last week it invented a 60-day refund policy we don't have", "should_trigger": true},
+  {"query": "draft the instructions i'll paste into a custom GPT that helps our sales reps write follow-up emails after demos, in our brand voice (casual, no buzzwords, under 120 words)", "should_trigger": true},
+  {"query": "I'm going to send ~10k product reviews from reviews.csv through gpt in batches and want each one tagged with sentiment (pos/neg/mixed) and topic (shipping, quality, price, support). what do I write as the instruction so the output is always valid json with the same keys?", "should_trigger": true},
+  {"query": "help me write the brief for a subagent that'll sweep our monorepo and find every call to the old payments client (PaymentsV1Client). it should report a list of file:line, not change any code", "should_trigger": true},
+  {"query": "our CLAUDE.md is like 900 lines now and claude ignores half of it, especially the bit about never touching migrations/. can you go through it and tighten it up so the important rules actually stick", "should_trigger": true},
+  {"query": "i want to hand off a research task to an AI with web access: every EU regulation affecting commercial drone delivery since 2024. how do i phrase the assignment so it cites sources and tells me when it's unsure instead of making stuff up", "should_trigger": true},
+  {"query": "here's the AGENTS.md our team uses for the jest->vitest migration agent. it keeps stopping halfway and saying 'done'. what's wrong with how it's written? 'Migrate tests to vitest. Be careful. Don't break anything. Run tests.'", "should_trigger": true},
+  {"query": "write a python function that calls the anthropic messages API with a system prompt from a file and streams the response to stdout", "should_trigger": false},
+  {"query": "what's the actual difference between temperature and top_p when sampling from an llm, and when would i change one vs the other", "should_trigger": false},
+  {"query": "give me 10 creative writing prompts for my 8th grade english class, theme is 'a place that no longer exists'", "should_trigger": false},
+  {"query": "my react app uses window.confirm() as a prompt before deleting an invoice. how do i swap it for a proper modal with headless ui", "should_trigger": false},
+  {"query": "write me a cover letter for a prompt engineer role at a fintech startup. i have 3 years of NLP experience at a bank and built an internal RAG tool", "should_trigger": false},
+  {"query": "make a 6-slide deck explaining to our execs what prompt injection is and why the customer chatbot needs guardrails before launch", "should_trigger": false},
+  {"query": "change my zsh prompt to show the current git branch and the active python venv name", "should_trigger": false},
+  {"query": "grade these 50 model outputs in outputs.jsonl against the rubric in rubric.md and give me the pass rate per criterion", "should_trigger": false},
+  {"query": "for our internal docs Q&A bot, should we fine-tune a model or do RAG? we have about 4,000 confluence pages that change weekly", "should_trigger": false},
+  {"query": "summarize the main findings of the chain-of-thought prompting paper (Wei et al. 2022) in 5 bullets for a reading group", "should_trigger": false}
+]

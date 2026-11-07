@@ -1,0 +1,4 @@
+{
+ "output": "This ticket reports another company's data, including client contracts, showing up in the customer's account after an update. That is exposed data, which meets the urgent definition (security issue), and it is also a product bug.\n\nTAGS: bug, urgent",
+ "mode": "system"
+}

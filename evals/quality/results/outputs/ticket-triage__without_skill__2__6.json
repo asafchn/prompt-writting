@@ -1,0 +1,4 @@
+{
+ "output": "This ticket reports that after an update, the customer's project list shows three projects belonging to another company, including that company's client contracts. That is unauthorized exposure of another customer's data, and it is happening now, so it fits the security category for urgent. The update causing wrong results also fits bug. It is not a login problem, so account-access doesn't apply.\n\nTAGS: urgent, bug",
+ "mode": "system"
+}

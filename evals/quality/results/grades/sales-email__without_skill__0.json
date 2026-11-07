@@ -1,0 +1,36 @@
+{
+ "items": [
+  {
+   "judge_pass": true,
+   "reason": "The email mentions Priya's missed oil changes, slipping DOT inspections, the auto-reminders and the driver app. It keeps a casual tone and has one next step: the pricing sheet plus the trial link.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 70,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "The email invents nothing about Mike's company, fleet, pains or commitments, stays generic with placeholders, and tells the rep to add details.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 92,
+   "pass": true
+  },
+  {
+   "judge_pass": false,
+   "reason": "It doesn't promise the discount, but 'checking with our engineering team on how Driftline works with it' assumes the Samsara integration exists, when the rep only said 'probably' and is still checking.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 76,
+   "pass": false
+  },
+  {
+   "judge_pass": true,
+   "reason": "The email focuses on north depot downtime and the CFO's ROI page instead of listing features, and has one next step: Carla sends the downtime numbers so the ROI summary is ready before Tuesday.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 108,
+   "pass": true
+  }
+ ]
+}

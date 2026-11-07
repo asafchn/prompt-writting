@@ -1,0 +1,4 @@
+{
+ "output": "Account-access only: the customer is locked out after an expired reset link, which is an access problem. No urgent criterion applies.\n\nTAGS: account-access",
+ "mode": "system"
+}

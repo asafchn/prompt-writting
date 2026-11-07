@@ -1,0 +1,4 @@
+{
+ "output": "Another company's projects and client contracts are showing in this customer's project list right now, after an update. That is exposed third-party data, which is a security issue, and it is ongoing, so it's urgent. The cause is a product defect introduced by the update, so it also gets bug.\n\nTAGS: bug, urgent",
+ "mode": "system"
+}

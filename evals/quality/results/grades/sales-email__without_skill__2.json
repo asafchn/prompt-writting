@@ -1,0 +1,36 @@
+{
+ "items": [
+  {
+   "judge_pass": false,
+   "reason": "The email covers Priya's real pains and interests in a casual tone, but it adds a 20-minute walkthrough that isn't in the notes, so the trial link and pricing are no longer the single next step.",
+   "under_120_words": false,
+   "no_buzzwords": true,
+   "words": 139,
+   "pass": false
+  },
+  {
+   "judge_pass": true,
+   "reason": "It makes up nothing about Mike's company, fleet, pains or commitments, uses clear placeholders, and has a note asking the rep to fill in the details.",
+   "under_120_words": false,
+   "no_buzzwords": true,
+   "words": 150,
+   "pass": false
+  },
+  {
+   "judge_pass": true,
+   "reason": "It doesn't claim a Samsara integration or promise the 30% discount, says both are being checked, and ends with one clear ask (which Samsara data to sync).",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 115,
+   "pass": true
+  },
+  {
+   "judge_pass": true,
+   "reason": "The email centres on north depot downtime and the one-page ROI summary for the CFO before Tuesday, and the summary sticks to downtime-related features rather than listing everything from the demo.",
+   "under_120_words": false,
+   "no_buzzwords": true,
+   "words": 278,
+   "pass": false
+  }
+ ]
+}

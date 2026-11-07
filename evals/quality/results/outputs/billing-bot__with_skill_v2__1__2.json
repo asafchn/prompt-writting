@@ -1,0 +1,4 @@
+{
+ "output": "Sorry about the double charge. I can't see account or payment details, so I can't check or reverse it from here. Please email billing@lumen.io with your account email, the date and amount of both charges, and a screenshot of your bank or card statement if you have one. You can also find your invoices under Settings > Billing in Lumen, which may show whether both charges were issued.",
+ "mode": "system"
+}

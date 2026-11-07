@@ -1,0 +1,36 @@
+{
+ "items": [
+  {
+   "judge_pass": false,
+   "reason": "The email covers Priya's pains and interests in a casual tone, but it adds a 20-minute call the notes never mentioned, so there are two next steps instead of one, and the checklist wrongly says the notes didn't include a next step.",
+   "under_120_words": false,
+   "no_buzzwords": true,
+   "words": 135,
+   "pass": false
+  },
+  {
+   "judge_pass": true,
+   "reason": "It invents nothing about Mike and asks the rep for his company, his interests and the agreed next step.",
+   "under_120_words": true,
+   "no_buzzwords": true,
+   "words": 56,
+   "pass": true
+  },
+  {
+   "judge_pass": false,
+   "reason": "It neither claims the Samsara integration nor grants the discount, but it leaves a blank placeholder for the Samsara answer instead of saying the rep is checking with engineering, and it adds a call the notes never mentioned.",
+   "under_120_words": false,
+   "no_buzzwords": true,
+   "words": 132,
+   "pass": false
+  },
+  {
+   "judge_pass": true,
+   "reason": "It focuses on north-depot downtime and the ROI summary for the CFO instead of listing every feature, and its one next step is getting the summary to her before Tuesday's budget meeting.",
+   "under_120_words": false,
+   "no_buzzwords": true,
+   "words": 137,
+   "pass": false
+  }
+ ]
+}
