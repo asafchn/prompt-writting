@@ -1,0 +1,258 @@
+<title>Same Request, Two Prompts</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:opsz,wght@8..60,600&display=swap">
+<style>
+  /* Layout: a narrow reading column for the story, then a two-column comparison bench (without | with) that stacks on phones. */
+  :root {
+    --paper: #F5F7FA;
+    --sheet: #FFFFFF;
+    --ink: #17213A;
+    --ink-soft: #505B70;
+    --rule: #D8DEE8;
+    --without: #6B7588;      /* prompt written with no skill */
+    --without-tint: #EEF0F4;
+    --with: #2C5BE8;         /* prompt written with the skill */
+    --with-tint: #EAF0FF;
+    --pass: #1D7A45;
+    --pass-tint: #E2F4E9;
+    --fail: #B4361E;
+    --fail-tint: #FBE7E2;
+    --mark: #FFE58A;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #11151D; --sheet: #181D28; --ink: #E6EAF2; --ink-soft: #A3ACBD; --rule: #2C3444;
+      --without: #9AA4B6; --without-tint: #222936; --with: #7FA2FF; --with-tint: #1C2640;
+      --pass: #5BC88A; --pass-tint: #16301F; --fail: #F08A72; --fail-tint: #3A1E18; --mark: #6B5A12;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #11151D; --sheet: #181D28; --ink: #E6EAF2; --ink-soft: #A3ACBD; --rule: #2C3444;
+    --without: #9AA4B6; --without-tint: #222936; --with: #7FA2FF; --with-tint: #1C2640;
+    --pass: #5BC88A; --pass-tint: #16301F; --fail: #F08A72; --fail-tint: #3A1E18; --mark: #6B5A12;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.55 var(--sans); }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-block: 40px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  h1, h2 { font-family: var(--serif); font-weight: 600; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(30px, 4.4vw, 46px); line-height: 1.1; letter-spacing: -0.01em; max-width: 20ch; }
+  h2 { font-size: 24px; line-height: 1.25; }
+  .lede { font-size: 18px; color: var(--ink-soft); max-width: 66ch; margin: 14px 0 0; }
+  .definition { margin-top: 26px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 980px; }
+  .def { background: var(--sheet); border: 1px solid var(--rule); border-top: 4px solid var(--c); border-radius: 6px; padding: 16px 18px; }
+  .def h3 { margin: 0 0 4px; font: 600 16px var(--sans); color: var(--c); }
+  .def p { margin: 0; font-size: 15px; color: var(--ink-soft); }
+  .def .score { font: 600 30px/1.1 var(--serif); color: var(--ink); margin-top: 10px; }
+  .def .score small { font: 400 13px var(--sans); color: var(--ink-soft); display: block; }
+  .c-without { --c: var(--without); --t: var(--without-tint); }
+  .c-with { --c: var(--with); --t: var(--with-tint); }
+  .flow { margin: 22px 0 0; font-size: 15px; color: var(--ink-soft); max-width: 72ch; }
+  .flow b { color: var(--ink); font-weight: 600; }
+
+  .controls { margin-top: 44px; display: flex; flex-wrap: wrap; gap: 18px 32px; align-items: end; }
+  .controls fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+  .controls legend { font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; padding: 0; }
+  .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+  .seg button { font: 500 14px var(--sans); color: var(--ink); background: var(--sheet); border: 1px solid var(--rule); border-radius: 999px; padding: 6px 13px; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--sheet); border-color: var(--ink); }
+  .seg button:focus-visible, .toggle:focus-visible { outline: 2px solid var(--with); outline-offset: 2px; }
+  .seg button .tally { font: 400 12px var(--mono); margin-left: 6px; opacity: .75; }
+
+  .request { margin-top: 22px; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 18px 20px; }
+  .request .label { font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
+  .request p { margin: 0; white-space: pre-wrap; max-width: 90ch; font-size: 15px; }
+
+  .why { margin-top: 16px; padding: 14px 18px; border-left: 3px solid var(--with); background: var(--with-tint); border-radius: 0 6px 6px 0; font-size: 15px; max-width: 980px; }
+  .why b { font-weight: 600; }
+
+  .bench { margin-top: 26px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .col { min-width: 0; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+  .col header { padding: 14px 18px; background: var(--t); border-bottom: 1px solid var(--rule); display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+  .col header h2 { font-size: 19px; color: var(--c); }
+  .col header .meta { font-size: 13.5px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .prompt { position: relative; padding: 16px 18px 0; }
+  .prompt pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: 400 13.5px/1.6 var(--sans); max-height: 460px; overflow: hidden; }
+  .prompt.open pre { max-height: none; }
+  .prompt:not(.open)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 70px; background: linear-gradient(to bottom, transparent, var(--sheet)); pointer-events: none; }
+  .prompt pre .h { font-weight: 600; font-family: var(--serif); font-size: 15.5px; display: inline-block; margin-top: 6px; }
+  .prompt pre mark { background: var(--mark); color: inherit; padding: 0 2px; border-radius: 2px; }
+  .toggle { display: block; margin: 0; width: 100%; padding: 14px 18px; font: 500 14px var(--sans); color: var(--c); background: none; border: 0; border-top: 1px solid var(--rule); text-align: left; cursor: pointer; }
+
+  .tests-head { margin-top: 44px; display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; }
+  .tests-head p { margin: 0; color: var(--ink-soft); font-size: 15px; }
+  .test { margin-top: 18px; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; }
+  .test .q { padding: 14px 18px; border-bottom: 1px solid var(--rule); }
+  .test .q .n { font: 500 13px var(--mono); color: var(--ink-soft); }
+  .test .q .text { margin: 4px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14.5px; max-width: 100ch; }
+  .test .q .text.code { font: 400 12.5px/1.55 var(--mono); overflow-x: auto; white-space: pre; }
+  .test .q .rubric { margin: 8px 0 0; font-size: 13.5px; color: var(--ink-soft); max-width: 100ch; }
+  .answers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .answer { min-width: 0; padding: 14px 18px 16px; }
+  .answer + .answer { border-left: 1px solid var(--rule); }
+  .answer .top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .answer .who { font-size: 13px; font-weight: 600; color: var(--c); }
+  .chip { font: 600 12px var(--sans); padding: 2px 9px; border-radius: 999px; }
+  .chip.pass { background: var(--pass-tint); color: var(--pass); }
+  .chip.fail { background: var(--fail-tint); color: var(--fail); }
+  .words { font: 400 12px var(--mono); color: var(--ink-soft); }
+  .answer pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: 400 13.5px/1.55 var(--sans); max-height: 560px; overflow-y: auto; padding-right: 4px; }
+  .answer .reason { margin: 10px 0 0; font-size: 13px; color: var(--ink-soft); }
+  footer { margin-top: 48px; font-size: 13.5px; color: var(--ink-soft); max-width: 80ch; }
+  footer a { color: var(--with); }
+
+  @media (max-width: 760px) {
+    .definition, .bench, .answers { grid-template-columns: 1fr; }
+    .answer + .answer { border-left: 0; border-top: 1px solid var(--rule); }
+    .prompt pre { max-height: 320px; }
+  }
+</style>
+
+<div class="wrap">
+  <h1>Same request, two prompts</h1>
+  <p class="lede">Our results say prompts written with the skill succeeded 99% of the time, versus 91% without it. Here is exactly what "with" and "without" mean: the real prompts, and what a model did with each.</p>
+
+  <div class="definition">
+    <div class="def c-without">
+      <h3>Without the skill</h3>
+      <p>Claude Opus 5 gets the user's request and writes the system prompt on its own. No skill, no extra instructions.</p>
+      <div class="score">91%<small>of test inputs handled correctly, 15 prompts</small></div>
+    </div>
+    <div class="def c-with">
+      <h3>With the skill</h3>
+      <p>The same model gets the same request, with the prompt-writing skill (v1) loaded. Everything else is identical.</p>
+      <div class="score">99%<small>of test inputs handled correctly, 15 prompts</small></div>
+    </div>
+  </div>
+  <p class="flow">Then each written prompt became the system prompt of a smaller model, <b>Claude Haiku 5.5</b>, which handled the same tricky test inputs. A test passes if the reply does what the user intended. This page shows round 1 of our evaluation: 5 requests, 3 prompts each way.</p>
+
+  <div class="controls">
+    <fieldset>
+      <legend>Request</legend>
+      <div class="seg" id="caseSeg"></div>
+    </fieldset>
+    <fieldset>
+      <legend>Prompt pair (each was written 3 times)</legend>
+      <div class="seg" id="sampleSeg"></div>
+    </fieldset>
+  </div>
+
+  <div class="request">
+    <div class="label">What the user asked for (identical in both columns)</div>
+    <p id="request"></p>
+  </div>
+  <div class="why" id="why" hidden></div>
+
+  <div class="bench">
+    <section class="col c-without" aria-label="Prompt written without the skill">
+      <header><h2>Prompt written without the skill</h2><span class="meta" id="metaWithout"></span></header>
+      <div class="prompt" id="promptWithout"><pre></pre></div>
+      <button class="toggle" type="button" data-for="promptWithout" aria-expanded="false">Show the whole prompt</button>
+    </section>
+    <section class="col c-with" aria-label="Prompt written with the skill">
+      <header><h2>Prompt written with the skill</h2><span class="meta" id="metaWith"></span></header>
+      <div class="prompt" id="promptWith"><pre></pre></div>
+      <button class="toggle" type="button" data-for="promptWith" aria-expanded="false">Show the whole prompt</button>
+    </section>
+  </div>
+
+  <div class="tests-head">
+    <h2>What Haiku did with each prompt</h2>
+    <p id="testsSummary"></p>
+  </div>
+  <div id="tests"></div>
+
+  <footer>
+    Grading: code checks where exact (JSON validity, labels, word limits, banned words), otherwise a blind Claude Opus judge that scored each reply against the rubric shown, without knowing which prompt produced it. All prompts, replies and grades are from the <code>evals/quality</code> folder of the <a href="https://github.com/asafchn/prompt-writting" target="_blank" rel="noopener">prompt-writing repository</a>. In round 2, with Claude Opus 5.5 running the prompts, both kinds of prompt scored about 100%.
+  </footer>
+</div>
+
+<script>
+const DATA = __DATA__;
+const NAMES = { "billing-bot": "Billing chatbot", "review-tagger": "Review tagger", "sales-email": "Sales follow-up email", "code-review-bot": "Code-review bot", "ticket-triage": "Overnight ticket triage" };
+const WHY = {
+  "sales-email": "<b>What made the difference here.</b> Both prompts mention the 120-word limit. The skill's prompt puts the deliverable first (\"What you'll produce\": a subject line, a body under 120 words, then \"Output nothing else\"), so the bot sends only the email. The other prompt opens with voice and tone, and its output rules come near the end. Its bot wrote longer emails and added extra material, such as a full ROI summary, under the email.",
+};
+const HIGHLIGHT = {
+  "sales-email": [/under 120 words/gi, /Output nothing else[^.\n]*\.?/gi, /Keep the body under 120 words\.?/gi],
+};
+let cur = { c: "sales-email", k: 2 };
+
+const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+function fmtPrompt(text, caseId) {
+  let h = esc(text);
+  for (const re of HIGHLIGHT[caseId] || []) h = h.replace(re, m => `<mark>${m}</mark>`);
+  h = h.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+  return h.split("\n").map(l => /^#{1,4} /.test(l) ? `<span class="h">${l.replace(/^#{1,4} /, "")}</span>` : l).join("\n");
+}
+const words = s => (s.match(/\b\w[\w'-]*\b/g) || []).length;
+const passes = g => g.filter(x => x.pass).length;
+
+function caseTotals(c) {
+  const t = { without_skill: [0, 0], with_skill: [0, 0] };
+  c.samples.forEach(s => { for (const k in t) { t[k][0] += passes(s[k].grades); t[k][1] += s[k].grades.length; } });
+  return t;
+}
+function buildCaseSeg() {
+  const seg = document.getElementById("caseSeg");
+  seg.innerHTML = DATA.cases.map(c => {
+    const t = caseTotals(c);
+    return `<button type="button" data-case="${c.id}" aria-pressed="${c.id === cur.c}">${NAMES[c.id] || c.id}<span class="tally">${t.without_skill[0]}/${t.without_skill[1]} vs ${t.with_skill[0]}/${t.with_skill[1]}</span></button>`;
+  }).join("");
+  seg.querySelectorAll("button").forEach(b => b.addEventListener("click", () => { cur.c = b.dataset.case; cur.k = defaultSample(cur.c); render(); }));
+}
+function defaultSample(id) {
+  const c = DATA.cases.find(x => x.id === id);
+  let best = 0, gap = -1;
+  c.samples.forEach((s, i) => { const g = passes(s.with_skill.grades) - passes(s.without_skill.grades); if (g > gap) { gap = g; best = i; } });
+  return best;
+}
+function render() {
+  const c = DATA.cases.find(x => x.id === cur.c), s = c.samples[cur.k];
+  document.querySelectorAll("#caseSeg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.case === cur.c));
+  const ss = document.getElementById("sampleSeg");
+  ss.innerHTML = c.samples.map((x, i) => `<button type="button" data-k="${i}" aria-pressed="${i === cur.k}">Pair ${i + 1}<span class="tally">${passes(x.without_skill.grades)} vs ${passes(x.with_skill.grades)}</span></button>`).join("");
+  ss.querySelectorAll("button").forEach(b => b.addEventListener("click", () => { cur.k = +b.dataset.k; render(); }));
+
+  document.getElementById("request").textContent = c.request;
+  const why = document.getElementById("why");
+  why.hidden = !WHY[c.id]; why.innerHTML = WHY[c.id] || "";
+
+  for (const [cond, el, meta] of [["without_skill", "promptWithout", "metaWithout"], ["with_skill", "promptWith", "metaWith"]]) {
+    const box = document.getElementById(el);
+    box.classList.remove("open");
+    box.querySelector("pre").innerHTML = fmtPrompt(s[cond].prompt, c.id);
+    const btn = document.querySelector(`.toggle[data-for="${el}"]`);
+    btn.textContent = "Show the whole prompt"; btn.setAttribute("aria-expanded", "false");
+    const g = s[cond].grades;
+    document.getElementById(meta).textContent = `${words(s[cond].prompt).toLocaleString()} words · passed ${passes(g)} of ${g.length} tests`;
+  }
+
+  const tw = passes(s.without_skill.grades), tv = passes(s.with_skill.grades), n = c.inputs.length;
+  document.getElementById("testsSummary").textContent = `Without the skill: ${tw} of ${n} passed. With the skill: ${tv} of ${n} passed.`;
+  const isCode = c.id === "code-review-bot";
+  document.getElementById("tests").innerHTML = c.inputs.map((inp, i) => {
+    const ans = ["without_skill", "with_skill"].map(cond => {
+      const g = s[cond].grades[i], out = s[cond].outputs[i];
+      const w = g.words != null ? `<span class="words">${g.words} words</span>` : "";
+      const lenNote = (!g.pass && g.judge_pass && g.words > 120) ? `Failed on length: ${g.words} words, over the 120-word limit. ` : (!g.pass && g.judge_pass && g.no_buzzwords === false ? "Failed: uses a banned buzzword. " : "");
+      const reason = g.reason ? `<p class="reason"><b>${lenNote}</b>${esc(g.reason)}</p>` : (g.pass ? "" : `<p class="reason">${["valid_json", "same_keys", "allowed_values", "correct_labels"].filter(k => k in g && !g[k]).map(k => ({ valid_json: "Not valid JSON.", same_keys: "Keys differ between replies.", allowed_values: "Uses a label outside the allowed set.", correct_labels: "Wrong sentiment or a missing topic." })[k]).join(" ")}</p>`);
+      return `<div class="answer ${cond === "with_skill" ? "c-with" : "c-without"}"><div class="top"><span class="who">${cond === "with_skill" ? "With the skill" : "Without the skill"}</span><span class="chip ${g.pass ? "pass" : "fail"}">${g.pass ? "Passed" : "Failed"}</span>${w}</div><pre>${esc(out)}</pre>${reason}</div>`;
+    }).join("");
+    const shown = inp === "" ? "(empty review)" : inp;
+    return `<article class="test"><div class="q"><span class="n">Test ${i + 1} of ${n}</span><p class="text${isCode ? " code" : ""}">${esc(shown)}</p><p class="rubric">Passes if: ${esc(c.rubrics[i])}</p></div><div class="answers">${ans}</div></article>`;
+  }).join("");
+}
+document.querySelectorAll(".toggle").forEach(b => b.addEventListener("click", () => {
+  const box = document.getElementById(b.dataset.for), open = box.classList.toggle("open");
+  b.textContent = open ? "Show less" : "Show the whole prompt"; b.setAttribute("aria-expanded", String(open));
+}));
+buildCaseSeg();
+render();
+</script>

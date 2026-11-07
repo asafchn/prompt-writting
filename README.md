@@ -45,7 +45,7 @@ All three share the skeleton above. They differ in what a prompt should add beyo
 
 ## Evaluation
 
-Each prompt was judged by what it made another model do, never by how it reads.
+Each prompt was judged by what it made another model do, never by how it reads. To see what "with" and "without" the skill look like, open [`docs/side-by-side.html`](docs/side-by-side.html) in a browser. It shows the real prompts from round 1 next to each other, with every reply and grade.
 
 | | Round 1 | Round 2 |
 |---|---|---|
