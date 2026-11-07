@@ -15,7 +15,7 @@ queues:
 - outage: Tallyboard (app or API) is down or unusable for a whole team/organization, not just one feature or one user.
 - billing: charges, refunds, invoice amounts, payment methods, seat counts on the bill, plan changes, and requests to cancel the subscription.
 - account_access: someone can't log in (password reset, 2FA, locked account, SSO loop) with no sign that anyone else got in.
-- bugs: a specific feature misbehaves or shows an error, including errors on the billing/invoice pages (e.g. the "download invoice" button crashing is bugs, not billing; billing is about the money).
+- bugs: a specific feature misbehaves or shows an error (except integration problems, which always go to integrations, not bugs), including errors on the billing/invoice pages (e.g. the "download invoice" button crashing is bugs, not billing; billing is about the money).
 - integrations: our Slack, Salesforce, HubSpot or Zapier integrations, or webhooks, misbehaving.
 - how_to: questions about how to do something; nothing is broken.
 - feature_requests: asking for something the product doesn't do.
@@ -123,7 +123,7 @@ TICKETS = [
      "Last night the Salesforce sync overwrote our contact records and about 300 notes were deleted on the Tallyboard side."),
     (E, "business", "en", ["billing"], {"dispute": 1000}, "Unordered add-on",
      "We were charged $1,000.00 for the Analytics add-on, which we never ordered. Please refund it."),
-    (E, "free", "en", ["billing"], {"dispute": 1250}, "Renewal charge",
+    (E, "business", "en", ["billing"], {"dispute": 1250}, "Renewal charge",
      "You charged us $1,250 for an annual renewal even though we switched off auto-renew in August. We want that refunded."),
     (E, "business", "es", ["security"], {"unauthorized": True, "data_loss": True}, "Acceso no autorizado",
      "Alguien entró en nuestra cuenta anoche y eliminó a cinco usuarios. No fuimos nosotros. ¡Ayuda, por favor!"),
