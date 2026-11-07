@@ -70,7 +70,7 @@ source/                  the original task prompt (CC BY 4.0)
 docs/                    full write-up and the figures
 ```
 
-For the full story (why we started, who the authors are, the method and every number), read [`docs/FULL_WRITEUP.md`](docs/FULL_WRITEUP.md).
+For the full story (why we started, who the authors are, the method and every number), read [`docs/FULL_WRITEUP.md`](docs/FULL_WRITEUP.md), or open [`docs/full-review.html`](docs/full-review.html) in a browser for the same write-up as one page, with live figures and a contents sidebar.
 
 ## Credits
 
