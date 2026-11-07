@@ -1,0 +1,2 @@
+train: ['claim-extraction', 'kb-support', 'scheduling', 'sql-analytics', 'ticket-routing']
+held-out: ['meeting-actions', 'order-pricing', 'pii-redaction', 'refund-decisions', 'tool-calling']
