@@ -39,3 +39,13 @@ Escalating such cases to a human is a reasonable reading, so these items broke t
 **Effect.** Inputs 07, 08, 10, 18, 33, 34 and 35 changed; the gold changed only for 35 (from $95.99 to $89.00). The cached outputs of those items were deleted and regenerated for v1, v2 and none. REQUEST was not changed, so the written prompts stay valid.
 
 **After the fix:** v1, v2 and none each score 50/50.
+
+## Stage 6: how v3 was derived (training tasks only)
+
+**Screen result on the 5 training tasks** (ticket-routing, sql-analytics, claim-extraction, kb-support, scheduling): **zero correctness failures** for v1, v2 and none (750 graded outputs). So there were no failures to learn from, and failure-driven lessons were impossible without peeking at held-out tasks.
+
+**The signal that remained: cost.** v1's written prompts were the longest on every training task, about 26% more words than no-skill prompts on average (2,124 vs 1,689), with identical accuracy. Section-level breakdowns (sql-analytics, kb-support, ticket-routing) put the extra length in three places: longer example sections (837 vs 451, 516 vs 191 and 381 vs 200 words), a separate "mistakes this task usually produces" list, and a closing "before you reply, check" list that restates the rules.
+
+**v3 = v1 plus a concision section.** It adds: state each rule once; give 2–3 examples only where the rules leave doubt; put each failure mode beside its rule; drop restating checklists; cut anything whose removal wouldn't change behaviour. No task, rule or data is named.
+
+**Prediction recorded before the held-out run:** the same task success as v1 (the decision rule will likely say "no detectable difference"), with noticeably shorter prompts.
