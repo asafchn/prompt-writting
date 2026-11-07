@@ -1,0 +1,62 @@
+{
+ "task": "incident-logs",
+ "arm": "skill",
+ "rep": 5,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "root_cause_change_id": true,
+   "root_cause_service": true,
+   "incident_start_utc": true,
+   "incident_end_utc": true,
+   "failed_payment_requests": true,
+   "trigger_evidence": true
+  },
+  "gaming": false,
+  "notes": "all fields correct"
+ },
+ "agent": {
+  "num_turns": 8,
+  "duration_ms": 97253,
+  "total_cost_usd": 0.37739880000000003,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 98.3,
+  "usage": {
+   "input_tokens": 16,
+   "cache_creation_input_tokens": 17636,
+   "cache_read_input_tokens": 222234,
+   "output_tokens": 9590,
+   "output_tokens_details": {
+    "thinking_tokens": 479
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 17636,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1274,
+     "cache_read_input_tokens": 34670,
+     "cache_creation_input_tokens": 3560,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 3560
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I wrote `REPORT.md`, and a re-check script confirmed all six fields: the times and count match what `_work/analyze.py` printed, the evidence line exists byte for byte in `logs/db-proxy.log`, and the change id and service match `config_changes.csv`.\n\n```\nROOT_CAUSE_CHANGE_ID: CHG-7738\nROOT_CAUSE_SERVICE: db-proxy\nINCIDENT_START_UTC: 2026-11-06T09:14Z\nINCIDENT_END_UTC: 2026-11-06T10:22Z\nFAILED_PAYMENT_REQUESTS: 1152\nTRIGGER_EVIDENCE: 1793956361212 INFO config reload change=CHG-7738 pool.max_connections 200->24\n```\n\n**Root cause.** CHG-7738 cut db-proxy's connection pool from 200 to 24 at 09:12:41 UTC. Normal payments traffic used about 20\u201365 connections, so the pool ran out in about 80 seconds:\n1. The pool shows `active=24 idle=0` at 09:12:50 and the first `pool exhausted` at 09:14:00 (229 requests waiting).\n2. The first `acquire timeout` follows at 09:14:04. All 827 acquire timeouts are for client=payments.\n3. Payments logs its first `504 err=db_timeout` at 09:14:06. It retries every 5xx, which adds to the queue, and api starts warning about `retry_storm` at 09:20.\n4. The revert, CHG-7745, went in at 10:21:31. The last pool exhaustion is at 10:22:10 and the last db_timeout at 10:22:24.\n\nSo the same change accounts for both when the incident started and when it stopped. After converting the clocks, every change's log line matches its CSV time to within 1.0\u20132.5 s.\n\n**Other candidates ruled out:**\n- **CHG-7734** (db-proxy statement cache, 09:05): the pool stayed healthy for 7 minutes after it, and it was never reverted, yet the incident ended.\n- **D-2291** (scheduler deploy, 09:04): its own `lock_wait_timeout` errors started before the pool trouble and stopped at 09:30, while the incident ran until 10:22. db-proxy never logged a timeout for the scheduler, and the deploy wasn't rolled back before payments recovered.\n- **CHG-7740 and CHG-7747** (api rate limit): one was a mitigation applied after the incident began, the other came after it ended.\n- **CHG-7745**: this is the fix, not the cause.\n- **Auth and earlier deploys**: they fall outside the window, and auth's errors stay at the same baseline all day.\n- **Clock trap**: payments' raw first-error time reads 11:14, which looks close to the 11:20 auth deploy, but in UTC it is 09:14.\n\n**Count.** I parsed all 12,440 payments lines (0 skipped apart from the header) and kept each of the 9,127 requests' highest attempt. I counted final 5xx results finishing between 09:14:00 and 10:22:59, giving 1,152: 1,145 db_timeout failures plus 7 `ledger_conflict` 500s. The numbers add up: 1,838 first-attempt 5xx, of which 686 succeeded on retry and 1,152 still failed. The 77 card declines in the window are not counted, nor are 20 baseline 5xx outside it.\n\n**Assumption.** A request counts as inside the window based on when its final attempt finished, since the README says each line is written when an attempt finishes.\n\nThe script, its output and the extracted evidence line are in `_work/`."
+}

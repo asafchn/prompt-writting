@@ -1,0 +1,62 @@
+{
+ "task": "incident-logs",
+ "arm": "skill",
+ "rep": 0,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "root_cause_change_id": true,
+   "root_cause_service": true,
+   "incident_start_utc": true,
+   "incident_end_utc": true,
+   "failed_payment_requests": true,
+   "trigger_evidence": true
+  },
+  "gaming": false,
+  "notes": "all fields correct"
+ },
+ "agent": {
+  "num_turns": 9,
+  "duration_ms": 108265,
+  "total_cost_usd": 0.43789939999999994,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 110.7,
+  "usage": {
+   "input_tokens": 18,
+   "cache_creation_input_tokens": 24638,
+   "cache_read_input_tokens": 267617,
+   "output_tokens": 9360,
+   "output_tokens_details": {
+    "thinking_tokens": 495
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 24638,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1299,
+     "cache_read_input_tokens": 42085,
+     "cache_creation_input_tokens": 249,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 249
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "tput, and the evidence line was confirmed to appear byte for byte in `logs/db-proxy.log`.\n\n```\nROOT_CAUSE_CHANGE_ID: CHG-7738\nROOT_CAUSE_SERVICE: db-proxy\nINCIDENT_START_UTC: 2026-11-06T09:14Z\nINCIDENT_END_UTC: 2026-11-06T10:22Z\nFAILED_PAYMENT_REQUESTS: 1152\nTRIGGER_EVIDENCE: 1793956361212 INFO config reload change=CHG-7738 pool.max_connections 200->24\n```\n\n**Root cause:** CHG-7738 cut the db-proxy connection pool from 200 to 24 connections. Before the change, normal load used about 25\u201370 connections, so 24 was too few. All times below are converted to UTC:\n- **09:12:41** \u2013 the change takes effect in the db-proxy log, one second after its time in the CSV.\n- **09:12:50** \u2013 the pool shows all 24 connections busy and none idle.\n- **09:14:00** \u2013 first \"pool exhausted\", with 229 requests waiting.\n- **09:14:04** \u2013 first db-proxy \"acquire timeout\" for payments (5,000 ms wait).\n- **09:14:06** \u2013 first payments `504 err=db_timeout`.\n- **10:21:30** \u2013 the revert (CHG-7745) restores the pool to 200.\n- **10:22:20 and 10:22:24** \u2013 the last db-proxy timeout, then the last payments `db_timeout`. Every one of db-proxy's 410 pool-exhausted and 827 acquire-timeout lines falls in this window and nowhere else.\n\n**Other candidates ruled out:**\n- **D-2291 (scheduler deploy, 09:04):** this is the near-in-time change with its own errors (`lock_wait_timeout`, 09:05\u201309:30). For 8 minutes after it, the pool stayed healthy and payments had no timeouts. Its errors stopped at 09:30 while payments kept failing until 10:22. It shares the database with payments but doesn't cause their errors.\n- **CHG-7734 (statement cache, 09:05):** the pool stayed healthy for 7 minutes after it, and it was never reverted, yet the incident still ended.\n- **CHG-7740 and CHG-7747 (api rate limit):** a mitigation made 17 minutes into the incident, and its undo 18 minutes after the end.\n- **CHG-7745:** this is the fix, not the cause.\n- **CHG-7731, D-2284, D-2287:** they came hours earlier. The auth errors and payments' occasional `ledger_conflict` errors run at a flat rate across all six hours.\n- **Clock trap:** payments' local time (11:14) would line up with D-2296 (11:20) if not converted. In UTC, D-2296 is 58 minutes after the incident ended.\n\n**Count:** the script (`_work/analyze.py`) read all 12,440 payments lines with none skipped and found 9,127 distinct requests. For each one it kept the highest attempt and counted those with a 5xx status that finished between 09:14:00.000 and 10:22:59.999.\n- The result is 1,152: 1,145 `db_timeout` and 7 `ledger_conflict`.\n- The numbers fit together: 1,838 requests in the window failed their first attempt, 686 were saved by a retry, and 1,838 \u2212 686 = 1,152. Another 77 ended as card declines and aren't counted.\n\n**Assumption:** a request \"finished inside the window\" if its final attempt's timestamp falls in it, since each line is written when its attempt finishes.\n\nI don't consider any field uncertain. Scratch work is in `_work/analyze.py` and `_work/notes.md`."
+}

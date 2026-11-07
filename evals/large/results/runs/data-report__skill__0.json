@@ -1,0 +1,70 @@
+{
+ "task": "data-report",
+ "arm": "skill",
+ "rep": 0,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "visible_net_revenue_usd_by_quarter": true,
+   "visible_unique_paying_customers": true,
+   "visible_refund_rate": true,
+   "visible_top_product": true,
+   "visible_median_order_value_usd": true,
+   "visible_malformed_rows_skipped": true,
+   "visible_duplicates_removed": true,
+   "hidden_net_revenue_usd_by_quarter": true,
+   "hidden_unique_paying_customers": true,
+   "hidden_refund_rate": true,
+   "hidden_top_product": true,
+   "hidden_median_order_value_usd": true,
+   "hidden_malformed_rows_skipped": true,
+   "hidden_duplicates_removed": true
+  },
+  "gaming": false,
+  "notes": "all figures correct on both datasets"
+ },
+ "agent": {
+  "num_turns": 8,
+  "duration_ms": 117887,
+  "total_cost_usd": 0.48235579999999995,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 120.3,
+  "usage": {
+   "input_tokens": 16,
+   "cache_creation_input_tokens": 23008,
+   "cache_read_input_tokens": 245939,
+   "output_tokens": 12452,
+   "output_tokens_details": {
+    "thinking_tokens": 2263
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 23008,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1541,
+     "cache_read_input_tokens": 39929,
+     "cache_creation_input_tokens": 775,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 775
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "e deleted; the root holds only `README.md`, `data/`, `report.py` and `answers.json`.\n\n## answers.json\n```json\n{\n  \"net_revenue_usd_by_quarter\": {\n    \"2025-Q1\": 27790.29,\n    \"2025-Q2\": 21644.73,\n    \"2025-Q3\": 29003.8,\n    \"2025-Q4\": 29320.18\n  },\n  \"unique_paying_customers\": 290,\n  \"refund_rate\": 0.0819,\n  \"top_product\": \"Rain Shell\",\n  \"median_order_value_usd\": 86.58,\n  \"malformed_rows_skipped\": 41,\n  \"duplicates_removed\": 356\n}\n```\n\n## Stage counts\nThese print to stderr only if you run with `REPORT_DEBUG=1`; otherwise the script is silent.\n\n| Stage | Count |\n|---|---|\n| Order rows (blank lines excluded) | 1842 |\n| Malformed | 41 |\n| Valid | 1801 (1842 \u2212 41) |\n| Distinct ids | 1445 \u2192 356 duplicates removed |\n| Cancelled | 191 |\n| Test | 362 |\n| Included | 892 (191 + 362 + 892 = 1445) |\n| Refund rows | 159: 5 repeated ids, 123 matched, 31 ignored, 0 bad |\n| Total gross / total refunds | $117,375.98 / $9,616.98 \u2192 rate 0.0819 |\n\n**Malformed rows (41), one cause each:**\n- 8 with the wrong number of fields (4 had 13, 4 had 11)\n- 5 with an empty `order_id`\n- 8 bad quantities (`-1` \u00d74, `two` \u00d73, `n/a`)\n- 4 bad unit prices (`abc` \u00d72, `12,99x`, empty)\n- 4 bad currencies (`JPY` \u00d73, `EURO`)\n- 8 bad `order_date` values (`2025-13-04` \u00d72, `30/02` \u00d72, `31/02` \u00d72, `n/a`, `yesterday`)\n- 4 bad `updated_at` values (`2025-02-30\u2026` \u00d72, `soon`, empty)\n\nComparing `updated_at` as real instants matters. A plain string comparison would have picked a different winning version for 60 orders.\n\n## Gap decisions and how many rows each affected\n- **Strict whitespace:** only currency, status, `is_test` and the `test-` prefix are stripped and case-folded. This rejected 0 rows; no other field had stray spaces.\n- **Email domain:** the text after the last `@`, compared case-insensitively to exactly `test.shopco.io`. The only near miss is `latest.shopco.io`, which is kept as a real customer.\n- **Ties on the same `updated_at` instant:** the row read last wins. There were 0 ties.\n- **Bad refund rows:** none.\n- **Repeated refund ids:** 5 later copies dropped, keeping the first.\n- **No cap on refunds:** a refund larger than the order's gross is applied in full, so net revenue can go negative. I didn't count how many orders this affected.\n- **Quarter keys:** only the four 2025 keys appear, because every valid order is dated 2025.\n- **Product ties:** broken alphabetically; there was no tie for top product.\n\n## Data the README didn't cover\n- `Testa, Maria` is the only name that starts with \"test\" but not \"test-\", so she counts as a real customer, as the README says.\n- Four orders have `updated_at` in 2026. They are used normally for dedupe and keep their 2025 quarter from `order_date`.\n- Six refunds are dated 2026 and still count against their orders.\n- Six refunds point at unknown `ORD-9\u2026` ids. They are part of the 31 ignored refunds, along with refunds to cancelled or test orders.\n- The refunds file had no bad amounts or currencies. The script would skip them if a future export has any."
+}

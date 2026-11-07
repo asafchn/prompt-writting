@@ -1,0 +1,62 @@
+{
+ "task": "incident-logs",
+ "arm": "skill",
+ "rep": 3,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "root_cause_change_id": true,
+   "root_cause_service": true,
+   "incident_start_utc": true,
+   "incident_end_utc": true,
+   "failed_payment_requests": true,
+   "trigger_evidence": true
+  },
+  "gaming": false,
+  "notes": "all fields correct"
+ },
+ "agent": {
+  "num_turns": 6,
+  "duration_ms": 94650,
+  "total_cost_usd": 0.3733308,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 95.6,
+  "usage": {
+   "input_tokens": 12,
+   "cache_creation_input_tokens": 19593,
+   "cache_read_input_tokens": 156594,
+   "output_tokens": 9261,
+   "output_tokens_details": {
+    "thinking_tokens": 398
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 19593,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1291,
+     "cache_read_input_tokens": 35299,
+     "cache_creation_input_tokens": 4888,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 4888
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "ce line matches `logs/db-proxy.log` exactly.\n\n```\nROOT_CAUSE_CHANGE_ID: CHG-7738\nROOT_CAUSE_SERVICE: db-proxy\nINCIDENT_START_UTC: 2026-11-06T09:14Z\nINCIDENT_END_UTC: 2026-11-06T10:22Z\nFAILED_PAYMENT_REQUESTS: 1152\nTRIGGER_EVIDENCE: 1793956361212 INFO config reload change=CHG-7738 pool.max_connections 200->24\n```\n\n**Root cause:** a config change cut the db-proxy connection pool from 200 to 24, below what payments normally uses (20\u201370 connections at once).\n- db-proxy logged the change at 09:12:41.212 UTC (the CSV says 09:12:40).\n- 9 seconds later the pool was full at the new cap (`active=24 idle=0`).\n- At 09:14:00 the pool was exhausted, with over 200 requests waiting.\n- The first `acquire timeout client=payments waited_ms=5000` came at 09:14:04.\n- The first payments `504 err=db_timeout` came at 09:14:06.475 UTC (11:14 in payments' local clock). Its `dur_ms` of about 5000 matches db-proxy's 5-second wait.\n- Retries from payments and from clients (api's `retry_storm` warnings) kept the pool saturated.\n- The revert CHG-7745 (back to 200) took effect at 10:21:30.98. The queue cleared by 10:22:20, and the last db_timeout was at 10:22:24.\n\nSo this one change explains both when the incident started and when it ended.\n\n**Other candidates ruled out:**\n- **D-2291, scheduler deploy at 09:04:** this is the decoy. It has its own `lock_wait_timeout` errors starting at 09:05:52, but the pool stayed healthy (no waiting requests, at most 69 of 200 in use) until CHG-7738. Its errors stopped by themselves at 09:30 while the new version kept running, and payments kept failing until the pool revert.\n- **CHG-7734, statement cache size at 09:05:** the pool behaved normally for 7.5 minutes afterwards, and it was never reverted.\n- **CHG-7740 and CHG-7747, api rate-limit changes:** made after the incident started and after it ended; they were a mitigation and its undo.\n- **auth changes (CHG-7731, D-2296):** auth's errors run at a flat rate all six hours, and D-2296 came after the incident.\n- **D-2284 and D-2287:** both landed hours before the first failure.\n\nEvery change that writes a log line matches its CSV time to within 1\u20132.5 seconds after converting the clocks.\n\n**The count:** the script read all 12,440 payment lines (0 skipped) and found 9,127 distinct requests, with no duplicate request/attempt pairs. It kept the highest attempt for each request and counted those ending in any 5xx between 09:14:00 and 10:22:59.999 UTC. That gives 1152: 1145 `db_timeout` and 7 `ledger_conflict`. The cross-check fits: 1838 requests failed their first attempt, which is 1152 that stayed failed plus 686 saved by a retry. The 77 card declines (`402`) are not counted.\n\n**Assumptions:**\n- A request counts as inside the window based on the timestamp of its final attempt.\n- The 7 `ledger_conflict` failures are counted even though that error also appears at a low rate outside the incident, because the README says every 5xx counts.\n\nThe scratch files are `_work/analyze.py` and `_work/notes.md`."
+}

@@ -1,0 +1,8 @@
+{
+ "protected": {
+  "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "tests/test_dedupe.py": "5d13813c8c978d263e3fa0b2911100b8f0648fb5f9049b712fabb6fb71a485f7",
+  "bench/run_bench.py": "bd419e1148fd72cb01646dcedf61e252f79b2b270f197cf6bea0fba9afe305d7",
+  "bench/sample_20k.csv": "60c20f7eabd60a20baaa47c1c11265ede689f32a785249139c6fbabe6662f6e0"
+ }
+}

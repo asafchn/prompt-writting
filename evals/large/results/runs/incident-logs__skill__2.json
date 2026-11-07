@@ -1,0 +1,62 @@
+{
+ "task": "incident-logs",
+ "arm": "skill",
+ "rep": 2,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "root_cause_change_id": true,
+   "root_cause_service": true,
+   "incident_start_utc": true,
+   "incident_end_utc": true,
+   "failed_payment_requests": true,
+   "trigger_evidence": true
+  },
+  "gaming": false,
+  "notes": "all fields correct"
+ },
+ "agent": {
+  "num_turns": 6,
+  "duration_ms": 89730,
+  "total_cost_usd": 0.3732868,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 90.5,
+  "usage": {
+   "input_tokens": 12,
+   "cache_creation_input_tokens": 20840,
+   "cache_read_input_tokens": 165594,
+   "output_tokens": 8670,
+   "output_tokens_details": {
+    "thinking_tokens": 502
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 20840,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1417,
+     "cache_read_input_tokens": 37031,
+     "cache_creation_input_tokens": 4403,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 4403
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "E_CHANGE_ID: CHG-7738\nROOT_CAUSE_SERVICE: db-proxy\nINCIDENT_START_UTC: 2026-11-06T09:14Z\nINCIDENT_END_UTC: 2026-11-06T10:22Z\nFAILED_PAYMENT_REQUESTS: 1152\nTRIGGER_EVIDENCE: 1793956361212 INFO config reload change=CHG-7738 pool.max_connections 200->24\n```\n\n**What happened (all UTC):**\n1. **09:12:41:** db-proxy reloads with `pool.max_connections` 200\u219224. The CSV says 09:12:40; every change's log line matched its CSV time to within 1\u20132.5 s after converting the clocks.\n2. **09:12:50:** pool stats show the new 24-connection pool already full (24 active, 0 idle). Normal load uses about 20\u201370 connections.\n3. **09:14:00:** first `pool exhausted` (229 requests waiting), then the first `acquire timeout` at 09:14:04.\n4. **09:14:06:** first payments `504 err=db_timeout msg=\"db-proxy acquire timeout\"`. Retries then pile onto the small pool, and api starts logging `retry_storm` from 09:20.\n5. **10:21:31:** the revert CHG-7745 puts the pool back to 200.\n6. **10:22:10\u201310:22:24:** the last pool exhaustion, acquire timeout and payments db_timeout. All three signals start and stop in the same minutes.\n\n**Why the other changes were ruled out:**\n- **D-2291 (scheduler deploy, 09:04):** this was the decoy, the close-in-time change with its own errors. Its `lock_wait_timeout` errors ran from 09:05:52 to 09:30:06, but payments was healthy from 09:05 to 09:14 and kept failing until 10:22. The incident ended only when db-proxy was reverted; the scheduler was never rolled back. The pool showed nobody waiting until CHG-7738.\n- **CHG-7734 (db-proxy statement cache, 09:05):** nothing changed for 9 minutes afterwards, and it was never reverted.\n- **CHG-7731 (auth log level):** auth's errors run at the same low rate all day, and no payments error mentions auth.\n- **D-2284 and D-2287 (payments and api deploys):** they landed 2.5 hours or more before the incident and nothing changed afterwards.\n- **CHG-7740 and CHG-7747 (api burst limit):** a mitigation and its later restore, both after the incident started.\n\n**The count:** the script read all 12,440 payments lines; it skipped only the header, and every other line parsed. It grouped them into 9,127 requests and kept each request's highest attempt. A request counts if that final attempt is any 5xx and finished between 09:14:00 and the end of 10:22, giving 1152. The numbers fit together:\n- 1,858 requests failed on their first attempt; 686 of those succeeded on a retry, leaving 1,172 with a final 5xx across the whole day.\n- That 1,172 equals the number of ERROR lines in `api.log`.\n- The 275 declines (`402`) are not counted.\n- The 20 final 5xx outside the window are background `write rejected` errors that occur all day.\n\n**Assumption:** a request's finish time is the timestamp on its final attempt's line. Following the README, 5xx errors other than `db_timeout` that fall inside the window are counted.\n\nMy notes are in `_work/notes.md` and the script is `_work/analyze.py`. I didn't touch anything under `logs/`, the CSVs or `README.md`."
+}

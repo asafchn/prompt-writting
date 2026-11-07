@@ -1,0 +1,62 @@
+{
+ "task": "incident-logs",
+ "arm": "skill",
+ "rep": 4,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "root_cause_change_id": true,
+   "root_cause_service": true,
+   "incident_start_utc": true,
+   "incident_end_utc": true,
+   "failed_payment_requests": true,
+   "trigger_evidence": true
+  },
+  "gaming": false,
+  "notes": "all fields correct"
+ },
+ "agent": {
+  "num_turns": 6,
+  "duration_ms": 90709,
+  "total_cost_usd": 0.3783032,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 91.4,
+  "usage": {
+   "input_tokens": 12,
+   "cache_creation_input_tokens": 19855,
+   "cache_read_input_tokens": 164676,
+   "output_tokens": 9324,
+   "output_tokens_details": {
+    "thinking_tokens": 536
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 19855,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1375,
+     "cache_read_input_tokens": 36361,
+     "cache_creation_input_tokens": 4088,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 4088
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": " connection pool from 200 to 24 at 09:12:40 UTC.\n\n```\nROOT_CAUSE_CHANGE_ID: CHG-7738\nROOT_CAUSE_SERVICE: db-proxy\nINCIDENT_START_UTC: 2026-11-06T09:14Z\nINCIDENT_END_UTC: 2026-11-06T10:22Z\nFAILED_PAYMENT_REQUESTS: 1152\nTRIGGER_EVIDENCE: 1793956361212 INFO config reload change=CHG-7738 pool.max_connections 200->24\n```\n\n**What happened (UTC):**\n1. **09:12:41:** db-proxy reloads CHG-7738 and the pool shrinks to 24 connections.\n2. **09:12:50:** the pool is already full (24 in use, none free). Before the change, normal load used 22 to 64 connections.\n3. **09:14:00:** the first \"pool exhausted\" warning shows 229 requests waiting.\n4. **09:14:04:** the first payments connection request times out after waiting 5 seconds.\n5. **09:14:06:** payments logs its first `db_timeout`. Payments then retries, and clients retry through the api, which adds load to the already full pool.\n6. **10:21:30:** the revert CHG-7745 sets the pool back to 200.\n7. **10:22:24:** the last `db_timeout`. Nothing after that.\n\nEvery log line I tied to a change matches its CSV time to within 2 seconds after clock conversion. CHG-7740, CHG-7747 and the D-2284, D-2287 and D-2296 deploys have no log line of their own.\n\n**Other candidates ruled out:**\n- **D-2291 (scheduler deploy, 09:04):** this is the nearby change with its own errors (23 `lock_wait_timeout` between 09:05:52 and 09:30:06). It isn't the cause:\n  - db-proxy showed zero waiting requests until CHG-7738.\n  - The scheduler errors stopped at 09:30 while payments kept failing until 10:22.\n  - The deploy was never rolled back.\n  - Every connection timeout names `client=payments`.\n- **CHG-7734 (db-proxy cache size, 09:05):** the pool stayed healthy for 7 minutes afterwards.\n- **CHG-7740 (api burst limit, 09:31):** came 17 minutes after the start, as a mitigation.\n- **CHG-7745 and CHG-7747:** CHG-7745 is the fix, and CHG-7747 came after the incident ended.\n- **CHG-7731, D-2284, D-2287:** 1.5 to 2.7 hours earlier, with nothing after them.\n- **D-2296:** after the incident.\n\n**How the count was made:** a script reads every line of `payments.log` (none skipped), converts local time to UTC by subtracting 2 hours, and keeps each request's highest attempt. It counts the final 5xx results between 09:14:00 and 10:23:00. That gives 1,145 `db_timeout` plus 7 `ledger_conflict` = 1,152. The numbers fit together:\n- 1,858 requests failed on their first attempt; 686 were saved by a retry and 1,172 still failed.\n- 20 of those 1,172 are routine failures outside the window, leaving 1,152.\n- 1,172 also equals the number of api error lines.\n- 275 card declines are excluded.\n\n**Assumptions:**\n- A request is placed in the window by the time its final attempt finished.\n- The 7 `ledger_conflict` failures inside the window count, because the README says every 5xx counts. They are a steady background error, not part of the outage.\n\nScratch files are in `_work/` (`analyze.py`, `notes.md`, `evidence.txt`). Nothing under `logs/`, the CSVs or the README was changed."
+}

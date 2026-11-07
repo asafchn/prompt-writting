@@ -1,0 +1,1 @@
+`cluster_records` in dedupe.py is way too slow: over a minute on the 20k sample in bench/. Can you get it under 3 seconds for 20,000 records without changing its output at all (same clusters, same ids)? When you're done, write REPORT.md with `BEFORE_SECONDS: <n>` and `AFTER_SECONDS: <n>`, both timed on bench/sample_20k.csv.

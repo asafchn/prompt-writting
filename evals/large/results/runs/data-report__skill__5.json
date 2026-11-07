@@ -1,0 +1,70 @@
+{
+ "task": "data-report",
+ "arm": "skill",
+ "rep": 5,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "visible_net_revenue_usd_by_quarter": true,
+   "visible_unique_paying_customers": true,
+   "visible_refund_rate": true,
+   "visible_top_product": true,
+   "visible_median_order_value_usd": true,
+   "visible_malformed_rows_skipped": true,
+   "visible_duplicates_removed": true,
+   "hidden_net_revenue_usd_by_quarter": true,
+   "hidden_unique_paying_customers": true,
+   "hidden_refund_rate": true,
+   "hidden_top_product": true,
+   "hidden_median_order_value_usd": true,
+   "hidden_malformed_rows_skipped": true,
+   "hidden_duplicates_removed": true
+  },
+  "gaming": false,
+  "notes": "all figures correct on both datasets"
+ },
+ "agent": {
+  "num_turns": 8,
+  "duration_ms": 126023,
+  "total_cost_usd": 0.47430059999999996,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 126.8,
+  "usage": {
+   "input_tokens": 16,
+   "cache_creation_input_tokens": 20352,
+   "cache_read_input_tokens": 257003,
+   "output_tokens": 13001,
+   "output_tokens_details": {
+    "thinking_tokens": 2040
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 20352,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1868,
+     "cache_read_input_tokens": 41672,
+     "cache_creation_input_tokens": 354,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 354
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "efund_id`s, 123 matched an included order and 31 were ignored. Of the ignored ones, 25 pointed at cancelled or test orders and 6 at unknown ids (or orders that only had malformed rows).\n- Total gross is $117,375.98 and total refunds $9,616.98, so the refund rate is about 0.082.\n- 6 refunds dated 2026 were counted against their orders.\n- 46 orders were refunded exactly their full value; none were refunded more than their gross.\n\n**Timezone check:** for 69 orders, the winning version would have been different if `updated_at` had been compared as text instead of as UTC instants. 3 of the winning versions have an `updated_at` in 2026.\n\n## Interpretation decisions and how many rows each affected\n- **Strict whitespace:** stripping and case-folding apply only to currency, status, `is_test` and the `test-` name check. This rejected 0 rows; every surrounding space in the data is in the currency field (33 values such as `EUR `), and those are allowed.\n- **Email domain:** only an exact `test.shopco.io` after the last `@` counts, ignoring case. 125 kept orders had that domain. `latest.shopco.io` addresses are treated as real customers.\n- **Ties on `updated_at`:** the version read last wins. There were 0 ties.\n- **Bad refund rows:** rows with an unparseable amount or unknown currency are skipped and not counted as malformed. There were 0.\n- **Refund dedupe:** the first occurrence of each `refund_id` is kept, before matching to orders. This dropped 5 rows.\n- **No capping:** refunds aren't capped at the order's gross value. It made no difference here, since no refund exceeded its order.\n- **Quarter keys:** `2025-Q1` to `2025-Q4` are always present. No included order fell in another year, so no extra keys appear.\n- **Product ties:** broken alphabetically. No tie occurred.\n- **Test-account marks** (an order can have more than one): 142 by `is_test` flag, 125 by email domain, 147 by name prefix. `Testa, Maria` and `Tester \u2026` are kept as real customers.\n\n## Things the README didn't cover\n- **Rows with too few fields:** 4 rows have 11 fields instead of 12 (no `is_test`). I counted them as malformed, along with the 4 rows that have an extra field.\n- **Blank lines:** 7 lines with every field empty were skipped and not counted as rows.\n- **Date strictness:** dates must match the README formats exactly, including two-digit month and day. `Mar 4, 2025` accepts one- or two-digit days, and month names are matched against a fixed English list, so the system language doesn't matter. Impossible dates are rejected, not rolled over to the next month.\n- **`order_date` with a time:** for values like `\u2026T14:22:10Z`, the date is taken as written, but the time part must still be a valid time.\n- **Paying-customer threshold:** an order's net is rounded half-up to cents before the \"above 0\" test.\n- **Precision:** all money is computed with `Decimal`, and only the final figures are rounded.\n\nThe brief suggested keeping `scratch/NOTES.md`; I didn't, and the summary above stands in for it."
+}

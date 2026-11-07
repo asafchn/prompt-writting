@@ -1,0 +1,62 @@
+{
+ "task": "incident-logs",
+ "arm": "skill",
+ "rep": 1,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "root_cause_change_id": true,
+   "root_cause_service": true,
+   "incident_start_utc": true,
+   "incident_end_utc": true,
+   "failed_payment_requests": true,
+   "trigger_evidence": true
+  },
+  "gaming": false,
+  "notes": "all fields correct"
+ },
+ "agent": {
+  "num_turns": 9,
+  "duration_ms": 105752,
+  "total_cost_usd": 0.413383,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 106.4,
+  "usage": {
+   "input_tokens": 18,
+   "cache_creation_input_tokens": 19797,
+   "cache_read_input_tokens": 251175,
+   "output_tokens": 10235,
+   "output_tokens_details": {
+    "thinking_tokens": 316
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 19797,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1408,
+     "cache_read_input_tokens": 36176,
+     "cache_creation_input_tokens": 4215,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 4215
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "IGGER_EVIDENCE: 1793956361212 INFO config reload change=CHG-7738 pool.max_connections 200->24\n```\n\n**Clocks:** after converting every log to UTC, each change's `config reload` or deploy line matches its CSV time to within 1.0\u20132.5 seconds.\n\n**How the change led to the failures:**\n1. **09:12:41 UTC:** db-proxy logs the reload that drops `pool.max_connections` from 200 to 24. Normal load uses about 20\u201360 connections at once, so free connections fall to 0 within seconds.\n2. **09:14:00:** the first `pool exhausted` line appears, with 229 requests waiting.\n3. **09:14:04:** the first `acquire timeout client=payments waited_ms=5000`. All 827 acquire timeouts in the log are from payments.\n4. **09:14:06.475:** the first payments `504 err=db_timeout` (11:14 in the payments log's local time). Retries from payments and from API clients (`retry_storm` in `api.log`) add load to the small pool.\n5. **10:21:31:** the revert, CHG-7745, sets the pool back to 200. The last acquire timeout is at 10:22:20 and the last `db_timeout` at 10:22:24.569. The trigger therefore explains both when the incident started and when it ended.\n\n**Other candidates ruled out:**\n- **D-2291 (scheduler deploy, 09:04):** this is the nearby change with its own errors (23 `lock_wait_timeout` failures). They started at 09:05:52, eight minutes before any pool trouble, while the pool still showed 200 connections and nobody waiting. They are row-lock waits, never connection-acquire failures from the scheduler. They stopped at 09:30 while payments kept failing, and the incident ended at the pool revert even though the scheduler was never rolled back.\n- **CHG-7734 (db-proxy statement cache, 09:05):** the pool stayed healthy for 7.5 minutes afterwards, and it was never reverted.\n- **CHG-7740 and CHG-7747 (api rate limits, 09:31 and 10:40):** both came after the incident began. The first was a mitigation that had no effect and the second a restore after the end.\n- **Auth:** its errors run at a flat background rate all day, unrelated to CHG-7731 at 07:15. D-2296 came after the incident.\n- **D-2284 and D-2287:** they landed 1.5\u20132.7 hours earlier, with no change in errors after them.\n\n**Count:** there are 9,127 distinct requests, and no lines were skipped. Keeping each request's highest-numbered attempt, 1,152 ended in a 5xx within 09:14:00\u201310:22:59 UTC: 1,145 `504 db_timeout` and 7 `500 ledger_conflict`. The numbers add up: 1,858 requests failed their first attempt, 686 of those succeeded on a retry, and 1,172 ended in a final 5xx (686 + 1,172 = 1,858). The 20 final 5xx outside the window are routine `ledger_conflict` errors. The 275 `402` card declines are excluded.\n\n**Assumption:** \"finished inside the window\" uses the timestamp of the request's final attempt, since each line is written when an attempt finishes.\n\nThe script, its output, my notes and the copied evidence line are in `./_work/` (`analyze.py`, `out.txt`, `notes.md`, `evidence.txt`). `REPORT.md` also has the full timeline below the fields."
+}

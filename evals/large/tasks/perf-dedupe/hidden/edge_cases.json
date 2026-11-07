@@ -1,0 +1,672 @@
+{
+"ties": [
+{
+"name": "solo one",
+"email": "",
+"phone": ""
+},
+{
+"name": "",
+"email": "a@t.test",
+"phone": ""
+},
+{
+"name": "",
+"email": "",
+"phone": "555-0100-11"
+},
+{
+"name": "",
+"email": "b@t.test",
+"phone": ""
+},
+{
+"name": "Pat Lee",
+"email": "pat@t.test",
+"phone": ""
+},
+{
+"name": "",
+"email": "",
+"phone": "(555) 010011"
+},
+{
+"name": "",
+"email": "A@T.TEST",
+"phone": ""
+},
+{
+"name": "solo two",
+"email": "",
+"phone": ""
+},
+{
+"name": "",
+"email": "b+x@t.test",
+"phone": ""
+},
+{
+"name": "PAT  LEE",
+"email": "lee.p@t.test",
+"phone": ""
+},
+{
+"name": "",
+"email": "",
+"phone": "5550200222"
+},
+{
+"name": "",
+"email": "c@t.test",
+"phone": "5550300333"
+},
+{
+"name": "",
+"email": "",
+"phone": "+1 555 030 0333"
+},
+{
+"name": "",
+"email": "C@t.test",
+"phone": ""
+}
+],
+"empty_fields": [
+{
+"name": "",
+"email": "",
+"phone": ""
+},
+{
+"name": "",
+"email": "",
+"phone": ""
+},
+{
+"name": " ",
+"email": " ",
+"phone": " "
+},
+{
+"name": "Ann Ito",
+"email": "",
+"phone": ""
+},
+{
+"name": "Ann Ito",
+"email": "",
+"phone": ""
+},
+{
+"name": "",
+"email": "@",
+"phone": ""
+},
+{
+"name": "",
+"email": "@",
+"phone": ""
+},
+{
+"name": "",
+"email": "ann@",
+"phone": ""
+},
+{
+"name": "",
+"email": "ann@",
+"phone": ""
+},
+{
+"name": "",
+"email": "+tag@x.test",
+"phone": ""
+},
+{
+"name": "",
+"email": "+tag@x.test",
+"phone": ""
+},
+{
+"name": "",
+"email": "",
+"phone": "123456"
+},
+{
+"name": "",
+"email": "",
+"phone": "123456"
+},
+{
+"name": "",
+"email": "",
+"phone": "1-23-45-6"
+},
+{
+"name": "Ann Ito",
+"email": "",
+"phone": "555 123 4567"
+},
+{
+"name": "",
+"email": "",
+"phone": "5551234567"
+},
+{
+"name": "ann ito",
+"email": "a@@x.test",
+"phone": ""
+},
+{
+"name": "ANN ITO",
+"email": "a@@x.test",
+"phone": ""
+},
+{
+"name": "Bo",
+"email": "bo@x.test",
+"phone": ""
+},
+{
+"name": "bo",
+"email": "",
+"phone": ""
+},
+{
+"name": "",
+"email": "x@y@z.test",
+"phone": ""
+},
+{
+"name": "",
+"email": "x@y@z.test",
+"phone": ""
+},
+{
+"name": "",
+"email": "",
+"phone": "11234567890"
+},
+{
+"name": "",
+"email": "",
+"phone": "1234567890"
+},
+{
+"name": "",
+"email": "",
+"phone": "21234567890"
+},
+{
+"name": "",
+"email": "",
+"phone": "2123456789"
+}
+],
+"unicode_casefold": [
+{
+"name": "Jürgen Weiß",
+"email": "WEISS@post.example.de",
+"phone": ""
+},
+{
+"name": "",
+"email": "weiß@post.example.de",
+"phone": ""
+},
+{
+"name": "Émile Zola",
+"email": "ez@mail.test",
+"phone": ""
+},
+{
+"name": "ÉMILE ZOLA",
+"email": "zola.e@mail.test",
+"phone": ""
+},
+{
+"name": "emile zola",
+"email": "e.zola@mail.test",
+"phone": ""
+},
+{
+"name": "",
+"email": "",
+"phone": "５５５１２３９８７６"
+},
+{
+"name": "",
+"email": "",
+"phone": "555-123-9876"
+},
+{
+"name": "Ｋｉｍ Ｌｅｅ",
+"email": "kl@inbox.test",
+"phone": ""
+},
+{
+"name": "kim lee",
+"email": "kim@inbox.test",
+"phone": ""
+},
+{
+"name": "Kim Lee",
+"email": "kim@other.test",
+"phone": ""
+},
+{
+"name": "Straße",
+"email": "s@web.example",
+"phone": ""
+},
+{
+"name": "STRASSE",
+"email": "strasse@web.example",
+"phone": ""
+},
+{
+"name": "strasse",
+"email": "x@corp.example",
+"phone": ""
+},
+{
+"name": "",
+"email": "İnci@mail.test",
+"phone": ""
+},
+{
+"name": "",
+"email": "i̇nci@mail.test",
+"phone": ""
+},
+{
+"name": "",
+"email": "inci@mail.test",
+"phone": ""
+}
+],
+"different_keys": [
+{
+"name": "Ada Brook",
+"email": "ada@corp.example",
+"phone": ""
+},
+{
+"name": "",
+"email": "ADA@corp.example",
+"phone": "5557771234"
+},
+{
+"name": "Zed Q",
+"email": "zq@inbox.test",
+"phone": "+1 555 777 1234"
+},
+{
+"name": "zed q",
+"email": "zed.q@inbox.test",
+"phone": ""
+},
+{
+"name": "Zed Q",
+"email": "zed@other.test",
+"phone": ""
+},
+{
+"name": "Ada Brook",
+"email": "",
+"phone": "5550000001"
+},
+{
+"name": "Mo",
+"email": "mo@x.test",
+"phone": "5559990000"
+},
+{
+"name": "Mo",
+"email": "mo2@y.test",
+"phone": "5559990001"
+},
+{
+"name": "Mo",
+"email": "mo3@x.test",
+"phone": ""
+},
+{
+"name": "Ada Brook",
+"email": "brook@corp.example",
+"phone": ""
+}
+],
+"transitive": [
+{
+"name": "Link 10",
+"email": "l9@chain.test",
+"phone": "6660000010"
+},
+{
+"name": "Single 5",
+"email": "s5@solo.test",
+"phone": ""
+},
+{
+"name": "Link 11",
+"email": "l12@chain.test",
+"phone": "5550000012"
+},
+{
+"name": "Single 2",
+"email": "s2@solo.test",
+"phone": ""
+},
+{
+"name": "Link 32",
+"email": "l33@chain.test",
+"phone": "5550000033"
+},
+{
+"name": "Link 28",
+"email": "l27@chain.test",
+"phone": "6660000028"
+},
+{
+"name": "Link 22",
+"email": "l21@chain.test",
+"phone": "6660000022"
+},
+{
+"name": "Ring 1",
+"email": "r1@ring.test",
+"phone": ""
+},
+{
+"name": "Ring 7",
+"email": "r7@ring.test",
+"phone": ""
+},
+{
+"name": "Link 29",
+"email": "other29@chain.test",
+"phone": "6660000028"
+},
+{
+"name": "Link 0",
+"email": "l0@chain.test",
+"phone": "5550000000"
+},
+{
+"name": "Link 23",
+"email": "l24@chain.test",
+"phone": "5550000024"
+},
+{
+"name": "Link 1",
+"email": "l0@chain.test",
+"phone": "6660000001"
+},
+{
+"name": "Link 16",
+"email": "l15@chain.test",
+"phone": "6660000016"
+},
+{
+"name": "Link 31",
+"email": "l30@chain.test",
+"phone": "6660000031"
+},
+{
+"name": "Link 20",
+"email": "other20@chain.test",
+"phone": "6660000019"
+},
+{
+"name": "Link 11",
+"email": "other11@chain.test",
+"phone": "6660000010"
+},
+{
+"name": "Single 6",
+"email": "s6@solo.test",
+"phone": ""
+},
+{
+"name": "Single 13",
+"email": "s13@solo.test",
+"phone": ""
+},
+{
+"name": "Ring 5",
+"email": "r5@ring.test",
+"phone": ""
+},
+{
+"name": "Ring 9",
+"email": "r9@ring.test",
+"phone": ""
+},
+{
+"name": "Ring 6",
+"email": "r5@ring.test",
+"phone": ""
+},
+{
+"name": "Link 20",
+"email": "l21@chain.test",
+"phone": "5550000021"
+},
+{
+"name": "Ring 4",
+"email": "r3@ring.test",
+"phone": ""
+},
+{
+"name": "Link 29",
+"email": "l30@chain.test",
+"phone": "5550000030"
+},
+{
+"name": "Link 17",
+"email": "l18@chain.test",
+"phone": "5550000018"
+},
+{
+"name": "Single 7",
+"email": "s7@solo.test",
+"phone": ""
+},
+{
+"name": "Link 17",
+"email": "other17@chain.test",
+"phone": "6660000016"
+},
+{
+"name": "Ring 8",
+"email": "r7@ring.test",
+"phone": ""
+},
+{
+"name": "Single 8",
+"email": "s8@solo.test",
+"phone": ""
+},
+{
+"name": "Link 8",
+"email": "l9@chain.test",
+"phone": "5550000009"
+},
+{
+"name": "Link 8",
+"email": "other8@chain.test",
+"phone": "6660000007"
+},
+{
+"name": "Single 0",
+"email": "s0@solo.test",
+"phone": ""
+},
+{
+"name": "Link 38",
+"email": "l39@chain.test",
+"phone": "5550000039"
+},
+{
+"name": "Link 38",
+"email": "other38@chain.test",
+"phone": "6660000037"
+},
+{
+"name": "Link 25",
+"email": "l24@chain.test",
+"phone": "6660000025"
+},
+{
+"name": "Single 11",
+"email": "s11@solo.test",
+"phone": ""
+},
+{
+"name": "Ring 3",
+"email": "r3@ring.test",
+"phone": ""
+},
+{
+"name": "Single 4",
+"email": "s4@solo.test",
+"phone": ""
+},
+{
+"name": "Link 14",
+"email": "other14@chain.test",
+"phone": "6660000013"
+},
+{
+"name": "Link 7",
+"email": "l6@chain.test",
+"phone": "6660000007"
+},
+{
+"name": "Link 35",
+"email": "l36@chain.test",
+"phone": "5550000036"
+},
+{
+"name": "Single 3",
+"email": "s3@solo.test",
+"phone": ""
+},
+{
+"name": "Ring 10",
+"email": "r9@ring.test",
+"phone": ""
+},
+{
+"name": "Link 35",
+"email": "other35@chain.test",
+"phone": "6660000034"
+},
+{
+"name": "Single 12",
+"email": "s12@solo.test",
+"phone": ""
+},
+{
+"name": "Link 14",
+"email": "l15@chain.test",
+"phone": "5550000015"
+},
+{
+"name": "Single 9",
+"email": "s9@solo.test",
+"phone": ""
+},
+{
+"name": "Link 26",
+"email": "other26@chain.test",
+"phone": "6660000025"
+},
+{
+"name": "Link 26",
+"email": "l27@chain.test",
+"phone": "5550000027"
+},
+{
+"name": "Link 5",
+"email": "other5@chain.test",
+"phone": "6660000004"
+},
+{
+"name": "Link 2",
+"email": "other2@chain.test",
+"phone": "6660000001"
+},
+{
+"name": "Link 13",
+"email": "l12@chain.test",
+"phone": "6660000013"
+},
+{
+"name": "Link 32",
+"email": "other32@chain.test",
+"phone": "6660000031"
+},
+{
+"name": "Single 10",
+"email": "s10@solo.test",
+"phone": ""
+},
+{
+"name": "Link 37",
+"email": "l36@chain.test",
+"phone": "6660000037"
+},
+{
+"name": "Link 23",
+"email": "other23@chain.test",
+"phone": "6660000022"
+},
+{
+"name": "Link 5",
+"email": "l6@chain.test",
+"phone": "5550000006"
+},
+{
+"name": "Link 34",
+"email": "l33@chain.test",
+"phone": "6660000034"
+},
+{
+"name": "Single 1",
+"email": "s1@solo.test",
+"phone": ""
+},
+{
+"name": "Link 4",
+"email": "l3@chain.test",
+"phone": "6660000004"
+},
+{
+"name": "Link 2",
+"email": "l3@chain.test",
+"phone": "5550000003"
+},
+{
+"name": "Single 14",
+"email": "s14@solo.test",
+"phone": ""
+},
+{
+"name": "Ring 11",
+"email": "r11@ring.test",
+"phone": ""
+},
+{
+"name": "Link 19",
+"email": "l18@chain.test",
+"phone": "6660000019"
+},
+{
+"name": "Ring 2",
+"email": "r1@ring.test",
+"phone": ""
+}
+]
+}

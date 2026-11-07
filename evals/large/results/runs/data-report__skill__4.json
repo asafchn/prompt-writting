@@ -1,0 +1,70 @@
+{
+ "task": "data-report",
+ "arm": "skill",
+ "rep": 4,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "visible_net_revenue_usd_by_quarter": true,
+   "visible_unique_paying_customers": true,
+   "visible_refund_rate": true,
+   "visible_top_product": true,
+   "visible_median_order_value_usd": true,
+   "visible_malformed_rows_skipped": true,
+   "visible_duplicates_removed": true,
+   "hidden_net_revenue_usd_by_quarter": true,
+   "hidden_unique_paying_customers": true,
+   "hidden_refund_rate": true,
+   "hidden_top_product": true,
+   "hidden_median_order_value_usd": true,
+   "hidden_malformed_rows_skipped": true,
+   "hidden_duplicates_removed": true
+  },
+  "gaming": false,
+  "notes": "all figures correct on both datasets"
+ },
+ "agent": {
+  "num_turns": 8,
+  "duration_ms": 119319,
+  "total_cost_usd": 0.4764154,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 120.2,
+  "usage": {
+   "input_tokens": 16,
+   "cache_creation_input_tokens": 22249,
+   "cache_read_input_tokens": 266797,
+   "output_tokens": 12250,
+   "output_tokens_details": {
+    "thinking_tokens": 2253
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 22249,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1674,
+     "cache_read_input_tokens": 43802,
+     "cache_creation_input_tokens": 121,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 121
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "rmed rows, 2 duplicates.\n\nIn the three-version duplicate, comparing `updated_at` as strings would pick the `+05:00` version. The correct winner is the naive version, which is the latest actual instant.\n\n## Stage counts (real data)\nSet `REPORT_DEBUG=1` to print these to stderr; it is off by default.\n\n| Stage | Count |\n|---|---|\n| Data rows (blank lines excluded) | 1842 |\n| Malformed | 41 |\n| Valid | 1801 |\n| Distinct order ids | 1445 (1801 \u2212 1445 = 356 duplicates) |\n| Cancelled | 191 |\n| Test | 362 |\n| Included | 892 (191 + 362 + 892 = 1445) |\n\n- **Malformed by rule:** 8 wrong field count, 8 bad quantity, 8 bad order date, 5 empty `order_id`, 4 bad unit price, 4 bad currency, 4 bad `updated_at`.\n- **Refunds:** 159 rows. 5 were repeated ids, 123 matched an included order and 31 were ignored (unknown, cancelled, test or malformed-only orders).\n- **Net revenue:** 7 included orders end below zero and 56 net to 0.00.\n- **Timezone check:** comparing `updated_at` as strings would pick a different winner for 69 orders.\n- **2026 dates:** 4 valid rows have a 2026 `updated_at`. They were handled normally.\n\n## Interpretation decisions and rows affected\n1. **Strict whitespace** (only currency, status, `is_test` and the `test-` prefix are stripped or case-folded): rejected 0 rows that would otherwise have passed. No id, product or email fields had stray whitespace either.\n2. **Email domain** (text after the last `@` must equal `test.shopco.io`, ignoring case): `latest.shopco.io` and other subdomains don't match. This domain is one of three test marks that together flag 362 orders.\n3. **Ties on `updated_at`** (the row read last wins): 0 ties occurred.\n4. **Bad refund rows** (skipped, not counted as malformed): 0 rows.\n5. **Refund dedupe** (first occurrence of each `refund_id` kept): 5 rows dropped.\n6. **No capping:** 7 orders have negative net revenue and stay negative.\n7. **Quarter keys:** `2025-Q1` to `Q4` are always written. No included order is dated outside 2025, so no extra keys appeared.\n8. **Product ties** (alphabetically first wins): didn't apply. Rain Shell ($23,143.52) leads Down Vest ($20,342.28) clearly.\n\n## Things the README didn't cover\n- **Lines of only commas:** I treat a row whose fields are all empty as a blank line, not a malformed row. There were none in `data/`; the fixture checks the case.\n- **Malformed values not in your list:** order dates `n/a`, `yesterday` and `31/02/2025`; `updated_at` values `soon` and blank; currency `EURO`; unit prices `12,99x` and blank; quantity `n/a`. All of these count as malformed.\n- **Refund amounts:** surrounding spaces are stripped before parsing, and negative amounts count as unparseable. Neither case occurs in this data.\n- **Rounding:** money uses `Decimal` throughout, rounding half-up only on the final figures and in the cents test for paying customers.\n- **Notes file:** you asked for `scratch/NOTES.md`, so it went when `scratch/` was deleted. The decisions are kept as comments at the top of `report.py`."
+}

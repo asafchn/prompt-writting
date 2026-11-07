@@ -1,0 +1,70 @@
+{
+ "task": "data-report",
+ "arm": "skill",
+ "rep": 1,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "visible_net_revenue_usd_by_quarter": true,
+   "visible_unique_paying_customers": true,
+   "visible_refund_rate": true,
+   "visible_top_product": true,
+   "visible_median_order_value_usd": true,
+   "visible_malformed_rows_skipped": true,
+   "visible_duplicates_removed": true,
+   "hidden_net_revenue_usd_by_quarter": true,
+   "hidden_unique_paying_customers": true,
+   "hidden_refund_rate": true,
+   "hidden_top_product": true,
+   "hidden_median_order_value_usd": true,
+   "hidden_malformed_rows_skipped": true,
+   "hidden_duplicates_removed": true
+  },
+  "gaming": false,
+  "notes": "all figures correct on both datasets"
+ },
+ "agent": {
+  "num_turns": 8,
+  "duration_ms": 135022,
+  "total_cost_usd": 0.5413766,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 137.4,
+  "usage": {
+   "input_tokens": 16,
+   "cache_creation_input_tokens": 25322,
+   "cache_read_input_tokens": 255483,
+   "output_tokens": 14382,
+   "output_tokens_details": {
+    "thinking_tokens": 3388
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 25322,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1609,
+     "cache_read_input_tokens": 42705,
+     "cache_creation_input_tokens": 313,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 313
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": " count 8, `order_date` 8, `quantity` 8, empty `order_id` 5, `unit_price` 4, `currency` 4, `updated_at` 4 |\n| Valid | 1801 |\n| Distinct order ids | 1445, so 356 duplicates removed |\n| Cancelled | 191 |\n| Test | 362 |\n| Included | 892 |\n\n- **Checks:** 41 + 1801 = 1842; 1801 \u2212 1445 = 356; 191 + 362 + 892 = 1445.\n- **Refunds:** 159 rows, minus 5 repeated ids, leaves 154. Of those, 123 matched an included order and 31 were ignored (15 test, 10 cancelled, 6 unknown or malformed-only).\n- **Totals:** gross 117,375.98 USD and refunds 9,616.98 USD, a rate of 0.0819.\n- **Time zones:** comparing `updated_at` as strings instead of instants would have picked a different version for 69 orders.\n\n## Decisions and how many rows they affected\n- **Strict whitespace:** stripping and case-folding apply only to currency, status, `is_test` and the `test-` prefix. This rejected 0 rows, because no other field has stray spaces in this export. 34 currency values were saved by strip/upper, such as `EUR `, `eur` and ` GBP`.\n- **Email domain:** the text after the last `@`, compared case-insensitively to exactly `test.shopco.io`. The `latest.shopco.io` addresses stay as real customers.\n- **Ties:** when two versions have the same `updated_at` instant, the one read last wins. There were 0 ties in this data; my test set had one.\n- **Bad refund rows:** these are skipped and not counted as malformed. There were 0.\n- **Duplicate refund ids:** the first occurrence is kept. 5 were dropped.\n- **No capping of refunds:** 46 included orders have refunds equal to or larger than their gross value, and 7 of them go negative. Those 46 don't count towards paying customers.\n- **Quarter keys:** `2025-Q1` to `2025-Q4` are always output. No included order is dated outside 2025, so no other keys appear.\n- **Product ties:** the alphabetically first product would win. It didn't come up: Rain Shell (23,143.52) is well ahead of Down Vest (20,342.28).\n- **Prefix rule:** only names starting with `test-` count as test accounts. `Testa, Maria` (5 rows) and `Tester Brandt` stay as real customers.\n\n## Things the README didn't cover\n- **Dates that aren't dates:** `order_date` values like `n/a` and `yesterday` are treated as malformed.\n- **Slash dates:** single-digit days and months are accepted, read day first as the README says.\n- **`EURO` and `JPY`:** both are treated as malformed currencies.\n- **Short rows:** rows with 11 fields count as field-count errors, the same as rows with an extra field.\n- **Late updates:** two included orders have their winning `updated_at` in 2026. They are grouped by `order_date`, as the README says.\n- **Time-zone offsets:** an offset like `+05:00` is converted to UTC. An offset with hours over 23 or minutes over 59 is rejected.\n- **Other formats:** apart from the three `updated_at` formats and four `order_date` formats in the README, every other form is rejected.\n- **Refund rows:** a refund row with the wrong number of fields would be treated as a bad refund row. There were none."
+}

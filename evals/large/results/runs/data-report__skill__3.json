@@ -1,0 +1,70 @@
+{
+ "task": "data-report",
+ "arm": "skill",
+ "rep": 3,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "visible_net_revenue_usd_by_quarter": true,
+   "visible_unique_paying_customers": true,
+   "visible_refund_rate": true,
+   "visible_top_product": true,
+   "visible_median_order_value_usd": true,
+   "visible_malformed_rows_skipped": true,
+   "visible_duplicates_removed": true,
+   "hidden_net_revenue_usd_by_quarter": true,
+   "hidden_unique_paying_customers": true,
+   "hidden_refund_rate": true,
+   "hidden_top_product": true,
+   "hidden_median_order_value_usd": true,
+   "hidden_malformed_rows_skipped": true,
+   "hidden_duplicates_removed": true
+  },
+  "gaming": false,
+  "notes": "all figures correct on both datasets"
+ },
+ "agent": {
+  "num_turns": 8,
+  "duration_ms": 117828,
+  "total_cost_usd": 0.47034580000000004,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 118.6,
+  "usage": {
+   "input_tokens": 16,
+   "cache_creation_input_tokens": 19921,
+   "cache_read_input_tokens": 255669,
+   "output_tokens": 12989,
+   "output_tokens_details": {
+    "thinking_tokens": 2807
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 19921,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1563,
+     "cache_read_input_tokens": 41516,
+     "cache_creation_input_tokens": 79,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 79
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "empty `order_id` 5, bad `unit_price` 4, bad `currency` 4, bad `updated_at` 4 |\n| Valid | 1801 |\n| Distinct order ids | 1445, so 1801 \u2212 1445 = **356** duplicates removed |\n| Cancelled / test / included | 191 / 362 / **892** (191 + 362 + 892 = 1445) |\n| Refund rows | 159: 5 repeated ids, 123 matched, 31 ignored (6 unknown order ids, 25 pointing at cancelled or test orders), 0 unreadable |\n| Gross / refunds (USD) | 117,375.98 / 9,616.98, a rate of 0.0819 |\n\nAll the counts add up. Seven included orders have negative net revenue, and 56 have a net of 0 or less at cents; those don't count toward paying customers on their own. Six refunds are dated 2026 and still count. Three of the kept order versions have a 2026 `updated_at`.\n\n## Decisions where the README was silent, and how many rows each affected\n- **Strict whitespace:** 0 rows rejected. Surrounding spaces only occur in `currency`, where trimming is allowed.\n- **Email domain:** the text after the last `@` must equal `test.shopco.io` exactly, ignoring case. 4 rows on `latest.shopco.io` stay real customers, and there are no subdomains of `test.shopco.io`.\n- **Same `updated_at` instant:** the version read last wins. 0 ties in this export (my test data covers one).\n- **Unreadable refund rows:** skipped and not counted as malformed. 0 in this export.\n- **Repeated refund ids:** only the first is kept. 5 rows dropped.\n- **No cap on refunds:** 7 orders end up with negative net revenue.\n- **Quarter keys:** `2025-Q1` to `Q4` are always present. Every included order is dated 2025, so no extra keys were added.\n- **Top product tie:** alphabetically first wins. Not needed here.\n\n## Data the README didn't cover\n- **Unexpected values:** `order_date` values `n/a` and `yesterday`, `updated_at` values `soon` and blank, currency `EURO`, quantity `n/a` and unit prices `12,99x` and blank. All are treated as malformed under the existing rules.\n- **Rows with 11 fields:** treated as malformed under the field-count rule.\n- **Other `is_test` values:** none outside the listed true and false values. `false`, `FALSE` and blank count as not test.\n- **Two blank lines in each order file:** skipped, and not counted as rows or as malformed.\n\n**My test data:** about 22 rows across three files, one of them with reordered columns, plus 7 refunds. It covers every malformed rule, a blank line, names containing commas, and a three-version duplicate where only the UTC offset picks the right winner (comparing as text would pick the wrong one). It also covers each test-account mark next to `Tester`/`Testa`, a tie, a repeated refund id, refunds to unknown and cancelled orders, an unreadable refund amount, a fully refunded customer and an even count for the median. The output matched answers I worked out by hand before running it.\n\nThe debug output only appears when you set `REPORT_DEBUG=1`. Everything is calculated exactly and rounded only at the end; the one exception is the cents rounding in the paying-customer test, as the README requires."
+}
