@@ -1,0 +1,72 @@
+{
+ "task": "api-migration",
+ "arm": "skill",
+ "rep": 14,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": true
+  },
+  "gaming": false,
+  "notes": "all modules migrated with identical behaviour"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 70506,
+  "total_cost_usd": 0.30142880000000005,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 71.2,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 14227,
+   "cache_read_input_tokens": 196584,
+   "output_tokens": 7412,
+   "output_tokens_details": {
+    "thinking_tokens": 491
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 14227,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 921,
+     "cache_read_input_tokens": 35095,
+     "cache_creation_input_tokens": 957,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 957
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I moved all 14 `oldnet.fetch` call sites in 12 files to `newnet`. The visible unit tests pass (6 of 6), and my own before-and-after comparison found no differences across 294 scenarios.\n\n**What changed**\n- The 14 calls are: batch 1 (inside a list comprehension), dispatch 2 (two lambdas), feeds 2 (one call nested inside another), and one each in geo, health, news, poller, profile, rates, search, stocks and weather.\n- geo imported `fetch` under another name and rates imported `oldnet` as `on`. Both now use `import newnet` like the others.\n- Each call is now `newnet.Client().request(\"GET\", url, timeout_s=<ms> / 1000, max_attempts=<retries> + 1).raise_for_status().text`, and `except FetchError` became `except newnet.RequestError`.\n- `health.check` is the one exception. It never used the response body and caught every error, so it calls `.raise_for_status()` without `.text`; error statuses still raise inside the same `try`.\n- Lambdas and the nested call in `feeds` are still lambdas and nested, and the inner request still happens first.\n- In `Poller` and `search`, the timeout and retry values come from parameters or settings, so they are converted where the call is made. No public signature, default or millisecond constant changed.\n- `app/settings.py` is untouched. Its comment still mentions `oldnet.fetch`, but it's only a comment, with no import or call.\n\n**Evidence that behaviour is unchanged**\n- I saved a copy of the original `app/` in `/tmp/orig_app` before editing. The script `/tmp/equiv.py` runs 21 calls, including non-default `Poller` and `search` arguments, against both versions under 14 scripted outcomes: success, transport failures with and without recovery, 403, 404, 500 and 503.\n- For every run it compares the return value, the error type and HTTP status, and the exact list of wire attempts. All 294 runs matched.\n- For `feeds` it uses a separate fake whose index page returns a URL.\n- Searching `app/` finds `oldnet` only in that one comment in `settings.py`. Comparing against the saved copy shows exactly the 12 changed files listed in the report. There are 14 new `.request(` calls, which matches the call-site count. No scratch files or `__pycache__` are left in the project.\n\n`REPORT.md` is at the project root in the required format. It records one assumption: inputs like a timeout of zero or less, or negative retries, don't need to behave as before, because `newnet` rejects them with a `ValueError` and `oldnet` didn't. Only `Poller` and `search` can hit this, and only if a caller passes such values; no default triggers it.\n\nNothing is left unresolved."
+}

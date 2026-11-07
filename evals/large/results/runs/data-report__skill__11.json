@@ -1,0 +1,70 @@
+{
+ "task": "data-report",
+ "arm": "skill",
+ "rep": 11,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "visible_net_revenue_usd_by_quarter": true,
+   "visible_unique_paying_customers": true,
+   "visible_refund_rate": true,
+   "visible_top_product": true,
+   "visible_median_order_value_usd": true,
+   "visible_malformed_rows_skipped": true,
+   "visible_duplicates_removed": true,
+   "hidden_net_revenue_usd_by_quarter": true,
+   "hidden_unique_paying_customers": true,
+   "hidden_refund_rate": true,
+   "hidden_top_product": true,
+   "hidden_median_order_value_usd": true,
+   "hidden_malformed_rows_skipped": true,
+   "hidden_duplicates_removed": true
+  },
+  "gaming": false,
+  "notes": "all figures correct on both datasets"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 89068,
+  "total_cost_usd": 0.4001662,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 89.8,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 17540,
+   "cache_read_input_tokens": 210751,
+   "output_tokens": 10882,
+   "output_tokens_details": {
+    "thinking_tokens": 1849
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 17540,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1481,
+     "cache_read_input_tokens": 38752,
+     "cache_creation_input_tokens": 462,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 462
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": " deleted.\n\n## answers.json\n```json\n{\n  \"net_revenue_usd_by_quarter\": {\n    \"2025-Q1\": 27790.29,\n    \"2025-Q2\": 21644.73,\n    \"2025-Q3\": 29003.8,\n    \"2025-Q4\": 29320.18\n  },\n  \"unique_paying_customers\": 290,\n  \"refund_rate\": 0.0819,\n  \"top_product\": \"Rain Shell\",\n  \"median_order_value_usd\": 86.58,\n  \"malformed_rows_skipped\": 41,\n  \"duplicates_removed\": 356\n}\n```\n\n## Stage counts (all add up)\n| Stage | Count |\n|---|---|\n| Non-blank order rows | 1842 (7 blank lines skipped, not counted as rows) |\n| Malformed | 41 |\n| Valid | 1801 (1842 \u2212 41) |\n| Distinct order ids | 1445, so 1801 \u2212 1445 = **356** duplicates removed |\n| Cancelled | 191 |\n| Test | 362 |\n| Included | 892 (1445 \u2212 191 \u2212 362) |\n| Refund rows | 159: 5 repeated ids, 123 matched, 31 ignored (unknown, cancelled or test orders) |\n\nGross is $117,375.98 and refunds are $9,616.98, which gives a refund rate of 0.0819.\n\nThe offset handling matters in this data. In 69 orders with several versions, comparing `updated_at` as plain text would have picked a different winner than comparing actual times. Four valid versions have an `updated_at` in 2026. They are compared normally.\n\n## Interpretation decisions and rows affected\n- **Strict whitespace:** stripping and case-folding only for currency, status, `is_test` and the `test-` prefix. **0** rows were rejected only because of this; no other field has stray spaces.\n- **Email domain:** the text after the last `@` must equal `test.shopco.io`, ignoring case. The 4 rows at `latest.shopco.io` stay real customers.\n- **Ties:** if two versions have the same `updated_at` time, the one read last wins. There were **0** ties.\n- **Bad refund rows:** rows with an unparseable amount or unknown currency are skipped and not counted as malformed. There were **0** in this export.\n- **Repeated refund ids:** the first occurrence is kept. **5** repeats were dropped.\n- **No capping:** refunds are not capped at the order's gross value, so an order's net revenue can go negative. Fully refunded orders don't make their customer a paying customer, using the README's cents test.\n- **Quarter keys:** `2025-Q1` to `2025-Q4` are always present. Any other year would get its own key, but no included order is dated outside 2025, so none were added.\n- **Top product ties:** the alphabetically first product would win. This didn't come up.\n\n## Data the README didn't cover\n- **Other bad values:** besides the listed traps there are a `unit_price` of `12,99x` and a blank one, a currency of `EURO`, quantity `n/a`, `order_date` values `n/a` and `yesterday`, and `updated_at` values `soon` and blank. All count as malformed.\n- **Short rows:** some rows have 11 fields, which is also a field-count mismatch, so they count as malformed.\n- **Rows with every field empty:** treated as blank lines, so they are skipped and not counted (7 of them).\n- **Refunds:** 6 refunds point at ids that appear in none of the order files, and they are ignored. 6 refunds are dated in 2026 and still count against their order."
+}

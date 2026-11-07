@@ -1,0 +1,72 @@
+{
+ "task": "api-migration",
+ "arm": "skill",
+ "rep": 7,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": true
+  },
+  "gaming": false,
+  "notes": "all modules migrated with identical behaviour"
+ },
+ "agent": {
+  "num_turns": 8,
+  "duration_ms": 80126,
+  "total_cost_usd": 0.3291322,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 80.8,
+  "usage": {
+   "input_tokens": 16,
+   "cache_creation_input_tokens": 15127,
+   "cache_read_input_tokens": 233561,
+   "output_tokens": 8067,
+   "output_tokens_details": {
+    "thinking_tokens": 580
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 15127,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 939,
+     "cache_read_input_tokens": 35766,
+     "cache_creation_input_tokens": 1186,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1186
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I moved all 14 `oldnet.fetch` call sites in `app/` to `newnet`, and every `app/` function behaves the same as the original in every case I tested.\n\n**What changed:** 12 files: `batch`, `dispatch`, `feeds`, `geo`, `health`, `news`, `poller`, `profile`, `rates`, `search`, `stocks` and `weather`.\n- Each module now imports `newnet` and creates one client, `_client = newnet.Client()`.\n- Each call is now `_client.request(\"GET\", url, timeout_s=<ms> / 1000, max_attempts=<retries> + 1).raise_for_status().text`.\n- `health.py` drops the `.text` because it never uses the body and catches every error. A 4xx/5xx response still raises inside its `try`.\n- Every `except FetchError` (including the `on.` alias and the directly imported name) is now `except newnet.RequestError`.\n- The two lambdas in `dispatch.py` are still lambdas, and the nested call in `feeds.py` still runs the inner request first.\n- Public signatures and the millisecond / extra-retry parameters are unchanged. `settings.py` and `__init__.py` are untouched.\n\n**Evidence that behaviour is unchanged:**\n- The unit tests pass (6 of 6).\n- `/tmp/equiv.py` ran the original code (copied to `/tmp/orig_app`) and the new code side by side over 304 scenarios, with **0 mismatches**. There are 19 cases with 16 outcome scripts each, covering success, transport failures with and without recovery, 4xx and 5xx. The cases include non-default `Poller` and `search` arguments, and `feeds` gets its own fake whose index body is a URL. Each scenario compares the return value, the escaping error (its class, its `.status`, and whether it's an `HTTPError`) and the exact sequence of wire attempts.\n- I checked that the original copy really loads from its own files, so the zero isn't a case of both sides failing the same way.\n\n**Checks on the result:**\n- `app/` now contains exactly 14 `.request(` calls, matching the count.\n- `REPORT.md`'s file list comes from `diff -rq` against the snapshot.\n- No `__pycache__` or scratch files are left in the project.\n- The only remaining mention of `oldnet` is a comment in `settings.py`. It isn't a call or an import, and you asked for that file to stay untouched.\n\n**Unresolved:** nothing. `REPORT.md` records one assumption: invalid inputs such as `timeout_ms <= 0` or `retries < 0` are out of scope, because `newnet` raises `ValueError` for them and `oldnet` didn't. No `app/` function hits that case with its own constants. Only `Poller` and `search` pass caller-supplied values through."
+}

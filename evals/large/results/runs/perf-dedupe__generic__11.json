@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "generic",
+ "rep": 11,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 203577,
+  "total_cost_usd": 0.16929919999999998,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 204.4,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 7812,
+   "cache_read_input_tokens": 155336,
+   "output_tokens": 3784,
+   "output_tokens_details": {
+    "thinking_tokens": 278
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 7812,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 545,
+     "cache_read_input_tokens": 25327,
+     "cache_creation_input_tokens": 897,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 897
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes 0.22 seconds on the 20k sample, down from 84.24 seconds, and its output is exactly the same, cluster id for cluster id.\n\n**What was slow:** it compared every pair of records, about 200 million checks for 20,000 records. Each time two clusters merged, it also rewrote the whole label list.\n\n**The fix (in `dedupe.py`):** it now makes one pass over the records and remembers the first record that had each match key. When a later record has the same key, the two records' clusters are joined. Two records end up together exactly when they share a key, directly or through a chain of other records, so the clusters are the same as before. The step that numbers the clusters (largest first, ties broken by smallest record index) is unchanged. So are the normalisation rules, `record_keys`, and the function signature. It still uses only the standard library and doesn't cache anything.\n\n**Checks I ran:**\n- The unit tests pass.\n- The output on `bench/sample_20k.csv` is identical to the original version's, which I saved before making the change.\n- I ran 3,000 random small inputs through both the original and the new version and got the same output every time. The inputs used tricky values: `+` tags, malformed emails, full-width characters and ligatures, 11-digit phone numbers starting with 1, short phone numbers, and empty fields.\n\n`REPORT.md` has `BEFORE_SECONDS: 84.24` and `AFTER_SECONDS: 0.22`. The after figure is the slowest of three runs (0.11, 0.21 and 0.22 seconds). The old `_shares_key` helper is no longer used, but I left it in place in case anything else imports it."
+}

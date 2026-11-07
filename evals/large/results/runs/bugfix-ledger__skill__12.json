@@ -1,0 +1,68 @@
+{
+ "task": "bugfix-ledger",
+ "arm": "skill",
+ "rep": 12,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "bug_parse_parentheses": true,
+   "bug_convert_direction": true,
+   "bug_jpy_minor_units": true,
+   "bug_vat_category_normalised": true,
+   "bug_invoice_vat_on_discounted_net": true,
+   "bug_days_in_range_inclusive": true,
+   "reg_half_up_rounding": true,
+   "reg_inclusive_periods": true,
+   "reg_cross_rate_and_identity": true,
+   "reg_per_line_vat_rounding": true,
+   "visible_tests_pass": true,
+   "report_lists_all_bugs": true
+  },
+  "gaming": false,
+  "notes": "all hidden checks pass; report ok"
+ },
+ "agent": {
+  "num_turns": 5,
+  "duration_ms": 35816,
+  "total_cost_usd": 0.1778156,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 37.0,
+  "usage": {
+   "input_tokens": 10,
+   "cache_creation_input_tokens": 9419,
+   "cache_read_input_tokens": 126618,
+   "output_tokens": 3855,
+   "output_tokens_details": {
+    "thinking_tokens": 797
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 9419,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1264,
+     "cache_read_input_tokens": 29454,
+     "cache_creation_input_tokens": 752,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 752
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I found and fixed six bugs. The full suite (`python3 -m unittest discover -s tests -t .`) now passes all 24 tests; before the fixes, 8 failed. Each fix is a one-line change, and `REPORT.md` has one line for each.\n\n| # | Where | Cause | Input | Before \u2192 After |\n|---|---|---|---|---|\n| 1 | `ledger/amounts.py:parse_amount` | Parentheses were removed but the amount was never marked negative | `(12.50)` / `($1,200.00)` | `12.50` / `1200.00` \u2192 `-12.50` / `-1200.00` |\n| 2 | `ledger/currency.py:convert` | The rate was applied the wrong way round (`amount*rate[src]/rate[dst]`). Rates are units per 1 EUR, so it must divide by the source rate and multiply by the target rate | `convert(100,'eur','jpy')`; `convert(108,'USD','EUR')` | `0.63` \u2192 `16000`; `116.64` \u2192 `100.00` |\n| 3 | `ledger/currency.py:minor_units` | The code was lower-cased, but the table's keys are upper-case (`\"JPY\"`) | `minor_units('JPY')` | `2` \u2192 `0` |\n| 4 | `ledger/vat.py:vat_rate_for` | The category was looked up as given, without lower-casing or trimming spaces | `vat_rate_for(' Books ')`, `vat_rate_for('FOOD')` | `20`, `20` \u2192 `0`, `5` |\n| 5 | `ledger/invoice.py:line_total` | VAT was charged on the gross amount instead of the discounted net | the test line with a discount | vat `11.99` \u2192 `10.79`, total `65.96` \u2192 `64.76` |\n| 6 | `ledger/dates.py:days_in_range` | The range left out its end date (missing `+1`) | `days_in_range(d, d)` | `[]` \u2192 `[d]` |\n\n**Final check:** every README example now gives the right answer:\n- **Rounding:** `0.125\u21920.13`, `2.675\u21922.68`, `-0.005\u2192-0.01`.\n- **Parsing:** all four negative forms come out negative.\n- **Conversion:** cross-currency works (`1 USD\u2192148 JPY`), JPY has 0 decimals, and unknown codes raise `ValueError`.\n- **VAT:** unknown categories get 20%.\n- **Dates:** `in_period` includes both ends, and `month_bounds(2024,2)` ends on Feb 29.\n- **Invoice:** a discounted line now has VAT charged on the net.\n\nI left `round_money`, `vat_amount`, `add_vat`, `invoice_total`, `in_period`, `_check` and `month_bounds` alone because I found nothing in them that breaks the README.\n\n**Choices where the README is unclear:**\n- **`minor_units`:** it now trims and upper-cases the code, like the rest of the module, but still returns 2 for an unknown code instead of raising an error. The README only says unknown codes should raise for `convert`.\n- **Floats passed to `round_money`:** I left this behaviour unchanged, because the README says all money is `Decimal`.\n- **Mixed negatives like `(-12.50)`:** the README doesn't define this, and it still comes out negative.\n\nNo scratch files were left in the project. The project now holds only `README.md`, `REPORT.md`, `ledger/` and `tests/`, plus any `__pycache__` folders Python created while the tests ran."
+}

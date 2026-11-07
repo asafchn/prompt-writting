@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "skill",
+ "rep": 6,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 13,
+  "duration_ms": 126834,
+  "total_cost_usd": 0.2889612,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 127.6,
+  "usage": {
+   "input_tokens": 22,
+   "cache_creation_input_tokens": 10797,
+   "cache_read_input_tokens": 307686,
+   "output_tokens": 7048,
+   "output_tokens_details": {
+    "thinking_tokens": 430
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 10797,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 886,
+     "cache_read_input_tokens": 32028,
+     "cache_creation_input_tokens": 186,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 186
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes **0.22 s** on the 20k sample, down from **85.72 s**. Its output matched the original implementation exactly in every check I ran.\n\n**The change** (only `cluster_records` in `dedupe.py`): it no longer compares every pair of records or rebuilds the label list on each merge. Instead it:\n- computes `record_keys` once per record;\n- keeps a dict from each key to the first record index that had it;\n- merges each later record with that index using union-find with path compression.\n\nThe final grouping and the sort by `(-size, smallest index)` are unchanged. The ids depend only on which records end up together, so the order of merging doesn't affect them. The normalisers, `record_keys`, `load_csv`, the docstring, the tests and the bench files are all untouched. There is no caching and nothing specific to the sample file.\n\n**Timings:**\n- **Before:** 85.72 s, one background run of the original code, timed the same way as `run_bench.py`.\n- **After:** 0.22 s, 0.21 s and 0.31 s over three `run_bench.py` runs; the median, 0.22 s, is what the report uses.\n\n**Equivalence evidence:**\n- **Unit tests:** all 8 pass, unchanged.\n- **20k sample:** all 20,000 ids are identical to the original's (7,101 clusters).\n- **Random differential test against the original code:**\n  - 3,201 cases of 0\u201360 records each, with 0 mismatches. They include the empty input, 200 cases built with several equal-size clusters to test the tie-break, missing keys, `None`, `+tags`, `@@`, missing local part or domain, upper case and padded emails, full-width and Arabic-Indic digits, 6/7/10/11-digit phones, `\u00df`/`STRASSE`, `_`, and names differing only in punctuation or case.\n  - 401 larger cases of 100\u2013400 records each, also with 0 mismatches.\n\n**Not verified:**\n- I only timed it on this machine; the grader's machine may be slower, though 0.22 s leaves plenty of room under 3 s.\n- The random tests drew values from a fixed pool, so they can't prove equivalence for every possible input. The argument rests on the merge order not mattering, and on the normalisers being unchanged.\n- I didn't test fields that are something other than a string or `None` (for example an int). Those values reach the unchanged `record_keys`, so they should behave as before, but I didn't check.\n\n`REPORT.md` is in the project root with the required `BEFORE_SECONDS` and `AFTER_SECONDS` lines. The reference copy, test scripts and notes are in `/tmp/dedupe_work/`."
+}

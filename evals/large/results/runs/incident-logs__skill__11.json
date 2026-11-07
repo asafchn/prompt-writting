@@ -1,0 +1,62 @@
+{
+ "task": "incident-logs",
+ "arm": "skill",
+ "rep": 11,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "root_cause_change_id": true,
+   "root_cause_service": true,
+   "incident_start_utc": true,
+   "incident_end_utc": true,
+   "failed_payment_requests": true,
+   "trigger_evidence": true
+  },
+  "gaming": false,
+  "notes": "all fields correct"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 83077,
+  "total_cost_usd": 0.370752,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 83.8,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 18450,
+   "cache_read_input_tokens": 189780,
+   "output_tokens": 9257,
+   "output_tokens_details": {
+    "thinking_tokens": 997
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 18450,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1324,
+     "cache_read_input_tokens": 35054,
+     "cache_creation_input_tokens": 3990,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 3990
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`REPORT.md` is written, and all six fields match what my script computed. The trigger was **CHG-7738**, a config change that cut the db-proxy connection pool from 200 to 24.\n\n```\nROOT_CAUSE_CHANGE_ID: CHG-7738\nROOT_CAUSE_SERVICE: db-proxy\nINCIDENT_START_UTC: 2026-11-06T09:14Z\nINCIDENT_END_UTC: 2026-11-06T10:22Z\nFAILED_PAYMENT_REQUESTS: 1152\nTRIGGER_EVIDENCE: 1793956361212 INFO config reload change=CHG-7738 pool.max_connections 200->24\n```\n\n**Key evidence.** After converting every clock to UTC, each change's log line matches its CSV time to within 2.5 seconds.\n- **09:12:41**: db-proxy logs the CHG-7738 reload (200\u219224). Ten seconds later the pool shows 24 of 24 in use.\n- **09:14:00**: the first \"pool exhausted\" warning appears, with 229 requests waiting for a connection.\n- **09:14:04**: the first 5-second connection timeout for payments.\n- **09:14:06**: the first payments `db_timeout` (local time 11:14:06).\n- **Before the change:** all 1,750 pool stats lines show nobody waiting.\n- **The end:** the revert, CHG-7745, landed at 10:21:31. The last db-proxy connection timeout was at 10:22:20 and the last payments `db_timeout` at 10:22:24, once the queue had drained.\n\n**Other candidates ruled out.**\n- **D-2291 (scheduler deploy, 09:04):** this is the nearby change with its own errors, 23 `lock_wait_timeout` failures from 09:05 to 09:30. They started 8 minutes before any pool trouble, while db-proxy still had 200 connections and nobody waiting. They stopped at 09:30 although D-2291 was never reverted, and payments kept failing until 10:22.\n- **CHG-7734 (db-proxy statement cache, 09:05):** the pool stayed healthy for 7 minutes after it, and it was never reverted.\n- **CHG-7740 (api burst limit, 09:31):** this was a response to the retry storm, applied after the timeouts had started. CHG-7747 undid it after the incident was over.\n- **The rest (CHG-7731, D-2284, D-2287, D-2296):** these came hours before or after the incident, and nothing changed when they landed.\n\n**How I counted.** All 12,440 payments lines parsed, with none skipped. For each request I kept the attempt with the highest number and counted those with a final 5xx that finished between 09:14:00 and 10:23:00 UTC. That gives 1,152: 1,145 `db_timeout` and 7 `ledger_conflict`, all failing on their third attempt. The numbers fit together: 1,838 requests failed their first attempt, 686 were saved by a retry and 1,152 still failed. The 77 card declines in the window were not counted.\n\n**Assumptions.**\n- The 7 `ledger_conflict` errors happen at a low rate all day, but they are counted because the README says every 5xx counts.\n- A request is placed in the window by when its last attempt finished.\n- One db-proxy stats line, stamped 980 ms before the revert's reload line, already shows 200 connections. I treated this as a timestamp quirk; it doesn't change any field.\n\nMy script and notes are in `_work/` (`analyze.py`, `out.txt`, `notes.md`, `evidence.txt`). Nothing in `logs/` or the CSVs was modified."
+}

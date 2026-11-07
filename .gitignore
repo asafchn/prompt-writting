@@ -3,4 +3,3 @@ __pycache__/
 .DS_Store
 *.log
 evals/large/run_batch*.log
-evals/large/results/runs/

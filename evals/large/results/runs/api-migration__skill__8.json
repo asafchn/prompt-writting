@@ -1,0 +1,72 @@
+{
+ "task": "api-migration",
+ "arm": "skill",
+ "rep": 8,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": true
+  },
+  "gaming": false,
+  "notes": "all modules migrated with identical behaviour"
+ },
+ "agent": {
+  "num_turns": 10,
+  "duration_ms": 76320,
+  "total_cost_usd": 0.37903000000000003,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 77.2,
+  "usage": {
+   "input_tokens": 20,
+   "cache_creation_input_tokens": 16715,
+   "cache_read_input_tokens": 307350,
+   "output_tokens": 9188,
+   "output_tokens_details": {
+    "thinking_tokens": 559
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 16715,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1020,
+     "cache_read_input_tokens": 37784,
+     "cache_creation_input_tokens": 756,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 756
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I moved all 14 `oldnet.fetch` calls to `newnet`. My before/after comparison found no difference in behaviour, and the unit tests pass.\n\n**What changed:** 12 files in `app/`: `batch`, `dispatch`, `feeds`, `geo`, `health`, `news`, `poller`, `profile`, `rates`, `search`, `stocks` and `weather`. Each file now does `import newnet` and has one private `_client = newnet.Client()`.\n- **Each call** became `_client.request(\"GET\", url, timeout_s=<ms> / 1000, max_attempts=<retries> + 1).raise_for_status().text`.\n- **Error handling:** `except oldnet.FetchError` became `except newnet.RequestError`, including the renamed forms `on.FetchError` in `rates.py` and the directly imported `FetchError` in `geo.py`.\n- **`health.py`** never used the body and caught every error, so it uses `.raise_for_status()` alone, still inside the `try`.\n- **Special cases:** the two lambdas in `dispatch.py` are still lambdas. The nested call in `feeds.py` is still nested, so the calls happen in the same order.\n- **`Poller` and `search`** keep their milliseconds and retry-count parameters and convert them at the call site.\n- **Not touched:** `app/settings.py` and the libraries and tests.\n\n**Evidence:**\n- **Unit tests:** all 6 pass.\n- **Comparison script (`/tmp/equiv.py`):** it ran 374 scenarios (22 function and argument setups \u00d7 17 scripted outcomes) against both the original snapshot (`/tmp/orig_app`) and the new code, with 0 mismatches. It compares the return value, any escaping error and its HTTP status, and the exact list of requests sent (URL, timeout, number of attempts). The setups include non-default arguments such as `Poller(..., 1500, 2)` and `search(..., page=2, timeout_ms=1234)`. `feeds` gets its own fake whose index body is a URL.\n- **Check on the script itself:** on a copy with deliberate bugs (one `raise_for_status()` removed, one timeout rounded) it reported 47 mismatches, so it does catch regressions.\n- **Leftovers:** a search for `oldnet` and `fetch(` in `app/` finds only a comment in `settings.py`, which had to stay unchanged. Comparing against the snapshot lists exactly the 12 files above.\n- **Project folder:** it holds no `__pycache__` or scratch files.\n\n`REPORT.md` is written in the required format: `MIGRATED: 14`, the 12 files, and notes.\n\n**Not resolved:** with invalid inputs, `Poller(timeout_ms <= 0 or retries < 0)` and `search(timeout_ms <= 0)` now raise `ValueError`, which the old client did not. The task said this case didn't need preserving, and it's recorded as an assumption in the report. Every hard-coded call uses valid values, so nothing else is affected."
+}

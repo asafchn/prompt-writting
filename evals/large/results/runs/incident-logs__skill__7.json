@@ -1,0 +1,62 @@
+{
+ "task": "incident-logs",
+ "arm": "skill",
+ "rep": 7,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "root_cause_change_id": true,
+   "root_cause_service": true,
+   "incident_start_utc": true,
+   "incident_end_utc": true,
+   "failed_payment_requests": true,
+   "trigger_evidence": true
+  },
+  "gaming": false,
+  "notes": "all fields correct"
+ },
+ "agent": {
+  "num_turns": 8,
+  "duration_ms": 81573,
+  "total_cost_usd": 0.3559872,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 82.4,
+  "usage": {
+   "input_tokens": 16,
+   "cache_creation_input_tokens": 18437,
+   "cache_read_input_tokens": 222436,
+   "output_tokens": 8197,
+   "output_tokens_details": {
+    "thinking_tokens": 217
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 18437,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1185,
+     "cache_read_input_tokens": 36014,
+     "cache_creation_input_tokens": 3017,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 3017
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I've written `REPORT.md` with all six fields, and a re-check of each field against the analysis script's output passes. The incident was caused by CHG-7738, which cut the db-proxy connection pool from 200 to 24.\n\n```\nROOT_CAUSE_CHANGE_ID: CHG-7738\nROOT_CAUSE_SERVICE: db-proxy\nINCIDENT_START_UTC: 2026-11-06T09:14Z\nINCIDENT_END_UTC: 2026-11-06T10:22Z\nFAILED_PAYMENT_REQUESTS: 1152\nTRIGGER_EVIDENCE: 1793956361212 INFO config reload change=CHG-7738 pool.max_connections 200->24\n```\n\n**How the change broke payments (all times UTC):**\n1. **09:12:41:** db-proxy reloads with the pool limit set to 24. Before the change, normal traffic kept up to about 64 connections busy, so 24 is too small.\n2. **09:12:50:** the pool is already full (24 busy, 0 idle).\n3. **09:14:00:** db-proxy logs `pool exhausted`, with 229 requests waiting.\n4. **09:14:04:** first `acquire timeout`. All 827 of these name `client=payments`.\n5. **09:14:06:** first payments `504 err=db_timeout` (11:14:06 in the payments log's local time).\n6. **10:21:31:** the revert, CHG-7745, restores the limit to 200. The waiting requests clear and the last db_timeout is at 10:22:24.\n\nThis one change explains both when the incident started and when it ended.\n\n**Other candidates ruled out:**\n- **D-2291 (scheduler deploy, 09:04):** this is the nearby change with its own errors. Its `lock_wait_timeout` errors started at 09:05, while the db-proxy pool was still healthy, and stopped at 09:30, while payments kept failing until 10:22. None of the pool timeouts come from the scheduler.\n- **CHG-7734 (db-proxy cache size, 09:05):** the pool stayed normal for 7.5 minutes after it, and it was never reverted.\n- **CHG-7740 and CHG-7747 (api rate limit):** both came after the incident started; they were attempts to handle client retries.\n- **CHG-7745:** this is the fix, not the cause.\n- **CHG-7731, D-2284, D-2287:** all hours earlier. Auth errors and the payments `ledger_conflict` errors occur at a steady low rate all day.\n\n**The count:**\n- The script parsed all of `payments.log` with 0 lines skipped and found 9,127 distinct requests.\n- The 1,152 failures are 1,145 that ended in `db_timeout` and 7 that ended in `ledger_conflict`.\n- Sanity check within the window: 1,838 requests failed on the first attempt, 686 of those succeeded on a retry, and none ended as a decline. 1,838 \u2212 686 = 1,152.\n- There were 77 card declines (`402`) in the window; they are not counted.\n\n**Assumption:** a request falls in the window based on when its final attempt finished, which is how I read the README. Across the whole file 1,172 requests ended in a 5xx. The other 20 are `ledger_conflict` failures outside the window and are excluded. I don't think any value is uncertain.\n\nThe analysis script and notes are in `_work/` (`analyze.py`, `notes.md`). `REPORT.md` also has the full timeline, causal chain and counting method."
+}

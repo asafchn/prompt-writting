@@ -1,0 +1,62 @@
+{
+ "task": "incident-logs",
+ "arm": "skill",
+ "rep": 9,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "root_cause_change_id": true,
+   "root_cause_service": true,
+   "incident_start_utc": true,
+   "incident_end_utc": true,
+   "failed_payment_requests": true,
+   "trigger_evidence": true
+  },
+  "gaming": false,
+  "notes": "all fields correct"
+ },
+ "agent": {
+  "num_turns": 8,
+  "duration_ms": 91505,
+  "total_cost_usd": 0.4188274,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 93.1,
+  "usage": {
+   "input_tokens": 16,
+   "cache_creation_input_tokens": 21431,
+   "cache_read_input_tokens": 236477,
+   "output_tokens": 10001,
+   "output_tokens_details": {
+    "thinking_tokens": 608
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 21431,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1282,
+     "cache_read_input_tokens": 38443,
+     "cache_creation_input_tokens": 3582,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 3582
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "fields against the analysis output and the source files.\n\n```\nROOT_CAUSE_CHANGE_ID: CHG-7738\nROOT_CAUSE_SERVICE: db-proxy\nINCIDENT_START_UTC: 2026-11-06T09:14Z\nINCIDENT_END_UTC: 2026-11-06T10:22Z\nFAILED_PAYMENT_REQUESTS: 1152\nTRIGGER_EVIDENCE: 1793956361212 INFO config reload change=CHG-7738 pool.max_connections 200->24\n```\n\n**Root cause:** CHG-7738 cut db-proxy's connection pool from 200 to 24, at 09:12:41 UTC. Payments normally uses about 20\u201360 connections at once, so the smaller pool filled up and payments requests failed waiting for a connection.\n- **Within 9 seconds,** db-proxy showed the pool full (`active=24 idle=0`).\n- **From 09:14:00,** db-proxy logged `pool exhausted`, then `acquire timeout client=payments` from 09:14:04.\n- **From 09:14:06,** payments logged `504 err=db_timeout msg=\"db-proxy acquire timeout\"`, and retries made the load worse.\n- **The incident ended with the revert.** CHG-7745 set the pool back to 200 at 10:21:30, and the last payments db_timeout was at 10:22:24. Every db_timeout falls between the change and its revert.\n\n**Other candidates ruled out:**\n- **Scheduler deploy D-2291 (09:04):** this is the nearby change with its own errors (`lock_wait_timeout` from 09:05:52 to 09:30:06). For 8 minutes after it there were no pool errors and no payments db_timeouts. Its errors stopped at 09:30 while payments kept failing at full rate until 10:22, and the incident ended only when the pool size was reverted.\n- **CHG-7734 (db-proxy statement cache, 09:05):** no pool errors or db_timeouts for more than 7 minutes afterwards, and it was never reverted.\n- **CHG-7740 (api rate limit, 09:31):** a mitigation applied 17 minutes into the incident; error rates didn't change.\n- **CHG-7745 and CHG-7747:** the pool revert and the api rate-limit restore.\n- **CHG-7731, D-2284 and D-2287:** two to three hours earlier, and only steady background errors follow them.\n\n**Clocks:** after conversion, every config-reload or deploy line matches its CSV time to within 2 seconds.\n\n**Count:** the script grouped payments lines by `req` and kept the highest attempt for each. It parsed all 12,440 lines and skipped none. Of the 1,152 failures, 1,145 are `db_timeout` and 7 are `ledger_conflict`; the README says every 5xx counts.\n- The numbers add up: 1,838 requests in the window failed their first attempt, 686 of them succeeded on a retry, and 1,152 still failed.\n- The 77 card declines (402) in the window are not counted.\n- Edge cases: a 500 at 09:13:41 and one at 10:23:07 fall outside the window and are excluded; one at 09:14:00 is included because the whole start minute counts.\n\n**Assumptions:** a request's finish time is the timestamp of its final attempt line. The window runs from 09:14:00 up to but not including 10:23:00, following the README.\n\nThe report also has the full timeline, causal chain and counting method below the fields. My scripts and notes are in `_work/` (`analyze.py`, `minutes.py`, `notes.md`). Nothing under `logs/` or the CSVs was changed."
+}

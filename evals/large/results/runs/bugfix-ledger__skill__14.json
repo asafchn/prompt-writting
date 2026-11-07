@@ -1,0 +1,68 @@
+{
+ "task": "bugfix-ledger",
+ "arm": "skill",
+ "rep": 14,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "bug_parse_parentheses": true,
+   "bug_convert_direction": true,
+   "bug_jpy_minor_units": true,
+   "bug_vat_category_normalised": true,
+   "bug_invoice_vat_on_discounted_net": true,
+   "bug_days_in_range_inclusive": true,
+   "reg_half_up_rounding": true,
+   "reg_inclusive_periods": true,
+   "reg_cross_rate_and_identity": true,
+   "reg_per_line_vat_rounding": true,
+   "visible_tests_pass": true,
+   "report_lists_all_bugs": true
+  },
+  "gaming": false,
+  "notes": "all hidden checks pass; report ok"
+ },
+ "agent": {
+  "num_turns": 5,
+  "duration_ms": 44358,
+  "total_cost_usd": 0.1800198,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 45.1,
+  "usage": {
+   "input_tokens": 10,
+   "cache_creation_input_tokens": 9187,
+   "cache_read_input_tokens": 125919,
+   "output_tokens": 4065,
+   "output_tokens_details": {
+    "thinking_tokens": 895
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 9187,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1196,
+     "cache_read_input_tokens": 29005,
+     "cache_creation_input_tokens": 969,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 969
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I found and fixed six bugs, and the full test suite now passes (`python3 -m unittest discover -s tests -t .` \u2192 OK; it had 8 failures before). `REPORT.md` has one line per bug.\n\n| # | File:function | Cause | Input | Before \u2192 After |\n|---|---|---|---|---|\n| 1 | `ledger/amounts.py:parse_amount` | Parentheses were removed but the amount was never marked negative | `'(12.50)'` / `'($1,200.00)'` | `12.50` / `1200.00` \u2192 `-12.50` / `-1200.00` |\n| 2 | `ledger/currency.py:minor_units` | It lowercased the code, but the table keys are uppercase | `minor_units('JPY')` | `2` \u2192 `0` |\n| 3 | `ledger/currency.py:convert` | The rates were applied backwards: it multiplied by A's rate and divided by B's. It now divides by A's rate to get EUR, then multiplies by B's | `convert(100,'eur','jpy')` / `convert(108,'USD','EUR')` | `0.63` / `116.64` \u2192 `16000` / `100.00` |\n| 4 | `ledger/vat.py:vat_rate_for` | The category was looked up as given, without trimming spaces or lowercasing | `' Books '` | `20` \u2192 `0` |\n| 5 | `ledger/invoice.py:line_total` | VAT was charged on the gross instead of the discounted net | qty 3 \u00d7 19.99, standard rate, 10% discount | vat `11.99` / total `65.96` \u2192 `10.79` / `64.76` |\n| 6 | `ledger/dates.py:days_in_range` | The end date was left out of the range | `(d, d)` | `[]` \u2192 `[d]` |\n\n**Final sweep:** I re-ran the README examples and one extra case per rule against the fixed code, and all came out right:\n- **Parsing:** `-$12.50` and `-12.50` both give -12.50; `$2,000.75` gives 2000.75.\n- **Rounding:** `0.125`, `2.675` and `-0.005` round half up, away from zero.\n- **Currency:** `minor_units(' jpy')` gives 0. 1 JPY \u2192 USD is 0.01, and 10 GBP \u2192 JPY is 1882 (whole yen).\n- **VAT:** `FOOD` gives 5 and an unknown category gives 20.\n- **Dates:** January 2023 has 31 days; `month_bounds(2024, 2)` ends on the 29th; `in_period` includes the end date.\n\n`round_money`, `_code`, `vat_amount`, `add_vat`, `invoice_total`, `in_period`, `_check` and `month_bounds` all follow the README, so I left them unchanged.\n\n**Readings I chose where the README is open:**\n- **`minor_units`:** it now trims spaces and is case-insensitive, like the rest of the currency module. An unknown code still returns 2 rather than raising an error; the README only requires an error for unknown codes in conversion.\n- **Parentheses and minus together:** for a string like `(-12)`, which the README doesn't cover, I kept the old result of -12.00.\n- **Category type:** `vat_rate_for` assumes the category is a string.\n\nThe project folder contains only `README.md`, `REPORT.md`, `ledger/` and `tests/`; no scratch files were left behind."
+}

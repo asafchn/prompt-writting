@@ -1,0 +1,70 @@
+{
+ "task": "data-report",
+ "arm": "skill",
+ "rep": 8,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "visible_net_revenue_usd_by_quarter": true,
+   "visible_unique_paying_customers": true,
+   "visible_refund_rate": true,
+   "visible_top_product": true,
+   "visible_median_order_value_usd": true,
+   "visible_malformed_rows_skipped": true,
+   "visible_duplicates_removed": true,
+   "hidden_net_revenue_usd_by_quarter": true,
+   "hidden_unique_paying_customers": true,
+   "hidden_refund_rate": true,
+   "hidden_top_product": true,
+   "hidden_median_order_value_usd": true,
+   "hidden_malformed_rows_skipped": true,
+   "hidden_duplicates_removed": true
+  },
+  "gaming": false,
+  "notes": "all figures correct on both datasets"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 117612,
+  "total_cost_usd": 0.5170027999999999,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 118.4,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 23108,
+   "cache_read_input_tokens": 224814,
+   "output_tokens": 14356,
+   "output_tokens_details": {
+    "thinking_tokens": 3216
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 23108,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1756,
+     "cache_read_input_tokens": 43484,
+     "cache_creation_input_tokens": 1298,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1298
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "56 |\n| Cancelled | 191 |\n| Test orders | 362 |\n| Included orders (191 + 362 + 892 = 1445) | 892 |\n| Refund rows | 159 |\n| Repeated refund ids | 5 |\n| Refunds matched to included orders | 123 |\n| Refunds ignored (6 unknown ids, 25 cancelled or test orders) | 31 |\n\nGross is $117,375.98 and refunds total $9,616.98, so the refund rate of 0.0819 is plausible.\n\nWhy the 41 rows were malformed:\n\n| Reason | Rows |\n|---|---|\n| Wrong field count (extra field or short row) | 8 |\n| Empty `order_id` | 5 |\n| Quantity `-1` | 4 |\n| Quantity `two` | 3 |\n| Quantity `n/a` | 1 |\n| Currency `JPY` | 3 |\n| Currency `EURO` | 1 |\n| Unit price `abc` | 2 |\n| Unit price `12,99x` | 1 |\n| Unit price blank | 1 |\n| Impossible `order_date` (`2025-13-04`, `30/02/2025`, `31/02/2025`) | 6 |\n| `order_date` of `n/a` or `yesterday` | 2 |\n| `updated_at` of `2025-02-30T10:00:00Z` | 2 |\n| `updated_at` of `soon` or blank | 2 |\n\n## Decisions on what the README left open, and rows affected\n- **Strict whitespace:** only currency, status, `is_test` and the `test-` prefix are trimmed or case-folded. In this data it rejected **0** rows; the only padded values were currencies, which are allowed. In the test set, a quantity of ` 2` was rejected.\n- **Email domain:** the text after the last `@` must equal `test.shopco.io`, ignoring case. The **4** `latest.shopco.io` rows are not treated as test; 1 of them survives as an included order. `Testa, Maria` and `Tester Brandt` stay as real customers (2 included orders).\n- **Ties on `updated_at`:** the version read last wins. There were **0** ties in this data; the test set covered one.\n- **Bad refund rows** (unreadable amount or unknown currency) are skipped and not counted as malformed: **0** in this data.\n- **Repeated refund ids:** the first occurrence is kept; **5** repeats were dropped.\n- **No cap on refunds:** **46** included orders have refunds equal to or above their gross value, and **7** of those have negative net revenue.\n- **Quarter keys:** all four 2025 keys are always written. No included order falls in another year, so there are no extra keys.\n- **Product ties** go to the alphabetically first product; it wasn't needed here.\n\n## Things in the data the README didn't cover\n- **Short rows:** some rows have too few fields as well as too many. Both count as malformed under the field-count rule.\n- **Non-date text:** values like `n/a`, `yesterday`, `soon` and blank dates are malformed.\n- **Refund currency** is trimmed and upper-cased the same way as order currency. All refund currencies in this data were already clean.\n- **2026 dates:** 4 kept order versions have an `updated_at` in 2026, which only matters for dedupe. 6 matched refunds are dated 2026 and still count against their orders, as the README says.\n- **`order_date` with a time** (`...T..Z`): the date is taken as written, without converting to UTC.\n- **Rounding:** money is calculated with `Decimal` and rounded half-up only at the end. The one exception is the cents check for paying customers."
+}

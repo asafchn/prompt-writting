@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "generic",
+ "rep": 9,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 205027,
+  "total_cost_usd": 0.1709688,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 206.4,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 7915,
+   "cache_read_input_tokens": 155764,
+   "output_tokens": 3822,
+   "output_tokens_details": {
+    "thinking_tokens": 266
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 7915,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 487,
+     "cache_read_input_tokens": 25504,
+     "cache_creation_input_tokens": 823,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 823
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes about 0.2 seconds on the 20k sample, down from 90.47 seconds, and its output is unchanged.\n\n**What was slow:** the old code compared every pair of records. That's about 200 million comparisons for 20,000 records. On top of that, each time two clusters merged it rewrote the whole label list.\n\n**The fix (in `dedupe.py`):** I replaced the pairwise loop with union-find. Each key (email, phone, or name plus email domain) remembers the first record that had it, and any later record with that key is joined to that record. This groups records the same way as before, including chains where A matches B and B matches C. The normalisation, the key rules and the cluster-id ordering are untouched.\n\n**Checks:**\n- **20k sample:** the ids match the original implementation's output exactly.\n- **Unit tests:** they pass.\n- **Random comparison:** I ran 3,000 small random inputs through both the old and new code and the outputs matched every time. The inputs included tricky cases: full-width Unicode characters, `+` tags in emails, malformed emails, phone numbers with a leading 1, and empty fields.\n\n`REPORT.md` has `BEFORE_SECONDS: 90.47` and `AFTER_SECONDS: 0.21`. The 0.21 is the first of three runs; the others took 0.23 and 0.16 seconds.\n\nThe old `_shares_key` helper isn't used any more, but I left it in place. You can delete it if you like."
+}

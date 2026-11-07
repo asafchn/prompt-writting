@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "skill",
+ "rep": 10,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 10,
+  "duration_ms": 110717,
+  "total_cost_usd": 0.2503772,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 111.5,
+  "usage": {
+   "input_tokens": 18,
+   "cache_creation_input_tokens": 9894,
+   "cache_read_input_tokens": 240766,
+   "output_tokens": 6150,
+   "output_tokens_details": {
+    "thinking_tokens": 498
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 9894,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 811,
+     "cache_read_input_tokens": 30362,
+     "cache_creation_input_tokens": 949,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 949
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now runs in about 0.11 s on the 20,000-record sample, down from 84.06 s. Its output is identical to the original implementation's in every check I ran.\n\n**What I changed:** I replaced the comparison of every pair and the rebuilding of the whole `label` list with a lookup table and union-find:\n- `record_keys` is computed once per record.\n- A dict maps each match key to the first record index that had it.\n- Each later record with the same key is merged with that index, using union-find with path compression.\n- Records are then grouped by root, and the grouping and the sort by `(-size, smallest index)` are the same as before.\n\n`normalize_name`, `normalize_email`, `normalize_phone`, `record_keys`, `load_csv`, the docstring, the tests and the benchmark are untouched. The private `_shares_key` helper is now unused, but I left it in place.\n\n**Timings:**\n- **Before:** 84.06 s, from one run of the original code in the background.\n- **After:** 0.11, 0.23 and 0.10 s over three runs of `bench/run_bench.py`, so the median is 0.11 s.\n\n**Equivalence checks:**\n- **Unit tests:** all 8 pass.\n- **20k sample:** the new id list matches the saved output of the original code exactly (0 differing ids out of 20,000).\n- **Random comparison against the original:** 3,000 random inputs of 0\u201360 records each, plus 6 handcrafted edge cases, with 0 mismatches. The values come from a small pool that includes missing keys, `None`, `+tag`, `@@`, a missing local part or domain, `\u00df`/`ss`, full-width and Arabic-Indic digits, and 6-, 7-, 10- and 11-digit phones. 2,542 of the cases have a cluster of 5 or more records, and 181 have multi-record clusters of equal size, which tests the tie-break.\n\n**Not verified:**\n- I didn't test very large clusters or inputs bigger than 20,000 records against the original.\n- The timings come from this machine only.\n- My random inputs had fewer cases with tied multi-record cluster sizes (181) than with large clusters, so the tie-break got less coverage. Ties between singletons occur in nearly every case.\n\nFiles are in the project root:\n- `dedupe.py`\n- `REPORT.md`\n\nThe reference copy, the saved 20k output, the test scripts and the notes are in `/tmp/dedupe_work/`."
+}

@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "generic",
+ "rep": 12,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 12,
+  "duration_ms": 178856,
+  "total_cost_usd": 0.24803239999999996,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 179.7,
+  "usage": {
+   "input_tokens": 20,
+   "cache_creation_input_tokens": 11505,
+   "cache_read_input_tokens": 242762,
+   "output_tokens": 5368,
+   "output_tokens_details": {
+    "thinking_tokens": 441
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 11505,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 638,
+     "cache_read_input_tokens": 29095,
+     "cache_creation_input_tokens": 822,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 822
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes about **0.26 s** on the 20k sample, down from **121.7 s**, and gives exactly the same output. `REPORT.md` has both numbers (`BEFORE_SECONDS: 121.69`, `AFTER_SECONDS: 0.26`), timed on `bench/sample_20k.csv`.\n\n**Why it was slow:** it compared every pair of records, about 200 million comparisons. Each time two clusters merged, it also relabelled the whole list.\n\n**The fix (in `dedupe.py`, `cluster_records` only):** one pass over the records that remembers the first record seen with each match key. Any later record with the same key is merged into that record's group (a union-find structure). Records end up grouped together exactly when a chain of shared keys links them, which is what the old code computed. The key building, normalisation and cluster numbering are unchanged.\n\n**How I checked the output is the same:**\n- The 8 unit tests pass.\n- On the full 20k sample, the new ids match the original's exactly (7,101 clusters).\n- On 20,000 random small inputs built from awkward values (`\u00df` vs `ss`, full-width digits, `+` tags, `@@`, 11-digit phones starting with 1, too-short phones), the new and old code always agreed.\n\nThe helper `_shares_key` is no longer used. I left it in case anything else imports it; it can be deleted if nothing does. The original file is backed up at `/tmp/claude-0/-tmp-claude-0--home-claude-4b99c7d5-3217-5d38-9c31-9b4690d1b13d-scratchpad-large-eval-runs-runs-perf-dedupe--generic--12/bfbdecf5-3b68-46ca-a5a4-f565028a6b32/scratchpad/dedupe_orig.py`."
+}

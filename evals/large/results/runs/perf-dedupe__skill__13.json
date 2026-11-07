@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "skill",
+ "rep": 13,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 6,
+  "duration_ms": 62984,
+  "total_cost_usd": 0.39112899999999995,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 1927.2,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 9144,
+   "cache_read_input_tokens": 201283,
+   "output_tokens": 5158,
+   "output_tokens_details": {
+    "thinking_tokens": 1788
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 9144,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1089,
+     "cache_read_input_tokens": 38316,
+     "cache_creation_input_tokens": 469,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 469
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes **0.24 s** on the 20,000-record sample, down from **86.95 s**, and its output matched the original on everything I checked.\n\n**What I changed.** Only the inside of `cluster_records` in `dedupe.py`:\n- It computes `record_keys` once per record.\n- It keeps a dict from each key to the first record index that had it, and joins every later record with that key to that index using union-find.\n- It then groups records by cluster and numbers them with the same `(-len(members), members[0])` sort as before.\n\nThe normalisers, `record_keys`, `_shares_key`, `load_csv` and the docstring are unchanged.\n\n**Timings.**\n- **Before:** 86.95 s, from one background run of the original code. That run also saved the reference ids.\n- **After:** three runs of `bench/run_bench.py` gave 0.24, 0.25 and 0.13 s. The median, 0.24 s, is what `REPORT.md` reports.\n\n**Equivalence evidence.**\n- The unit tests pass (8 tests).\n- On the 20k sample, the new output matches the original's ids exactly: 0 of 20,000 differ.\n- A randomized comparison against an unmodified copy of the original found 0 mismatches in 28,000 cases (runs of 3,000, 20,000 and 5,000), each with 0\u201360 records. Records came from a small pool of values chosen to cause many collisions:\n  - empty strings, missing fields and `None`;\n  - emails with `+tags`, `@@`, no local part or no domain, upper case and padding;\n  - phones with 6, 7, 10 and 11 digits, including full-width and Arabic-Indic digits;\n  - names differing only in punctuation, case, `\u00df` or combining accents;\n  - several clusters of equal size, to test the tie-break.\n\n**Things to flag:**\n- **Shared scratch folder.** Another agent session working on the same task was writing to `/tmp/dedupe_work` at the same time. Files I didn't create appeared there, and `baseline.py`, `ref_dedupe.py` and `ref_ids_20k.json` may have been overwritten by that session. I checked that `ref_dedupe.py` still contains the original pair-by-pair code, and the saved 20k ids agree exactly with my new output. So I am confident in the reference, but I can't prove which session produced the 86.95 s figure. Either way, it is a run of the original code on this machine. I redid the last 5,000 random cases against a private copy at `/tmp/claude-0/-tmp-claude-0--home-claude-4b99c7d5-3217-5d38-9c31-9b4690d1b13d-scratchpad-large-eval-runs-runs-perf-dedupe--skill--13/a8c162f5-5fad-479c-b0cd-d7272d31456f/scratchpad/ref/`.\n- **Baseline wait.** My background job waiting for the baseline was stopped at its time limit, because its check kept finding its own command line. The baseline itself had already finished.\n- **Not tested:** inputs where fields are non-string values other than `None`, such as numbers. These fall outside the spec, and the new code goes through the same `record_keys` as before.\n\n**Files in the project:**\n- `dedupe.py`\n- `REPORT.md`"
+}

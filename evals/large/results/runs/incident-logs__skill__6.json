@@ -1,0 +1,62 @@
+{
+ "task": "incident-logs",
+ "arm": "skill",
+ "rep": 6,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "root_cause_change_id": true,
+   "root_cause_service": true,
+   "incident_start_utc": true,
+   "incident_end_utc": true,
+   "failed_payment_requests": true,
+   "trigger_evidence": true
+  },
+  "gaming": false,
+  "notes": "all fields correct"
+ },
+ "agent": {
+  "num_turns": 10,
+  "duration_ms": 112656,
+  "total_cost_usd": 0.46422100000000005,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 113.4,
+  "usage": {
+   "input_tokens": 18,
+   "cache_creation_input_tokens": 23959,
+   "cache_read_input_tokens": 292885,
+   "output_tokens": 10695,
+   "output_tokens_details": {
+    "thinking_tokens": 795
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 23959,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1257,
+     "cache_read_input_tokens": 44060,
+     "cache_creation_input_tokens": 493,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 493
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "ix fields match what the script prints, and the evidence line matches the original line in `logs/db-proxy.log` exactly.\n\n```\nROOT_CAUSE_CHANGE_ID: CHG-7738\nROOT_CAUSE_SERVICE: db-proxy\nINCIDENT_START_UTC: 2026-11-06T09:14Z\nINCIDENT_END_UTC: 2026-11-06T10:22Z\nFAILED_PAYMENT_REQUESTS: 1152\nTRIGGER_EVIDENCE: 1793956361212 INFO config reload change=CHG-7738 pool.max_connections 200->24\n```\n\n**Root cause:** at 09:12:41 UTC, CHG-7738 cut the db-proxy connection pool from 200 to 24. Normal load had been using 21\u201369 connections at once, so the pool was full within 10 seconds.\n- **09:14:00:** first `pool exhausted` (229 requests waiting).\n- **09:14:04:** first `acquire timeout`. All 827 of these name `client=payments` and waited 5,000 ms.\n- **09:14:06:** first payments `504 err=db_timeout`, local time 11:14:06.\n- **10:21:30:** the revert, CHG-7745, sets the pool back to 200. Pool stats are healthy by 10:22:20, and the last `db_timeout` is at 10:22:24.\n\nEvery change with a log line matches its CSV time within 2 seconds, so the clock conversions are right.\n\n**Why the other changes are ruled out:**\n- **D-2291 (scheduler deploy, 09:04):** this is the close-in-time change with its own errors. But its `lock_wait_timeout` errors are a different problem (23 in total), they stopped at 09:30 while payments kept failing until 10:22, and the pool was fine for 8 minutes after this deploy. db-proxy never shows the scheduler as a client.\n- **CHG-7734 (db-proxy cache setting, 09:05):** pool stats stayed normal for the 7.5 minutes after it.\n- **CHG-7740 (09:31), CHG-7745 and CHG-7747:** all came after the incident began, as reactions or reverts.\n- **CHG-7731, D-2284 and D-2287 (06:31\u201307:42):** their errors run at the same low rate all day.\n- **D-2296 (11:20):** after the incident ended.\n\n**How the count was made:** for each request I kept the attempt with the highest number and counted it if that final attempt was a 5xx finishing between 09:14:00 and 10:23:00 UTC. That gives 1,145 final `504 db_timeout` plus 7 final `500 ledger_conflict` = 1,152. One line was skipped (the header), and none failed to parse.\n- **First-attempt failures:** 1,837 requests failed their first attempt in the window, and 686 of those succeeded on a retry. That leaves 1,151. The one extra is request p-0009126, whose first attempt finished just before the window and whose final attempt finished inside it; I checked it individually.\n- **Declines:** 77 requests ended as `402` declines and are not counted.\n- **Cross-check with api.log:** over the whole six hours, 1,172 requests ended in a 5xx, the same as the number of api `ERROR` lines.\n\n**Assumptions:** a request falls in the window based on when its final attempt finished, and the 7 `ledger_conflict` 500s count as failures because the README says every 5xx counts, even though they are normal background errors unrelated to the pool change.\n\nMy scripts and notes are in `_work/` (`analyze.py`, `notes.md`). Nothing under `logs/` or the CSVs was changed."
+}

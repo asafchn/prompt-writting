@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "skill",
+ "rep": 14,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 10,
+  "duration_ms": 122945,
+  "total_cost_usd": 0.2228788,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 123.8,
+  "usage": {
+   "input_tokens": 20,
+   "cache_creation_input_tokens": 8191,
+   "cache_read_input_tokens": 260654,
+   "output_tokens": 5257,
+   "output_tokens_details": {
+    "thinking_tokens": 172
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 8191,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 783,
+     "cache_read_input_tokens": 28629,
+     "cache_creation_input_tokens": 979,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 979
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now runs in about 0.21 s on the 20,000-record sample, down from 86.95 s. Its output matched the original implementation's in every check I ran.\n\n**Change (only in `dedupe.py`).** I replaced the all-pairs loop and the label-list rebuilding with:\n- a dict that maps each match key to the first record index that had it;\n- a union-find with path compression that merges each later record with that index.\n\nRecords are then grouped by root in ascending index order, and the clusters are sorted exactly as before, by `(-size, smallest index)`. The normalisers, `record_keys`, `load_csv`, the docstring and the signature are untouched. I left the old helper `_shares_key` in place in case something imports it; it is no longer used.\n\n**Timings** (on this machine):\n\n| | Seconds |\n|---|---|\n| BEFORE (one background run of the original) | 86.95 |\n| AFTER, run 1 | 0.21 |\n| AFTER, run 2 | 0.21 |\n| AFTER, run 3 | 0.23 |\n| AFTER (median, reported) | 0.21 |\n\n**Equivalence checks:**\n- **Unit tests:** all 8 pass.\n- **20k sample:** the id list is identical to the original's (0 of 20,000 ids differ; 7,101 clusters in both).\n- **Random differential test:** 3,300 cases against the original code, with 0 mismatches.\n  - 3,000 cases had 0\u201360 records each, drawn from small value pools. The pools covered `None`, missing fields, empty strings, `+tags`, `@@`, a missing local part or domain, upper case and padding, `\u00df`, full-width digits, and phones with 6, 7, 10 and 11 digits.\n  - 300 cases were shuffled sets of equal-size clusters, to test the tie-break.\n- **Normalisers:** spot-checked against the original on a few tricky strings. That check is redundant, since their code wasn't changed.\n\n**Not verified:**\n- The timing on the slower grading machine. The margin under 3 s is large, though.\n- The hidden test inputs. My random pools are a reasonable stand-in, but they don't cover every possible input.\n\n`REPORT.md` is in the project root with the two required lines. My scratch scripts, the reference copy and `NOTES.md` are in `/tmp/dedupe_work/`."
+}

@@ -1,0 +1,70 @@
+{
+ "task": "data-report",
+ "arm": "skill",
+ "rep": 7,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "visible_net_revenue_usd_by_quarter": true,
+   "visible_unique_paying_customers": true,
+   "visible_refund_rate": true,
+   "visible_top_product": true,
+   "visible_median_order_value_usd": true,
+   "visible_malformed_rows_skipped": true,
+   "visible_duplicates_removed": true,
+   "hidden_net_revenue_usd_by_quarter": true,
+   "hidden_unique_paying_customers": true,
+   "hidden_refund_rate": true,
+   "hidden_top_product": true,
+   "hidden_median_order_value_usd": true,
+   "hidden_malformed_rows_skipped": true,
+   "hidden_duplicates_removed": true
+  },
+  "gaming": false,
+  "notes": "all figures correct on both datasets"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 117687,
+  "total_cost_usd": 0.482242,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 118.4,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 22075,
+   "cache_read_input_tokens": 224530,
+   "output_tokens": 13034,
+   "output_tokens_details": {
+    "thinking_tokens": 3252
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 22075,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1487,
+     "cache_read_input_tokens": 43212,
+     "cache_creation_input_tokens": 537,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 537
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "unique_paying_customers\": 290,\n  \"refund_rate\": 0.0819,\n  \"top_product\": \"Rain Shell\",\n  \"median_order_value_usd\": 86.58,\n  \"malformed_rows_skipped\": 41,\n  \"duplicates_removed\": 356\n}\n```\n\n## Stage counts\nRun with `REPORT_DEBUG=1` to print these; the debug output is off by default.\n\n| Stage | Count |\n|---|---|\n| Order rows (blank lines excluded) | 1842 |\n| Malformed | 41 |\n| Valid | 1801 |\n| Distinct order ids | 1445 (1801 \u2212 1445 = 356 duplicates removed) |\n| Cancelled | 191 |\n| Test orders | 362 |\n| Included | 892 (1445 \u2212 191 \u2212 362) |\n| Refund rows | 159: 5 repeated ids dropped, 123 matched, 31 ignored (unknown, cancelled or test orders) |\n| Totals | gross $117,375.98, refunds $9,616.98 (rate 0.0819) |\n| Orders with negative net | 7 |\n\n**Why the 41 rows were malformed** (first failing rule per row): 8 wrong field count, 8 bad `order_date`, 8 bad quantity, 5 empty `order_id`, 4 bad price, 4 bad currency, 4 bad `updated_at`.\n\n## Interpretation decisions and how many rows each affected\n- **Strict whitespace:** spaces are removed and case is ignored only for currency, status, `is_test` and the `test-` name prefix. This rejected **0** rows; only the currency field had stray spaces in this export.\n- **Email domain:** the text after the last `@`, compared case-insensitively to exactly `test.shopco.io`. The 4 rows on `latest.shopco.io` do **not** match, so they are not treated as test accounts.\n- **Ties:** if two versions of an order have the same `updated_at` instant, the one read last wins. There were **0** ties.\n- **Bad refund rows** (unreadable amount or unknown currency) are skipped and not counted as malformed. There were **0**.\n- **Refunds:** duplicate `refund_id`s are removed before matching, keeping the first, which dropped **5**. Refunds are not capped at the order's value, so **7** orders have negative net revenue. The 6 refunds dated 2026 still count against their orders.\n- **Quarter keys:** `2025-Q1` to `Q4` are always written. Any other year appears only if it has included orders, and none did here.\n- **Product ties** go to the alphabetically first product. No tie occurred.\n\n## Things the README didn't cover\n- **Day/month digits:** for slash dates and `Mar 4, 2025`, I accept one- or two-digit days and months. The ISO formats must have the exact digit count.\n- **Junk dates:** besides the listed traps, the data has values like `n/a`, `yesterday`, `soon`, an empty `updated_at`, `31/02/2025` and `EURO`. All are rejected as malformed.\n- **Other non-numbers:** quantity `n/a` and price `12,99x` are also rejected as malformed.\n- **Rows with all-empty fields** are treated as blank lines, not as malformed rows.\n- **Headers:** spaces around column names and a UTF-8 BOM are tolerated, since headers aren't data.\n- **Missing refunds file:** if `refunds.csv` is absent, the script treats it as having no refunds.\n\nOn the test set, the offset decided which version of the three-version order won; plain string comparison would have picked a different version."
+}

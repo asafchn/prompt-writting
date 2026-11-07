@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "generic",
+ "rep": 13,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 224240,
+  "total_cost_usd": 0.1696248,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 224.9,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 7837,
+   "cache_read_input_tokens": 155864,
+   "output_tokens": 3785,
+   "output_tokens_details": {
+    "thinking_tokens": 293
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 7837,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 552,
+     "cache_read_input_tokens": 25463,
+     "cache_creation_input_tokens": 786,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 786
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes about 0.1 s on the 20k sample, down from 91 s, and its output is unchanged: the full list of 20,000 ids matches the old version exactly.\n\n- **Before:** 91.15 s\n- **After:** 0.12 s (the slowest of three runs; the others took 0.10 s)\n\n**What was slow:** the old code compared every pair of records, about 200 million comparisons. On top of that, every time two clusters joined it rewrote the label for every record.\n\n**The fix:** each record's match keys are worked out once, using the same `record_keys` as before. A dictionary records the first record seen with each key. Any later record with that key gets joined to that first record, using a standard union-find structure that tracks which records are already connected. Records sharing a key always end up in the same cluster, so the clusters are exactly the same as before. Cluster ids still use the original sort (largest first, ties by smallest record index), so they don't change either. The cost now grows in proportion to the number of records rather than the number of pairs. Only standard-library code is used and nothing is cached between calls.\n\n**Checks:**\n- All 8 unit tests pass.\n- The ids on the 20k sample are identical to the original's.\n- 3,000 random small inputs designed to collide often gave the same result from the old and new code. They mixed case and Unicode width variants, `+tag` emails, malformed emails, phone numbers with and without a leading 1, too-short phones and empty fields.\n\n`REPORT.md` has the `BEFORE_SECONDS` / `AFTER_SECONDS` lines and a short write-up. The old helper `_shares_key` is no longer used; I left it in place in case anything else imports it."
+}

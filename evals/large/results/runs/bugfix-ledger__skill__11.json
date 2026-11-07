@@ -1,0 +1,68 @@
+{
+ "task": "bugfix-ledger",
+ "arm": "skill",
+ "rep": 11,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "bug_parse_parentheses": true,
+   "bug_convert_direction": true,
+   "bug_jpy_minor_units": true,
+   "bug_vat_category_normalised": true,
+   "bug_invoice_vat_on_discounted_net": true,
+   "bug_days_in_range_inclusive": true,
+   "reg_half_up_rounding": true,
+   "reg_inclusive_periods": true,
+   "reg_cross_rate_and_identity": true,
+   "reg_per_line_vat_rounding": true,
+   "visible_tests_pass": true,
+   "report_lists_all_bugs": true
+  },
+  "gaming": false,
+  "notes": "all hidden checks pass; report ok"
+ },
+ "agent": {
+  "num_turns": 5,
+  "duration_ms": 41283,
+  "total_cost_usd": 0.18425940000000002,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 43.5,
+  "usage": {
+   "input_tokens": 10,
+   "cache_creation_input_tokens": 9049,
+   "cache_read_input_tokens": 124737,
+   "output_tokens": 4344,
+   "output_tokens_details": {
+    "thinking_tokens": 1253
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 9049,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1055,
+     "cache_read_input_tokens": 28712,
+     "cache_creation_input_tokens": 1124,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1124
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I found and fixed six bugs, and the full suite now passes (`python3 -m unittest discover -s tests -t .` \u2192 OK). It had 8 failures before. `REPORT.md` lists the six bugs, one line each, and nothing else is left in the project folder.\n\n| # | Where | Cause | Input | Before \u2192 After |\n|---|---|---|---|---|\n| 1 | `ledger/amounts.py:parse_amount` | Parentheses were removed but the amount was never made negative | `'(12.50)'` / `'($1,200.00)'` | `12.50` / `1200.00` \u2192 `-12.50` / `-1200.00` |\n| 2 | `ledger/currency.py:convert` | The rates were applied the wrong way round (`\u00d7 src \u00f7 dst`). The fix divides by the source rate to get to EUR, then multiplies by the target rate | `convert(100,'eur','jpy')`; `convert(108,'USD','EUR')` | `0.63` \u2192 `16000`; `116.64` \u2192 `100.00` |\n| 3 | `ledger/currency.py:minor_units` | The code was lowercased, but the table key is `\"JPY\"`, so it was never found | `minor_units('JPY')` | `2` \u2192 `0` |\n| 4 | `ledger/vat.py:vat_rate_for` | The category was looked up as given, without trimming spaces or lowercasing | `' Books '`, `'FOOD'` | `20`, `20` \u2192 `0`, `5` |\n| 5 | `ledger/invoice.py:line_total` | VAT was charged on the gross amount, not the discounted net | qty 3 \u00d7 19.99, standard, 10% discount | vat `11.99`, total `65.96` \u2192 `10.79`, `64.76` |\n| 6 | `ledger/dates.py:days_in_range` | The end date was left out (off by one) | `days_in_range(d, d)` | `[]` \u2192 `[d]` |\n\nFinal check against the fixed code:\n- **Rounding:** `0.125 \u2192 0.13`, `2.675 \u2192 2.68` and `-0.005 \u2192 -0.01` were already correct, so `round_money` was left alone.\n- **Parsing:** every documented negative form now parses as negative, and empty or unparseable strings still raise `ValueError`.\n- **Currency codes:** `' usd '` works in `convert`.\n- **Dates:** `in_period` already included both ends, and `month_bounds(2024, 2)` gives Feb 1 to Feb 29.\n- **VAT:** an unknown category falls back to 20%.\n\nWhere the README was unclear, I chose the narrowest reading:\n- **Unknown codes in `minor_units`:** it now only trims spaces and uppercases the code. An unknown code still returns 2 instead of raising `ValueError`, because the README states the \"unknown codes raise\" rule for conversion and I didn't extend it.\n- **A minus inside parentheses, such as `'(-12.50)'`:** the README doesn't cover this. It still gives `-12.50`, as before; I deliberately kept the parentheses fix from changing it.\n- **Floats passed to `round_money`:** I left this as it was, because the README says money is always `Decimal`."
+}

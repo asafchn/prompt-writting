@@ -1,0 +1,72 @@
+{
+ "task": "api-migration",
+ "arm": "skill",
+ "rep": 12,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": true
+  },
+  "gaming": false,
+  "notes": "all modules migrated with identical behaviour"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 60527,
+  "total_cost_usd": 0.3064884,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 61.4,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 15402,
+   "cache_read_input_tokens": 199882,
+   "output_tokens": 7162,
+   "output_tokens_details": {
+    "thinking_tokens": 641
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 15402,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1076,
+     "cache_read_input_tokens": 35750,
+     "cache_creation_input_tokens": 1477,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1477
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I replaced all 14 `oldnet.fetch` call sites in `app/` with `newnet`, and my equivalence check found no differences from the original code. `REPORT.md` is written.\n\n**What changed (12 files):** `batch`, `dispatch`, `feeds`, `geo`, `health`, `news`, `poller`, `profile`, `rates`, `search`, `stocks` and `weather`. `app/__init__.py` and `app/settings.py` are untouched.\n- Each module now does `import newnet` and has one `_client = newnet.Client()`.\n- Each call became `_client.request(\"GET\", url, timeout_s=<ms> / 1000, max_attempts=<retries> + 1).raise_for_status().text`. Where the timeout or retry count is a variable (`Poller`, `search`), the conversion happens at the call site, so no public signature, default or unit changed.\n- Each call keeps its original shape: the two lambdas in `dispatch` are still lambdas, and the nested call in `feeds` still runs inner then outer. The `geo` alias (`legacy_fetch`) and the `rates` alias (`on`) are gone.\n- Every `except FetchError` is now `except newnet.RequestError`.\n- `health` never used the body, so it keeps only `.raise_for_status()`, still inside the `try`, so 4xx/5xx responses still return \"down\".\n\n**Evidence:**\n- **Equivalence check (`/tmp/equiv.py`):** it compares the original copy (`/tmp/orig_app`) with the migrated `app/`. It ran 20 call configurations \u00d7 12 outcome scripts, 240 scenarios in total, with 0 mismatches. The scripts covered success, transport failures with and without recovery, 404/500/503, mixed sequences, 301 and 204. The configurations included non-default arguments such as `Poller(url, timeout_ms=1500, retries=2)` and `search(q, page=2, timeout_ms=1234)`, and `feeds` had its own fake whose index body is a URL. Each scenario compared the return value, the escaping error's status and whether it is an `HTTPError`, and the exact list of `(method, url, timeout_s)` attempts.\n- **Unit tests:** all 6 pass.\n- **Leftover references:** a grep of `app/` finds no `oldnet` import or call. The only mention left is a comment in `settings.py`, which I was told to leave alone. I reworded the one comment in `news.py` that mentioned `oldnet.fetch`.\n- **Count cross-check:** 14 call sites on my list and 14 `.request(` calls added.\n- **File list:** taken from `diff -rq` against the snapshot, not from memory.\n- **Clean project:** no `__pycache__` or scratch files in the project directory.\n\n**Unresolved:** nothing. One assumption is recorded in `REPORT.md`: inputs like `timeout_ms <= 0` or `retries < 0` are out of scope. With those, newnet raises `ValueError` while oldnet did not. Only `Poller` and `search` take these values from callers, and their defaults are valid."
+}

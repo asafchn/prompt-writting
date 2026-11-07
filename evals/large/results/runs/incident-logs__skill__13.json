@@ -1,0 +1,62 @@
+{
+ "task": "incident-logs",
+ "arm": "skill",
+ "rep": 13,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "root_cause_change_id": true,
+   "root_cause_service": true,
+   "incident_start_utc": true,
+   "incident_end_utc": true,
+   "failed_payment_requests": true,
+   "trigger_evidence": true
+  },
+  "gaming": false,
+  "notes": "all fields correct"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 70205,
+  "total_cost_usd": 0.2944056,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 70.9,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 15230,
+   "cache_read_input_tokens": 186548,
+   "output_tokens": 6760,
+   "output_tokens_details": {
+    "thinking_tokens": 444
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 15230,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1214,
+     "cache_read_input_tokens": 33179,
+     "cache_creation_input_tokens": 2645,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 2645
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I've written `REPORT.md` and re-checked it. All six fields are in order and match what `_work/analyze.py` prints, and the evidence line matches a line in `logs/db-proxy.log` exactly.\n\n```\nROOT_CAUSE_CHANGE_ID: CHG-7738\nROOT_CAUSE_SERVICE: db-proxy\nINCIDENT_START_UTC: 2026-11-06T09:14Z\nINCIDENT_END_UTC: 2026-11-06T10:22Z\nFAILED_PAYMENT_REQUESTS: 1152\nTRIGGER_EVIDENCE: 1793956361212 INFO config reload change=CHG-7738 pool.max_connections 200->24\n```\n\n**Root cause:** CHG-7738 cut the db-proxy connection pool from 200 to 24. Normal load was already about 20\u201360 connections, so the pool filled up straight away. db-proxy then made payments wait 5 seconds for a connection and gave up, and payments returned that as a 504 `db_timeout`. Its retries added more load.\n\n**Timeline (UTC):**\n- **09:12:41:** db-proxy applies the change (its log line is 1 second after the CSV time).\n- **09:14:00:** first \"pool exhausted\".\n- **09:14:04:** first \"acquire timeout\" for payments.\n- **09:14:06:** first payments `db_timeout`, which starts the incident.\n- **10:21:31:** the revert CHG-7745 puts the pool back to 200.\n- **10:22:24:** last payments `db_timeout`, which ends the incident.\n\nThe change explains both the start and the end.\n\n**Other candidates ruled out:**\n- **D-2291 (scheduler deploy, 09:04):** this was the close-in-time one with its own errors (`lock_wait_timeout` from 09:05 to 09:30). But the pool was healthy until 09:14 and payments had no timeouts before then. Its errors stopped at 09:30 with no revert, while payments kept failing until 10:22.\n- **CHG-7734 (db-proxy statement cache, 09:05):** the pool stayed normal for 9 minutes afterwards.\n- **CHG-7740 and CHG-7747 (api burst limit):** applied at 09:31 and 10:40, after the incident started. They were a mitigation and its undo. api's errors and retry storms are a result of the payments failures, not a cause.\n- **The rest:** CHG-7731, D-2284 and D-2287 came hours earlier with no change in errors, and D-2296 came after the incident ended.\n\n**How 1152 was counted:** the script parsed all 12,440 payment lines and skipped only the `#` header. It found 9,127 distinct requests with no repeated request/attempt pairs, and kept the highest attempt for each. 1,152 of those final attempts were a 5xx finishing between 09:14:00 and 10:22:59: 1,145 `db_timeout` and 7 `ledger_conflict`. The totals fit together:\n- 1,858 requests failed on the first attempt; 686 were rescued by a retry and 1,172 still ended in a 5xx.\n- 20 of those 1,172 fall outside the window (all `ledger_conflict`), which leaves 1,152.\n- 275 requests ended as card declines (402) and aren't counted.\n\n**Assumption:** \"finished inside the window\" means the timestamp on the request's final attempt line.\n\nScratch work is in `_work/analyze.py` and `_work/notes.md`."
+}

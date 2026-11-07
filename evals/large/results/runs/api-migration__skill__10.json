@@ -1,0 +1,72 @@
+{
+ "task": "api-migration",
+ "arm": "skill",
+ "rep": 10,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": true
+  },
+  "gaming": false,
+  "notes": "all modules migrated with identical behaviour"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 59819,
+  "total_cost_usd": 0.29809179999999996,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 60.7,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 13991,
+   "cache_read_input_tokens": 200039,
+   "output_tokens": 7305,
+   "output_tokens_details": {
+    "thinking_tokens": 538
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 13991,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 975,
+     "cache_read_input_tokens": 34711,
+     "cache_creation_input_tokens": 1105,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1105
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I moved all 14 `oldnet.fetch` calls in `app/` to `newnet.Client().request(...)`. The unit tests pass, and my equivalence check found no behaviour differences against a copy of the original code. `REPORT.md` is written.\n\n**What changed:** 12 files. That's every module except `app/__init__.py` and `app/settings.py`, which I left alone.\n- **The 14 calls:** one each in batch, geo, health, news, poller, profile, rates, search, stocks and weather. There are two lambdas in dispatch, and the nested call in feeds counts as two. Geo's `from oldnet import fetch as legacy_fetch` and rates' `import oldnet as on` are counted too. The `oldnet.fetch(url, 500)` in a news comment isn't a call, so I didn't count it. I reworded that comment.\n- **How each call was converted:**\n  - The timeout became `timeout_s=<ms> / 1000` and the retry count became `max_attempts=<retries> + 1`, including the variable values in `Poller` and `search`.\n  - The result is now `.raise_for_status().text`. `health.check` never uses the body, so it calls `.raise_for_status()` alone, still inside its `try`.\n  - Every `except` for `FetchError` (or its alias) became `except newnet.RequestError`.\n- **Unchanged:** public names, parameters, defaults and millisecond units, plus `settings.py`. The only remaining mention of `oldnet` in `app/` is a comment in `settings.py`.\n\n**Evidence that behaviour is the same:**\n- **Unit tests:** all 6 pass.\n- **Equivalence check (`/tmp/equiv.py`):** it ran the original and migrated code side by side, 18 call setups under 10 scripted outcomes each, for 180 runs and 0 mismatches. Outcomes covered success, failures with and without recovery, 404, 500, 503 and mixed sequences. The setups include `Poller(timeout_ms=1500, retries=2)`, an odd `Poller(timeout_ms=333, retries=5)`, `search(q, page=2, timeout_ms=1234)`, and a separate fake for `feeds` whose index returns a URL. Each run compared the return value, the escaping exception and status (old error mapped to new as specified), and the exact list of wire attempts.\n- **Other checks:**\n  - Comparing against the snapshot shows exactly the 12 changed files listed in the report.\n  - The 14 calls I listed match the 14 `.request(` calls I added.\n  - No `__pycache__` or scratch files are left in the project.\n\n**One case not preserved:** if a caller passes `timeout_ms <= 0` or `retries < 0` to `Poller` or `search`, the new client raises `ValueError` where the old one didn't. No `app/` function hits this with its defaults, and the report notes it as an assumption. Nothing else is unresolved."
+}

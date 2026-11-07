@@ -1,0 +1,72 @@
+{
+ "task": "api-migration",
+ "arm": "skill",
+ "rep": 13,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": true
+  },
+  "gaming": false,
+  "notes": "all modules migrated with identical behaviour"
+ },
+ "agent": {
+  "num_turns": 6,
+  "duration_ms": 73334,
+  "total_cost_usd": 0.29670759999999996,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 74.9,
+  "usage": {
+   "input_tokens": 12,
+   "cache_creation_input_tokens": 15083,
+   "cache_read_input_tokens": 173078,
+   "output_tokens": 7069,
+   "output_tokens_details": {
+    "thinking_tokens": 682
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 15083,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1134,
+     "cache_read_input_tokens": 35869,
+     "cache_creation_input_tokens": 1039,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1039
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I moved all 14 `oldnet.fetch` call sites in 12 files to `newnet.Client().request(...)`. The unit tests pass, my equivalence script found no differences from the original code, and `REPORT.md` is written.\n\n**What changed:**\n- **Files:** every module in `app/` except `__init__.py` and `settings.py`. Those two had no calls, and `settings.py` had to stay untouched.\n- **Call sites:** 2 in `dispatch.py` (one per lambda), 2 in `feeds.py` (nested call), and one in each of the other 10 files. Two used aliases: `geo.py` imported `fetch as legacy_fetch` and `rates.py` used `import oldnet as on`. There are exactly 14 `.request(` calls in `app/` now, which matches the count.\n- **How each call was translated:**\n  - The timeout became `timeout_s=<ms> / 1000` and the retry count became `max_attempts=<retries> + 1`. I kept that arithmetic even for constants, so the timeouts are exactly the same values as before.\n  - Each call ends in `.raise_for_status().text`, except in `health.py`, which never used the body and only calls `.raise_for_status()` inside its `try`.\n  - Every `except FetchError` became `except newnet.RequestError`.\n  - Lambdas, the nested call in `feeds.py` and the list comprehension in `batch.py` keep their structure and evaluation order.\n- **Unchanged:** public signatures, defaults and millisecond/extra-retry units. No `oldnet` import, alias or wrapper is left in `app/`.\n\n**Evidence:**\n- `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -t .` ran 6 tests: OK.\n- `/tmp/equiv.py` compared the original copy (`/tmp/orig_app`) with the new `app/`, using the fake transport. It ran 273 scenarios and found 0 mismatches.\n  - It covers every public function and method under 13 outcome scripts: the 7 you listed plus later-attempt failures, 302, and multi-call sequences for `batch` and `feeds`.\n  - It includes non-default arguments such as `Poller(..., 1500, 2)`, `Poller(..., 333, 5)` and `search(q, page=2, timeout_ms=1234)`.\n  - For `feeds`, it uses a fake whose index body is a URL, plus the default fake.\n  - Each run compares the return value, the exception class with its `.status` and whether it is an `HTTPError`, and the full list of wire attempts.\n- I built the changed-file list from `diff -rq` against the snapshot. A grep of `app/` for `oldnet` or `fetch(` finds only the comment in `settings.py`, and there is no `__pycache__` or scratch file in the project.\n\n**Left open:**\n- The comment in `app/settings.py` still mentions `oldnet.fetch`, because that file had to stay unchanged. In `news.py` I reworded a comment that quoted an old `oldnet.fetch` call.\n- `REPORT.md` records one assumption: behaviour for invalid inputs (`timeout_ms <= 0`, `retries < 0`) is out of scope, since newnet raises `ValueError` for them. No `app/` function uses such values itself; only `Poller` and `search` pass a caller's values through."
+}

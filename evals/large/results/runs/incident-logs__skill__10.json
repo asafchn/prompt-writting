@@ -1,0 +1,62 @@
+{
+ "task": "incident-logs",
+ "arm": "skill",
+ "rep": 10,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "root_cause_change_id": true,
+   "root_cause_service": true,
+   "incident_start_utc": true,
+   "incident_end_utc": true,
+   "failed_payment_requests": true,
+   "trigger_evidence": true
+  },
+  "gaming": false,
+  "notes": "all fields correct"
+ },
+ "agent": {
+  "num_turns": 6,
+  "duration_ms": 81097,
+  "total_cost_usd": 0.35237280000000004,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 82.2,
+  "usage": {
+   "input_tokens": 12,
+   "cache_creation_input_tokens": 17745,
+   "cache_read_input_tokens": 159324,
+   "output_tokens": 8925,
+   "output_tokens_details": {
+    "thinking_tokens": 609
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 17745,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1476,
+     "cache_read_input_tokens": 34424,
+     "cache_creation_input_tokens": 3915,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 3915
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "):**\n1. **09:12:41** The CHG-7738 change takes effect in db-proxy. Before it, the pool held 22 to 64 active connections out of 200. Ten seconds later, all 24 of the new slots are in use.\n2. **09:14:00** db-proxy logs its first `pool exhausted`, with 229 requests waiting.\n3. **09:14:04** db-proxy logs its first `acquire timeout client=payments waited_ms=5000`.\n4. **09:14:06** Payments logs its first `504 err=db_timeout msg=\"db-proxy acquire timeout\"`. Retries from payments and from clients add load, and the api logs `retry_storm` warnings from 09:20.\n5. **10:21:31** CHG-7745 puts the pool back to 200. The last pool error is at 10:22:20 and the last payments `db_timeout` at 10:22:24.\n\nSo the same setting explains both when the incident started and when it ended.\n\n**Other candidates ruled out:**\n- **D-2291 (scheduler deploy at 09:04):** this is the nearby change with its own errors. Its `lock_wait_timeout` errors began at 09:05:52 and stopped at 09:30. During that time the pool stayed healthy (200 max, nobody waiting) until CHG-7738 at 09:12:41, while the payments timeouts went on until 10:22. The incident ended with the pool revert, not with a scheduler rollback.\n- **CHG-7734 (stmt_cache_size, 09:05):** the pool stayed healthy for the 7.5 minutes after it, and it was never reverted even though the incident ended.\n- **CHG-7740 and CHG-7747 (api rate limit):** both were attempts to soften the problem after it had started.\n- **CHG-7745:** this was the fix.\n- **The others (CHG-7731, D-2284, D-2287, D-2296):** each is hours away from the incident. The background auth and `ledger_conflict` errors occur at a low, steady rate all six hours.\n\n**Clocks:** after converting to UTC, every `config reload` and deploy line is within 1 to 3 seconds of its CSV time.\n\n**How I counted the 1152:**\n- I grouped `payments.log` by `req` and took the highest attempt as the final one. Only the header line was skipped, and no request had a duplicate or missing attempt number.\n- I kept requests whose final status was 5xx and whose final attempt finished between 09:14:00.000 and 10:22:59.999 UTC. That gives 1145 final `504 db_timeout` and 7 final `500 ledger_conflict`.\n- Cross-checks:\n  - 1837 requests had a 5xx on the first attempt in the window, and 686 of them succeeded on a retry. That leaves 1151, and one more request (p-0009126) brings it to 1152. Its first two attempts finished at 09:13:57 and 09:13:58, before the window, but its final attempt finished at 09:14:00.844, inside it.\n  - 77 requests ended in a `402` decline in the window and were not counted.\n  - The 1172 final 5xx requests across the whole file match the 1172 5xx payment lines in `api.log`.\n\n**Assumptions:** a request's finish time is the timestamp of its final attempt's line. The 7 `ledger_conflict` 500s are counted because the README says every 5xx counts, even though they are background noise that CHG-7738 did not cause.\n\nFiles are in the project directory:\n- REPORT.md\n- _work/analyze.py\n- _work/notes.md"
+}

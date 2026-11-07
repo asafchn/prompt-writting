@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "generic",
+ "rep": 10,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 192740,
+  "total_cost_usd": 0.1601062,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 193.5,
+  "usage": {
+   "input_tokens": 12,
+   "cache_creation_input_tokens": 7782,
+   "cache_read_input_tokens": 131111,
+   "output_tokens": 3579,
+   "output_tokens_details": {
+    "thinking_tokens": 334
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 7782,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 446,
+     "cache_read_input_tokens": 25410,
+     "cache_creation_input_tokens": 784,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 784
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes about 0.13 s on the 20k sample, down from 81.72 s, and its output is unchanged.\n\n**What changed:** the old code compared every pair of records, and every time it merged two clusters it also rewrote the whole label list. Now each record is grouped with the first earlier record that has the same match key, using a standard group-merging structure (union-find). That builds the same chains of matches (if A matches B and B matches C, all three are one cluster), so the clusters are the same. The key normalisation and the numbering of cluster ids are untouched. The old helper `_shares_key` is no longer used, but I left it in place.\n\n**Checks:**\n- On the full 20k sample I compared the output against the original code's saved output: same 7,101 clusters and the same id for every record.\n- 3,000 random inputs gave identical output from the original and new versions. They mixed real records with awkward cases such as `+` tags in emails, broken emails like `a@@b`, full-width digits and phones with a leading 1.\n- The existing unit tests pass.\n\n`REPORT.md` has `BEFORE_SECONDS: 81.72` and `AFTER_SECONDS: 0.13` (the middle of three runs: 0.18, 0.13, 0.11 s). Both numbers come from `bench/run_bench.py` on `bench/sample_20k.csv`."
+}

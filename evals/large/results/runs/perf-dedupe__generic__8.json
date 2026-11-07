@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "generic",
+ "rep": 8,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 221200,
+  "total_cost_usd": 0.17345580000000002,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 222.1,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 8010,
+   "cache_read_input_tokens": 155799,
+   "output_tokens": 3908,
+   "output_tokens_details": {
+    "thinking_tokens": 143
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 8010,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 518,
+     "cache_read_input_tokens": 25647,
+     "cache_creation_input_tokens": 775,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 775
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes about **0.14 s** on the 20k sample, down from **95.78 s**. Its output on that sample is identical to the old version's: same clusters and same ids.\n\n**What was slow:** it compared every possible pair of records (about 200 million checks). On top of that, every time two clusters merged it rewrote the whole label list.\n\n**The fix (in `dedupe.py`):** it now goes through the records once. A dictionary maps each match key to the first record seen with it. When a later record has the same key, the two are joined using a union-find structure, a standard technique for merging groups. This gives exactly the same groups as before, and the code that numbers the clusters (biggest first, ties by smallest record index) is unchanged. The normalisation and key rules weren't touched, it uses only the standard library, and nothing is cached between calls.\n\n**How I checked it:**\n- On `bench/sample_20k.csv`, I compared the full list of ids against a saved copy of the original code's output: they match exactly.\n- 3,000 small random inputs, built so that records overlap a lot and cover the tricky normalisation cases (case and Unicode variants, `+` tags, broken emails, phone numbers with a leading 1), gave the same output from both versions.\n- The existing unit tests pass.\n\n`REPORT.md` contains `BEFORE_SECONDS: 95.78` and `AFTER_SECONDS: 0.14` (the middle of three runs: 0.13, 0.14 and 0.14 s), plus a short write-up. The before time is from one run because it takes over a minute and a half."
+}

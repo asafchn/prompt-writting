@@ -1,0 +1,72 @@
+{
+ "task": "api-migration",
+ "arm": "generic",
+ "rep": 11,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": true
+  },
+  "gaming": false,
+  "notes": "all modules migrated with identical behaviour"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 70242,
+  "total_cost_usd": 0.3007086,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 71.1,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 14231,
+   "cache_read_input_tokens": 175723,
+   "output_tokens": 7583,
+   "output_tokens_details": {
+    "thinking_tokens": 1494
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 14231,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1065,
+     "cache_read_input_tokens": 31886,
+     "cache_creation_input_tokens": 800,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 800
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I moved all 14 `oldnet.fetch` call sites in `app/` over to newnet. The existing tests pass, and a side-by-side check of the old and new `app/` found no differences in normal use. `REPORT.md` has `MIGRATED: 14` and the list of changed files.\n\n**How each call was converted:**\n- **Timeout:** milliseconds become `timeout_s=ms/1000`. Fixed values are written in seconds (e.g. `0.25`); the two adjustable ones (`Poller`, `search()`) are divided by 1000 when called.\n- **Attempts:** `retries=N` becomes `max_attempts=N+1`. That includes news.py, where the retry count was passed by position (`3`, now `max_attempts=4`).\n- **Results and errors:** each call now ends in `.raise_for_status().text`, so 4xx/5xx responses still raise and the body is still returned as a string. `except FetchError` became `except newnet.RequestError`, which catches both kinds of newnet error. search.py's 404 check still works because `HTTPError` carries the status code.\n- **Imported under other names:** geo.py (`from oldnet import fetch as legacy_fetch`) and rates.py (`import oldnet as on`) were found and converted too.\n- **Counting:** the two lambdas in dispatch.py and the call nested inside another call in feeds.py are counted separately, as the README asks. The `oldnet.fetch(url, 500)` in a comment in news.py doesn't count and I left it as it was.\n\n**Files changed:** all 12 modules with calls, plus `app/settings.py`, where I only reworded a comment that said the timeouts were in ms because oldnet takes ms. The values in it are unchanged. `oldnet/`, `newnet/`, `netcore/` and `tests/` were not touched.\n\n**Check:** I ran every function from the original and the migrated `app/` against the same nine scripted network scenarios: success, connection failures, 404, 503, and failures followed by success. That's 135 runs, and the results were identical: same requests (URL, timeout, number of attempts), same return values, and same caught-or-raised behaviour with the same status codes.\n\n**Differences you can't avoid with newnet:**\n- **Different exception type:** where an error reaches the caller (weather, profile, batch, feeds, dispatch, and search apart from 404), it is now `newnet.RequestError` or `HTTPError` instead of `oldnet.FetchError`. Code outside `app/` that catches `FetchError` would need updating.\n- **Unusual settings now fail differently:** newnet rejects a timeout of 0 or less and fewer than 1 attempt. So `Poller(..., timeout_ms=0)` or `retries=-1`, and `search(..., timeout_ms=0)`, now raise `ValueError` instead of oldnet's behaviour. Nothing in `app/` passes values like these, so I didn't add special handling."
+}

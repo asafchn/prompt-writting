@@ -1,0 +1,72 @@
+{
+ "task": "api-migration",
+ "arm": "generic",
+ "rep": 7,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": true
+  },
+  "gaming": false,
+  "notes": "all modules migrated with identical behaviour"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 87174,
+  "total_cost_usd": 0.3424674,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 88.0,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 15545,
+   "cache_read_input_tokens": 178657,
+   "output_tokens": 9116,
+   "output_tokens_details": {
+    "thinking_tokens": 1193
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 15545,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 896,
+     "cache_read_input_tokens": 32582,
+     "cache_creation_input_tokens": 1418,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1418
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "All 14 oldnet calls in `app/` now go through newnet, and `app/` no longer references oldnet anywhere. `REPORT.md` has `MIGRATED: 14` and the list of changed files. I didn't touch the client libraries or the tests, and the test suite passes (6 tests).\n\n**How each call was converted:**\n- **Timeout:** milliseconds became `timeout_s=ms/1000`.\n- **Retries:** `retries=N` became `max_attempts=N+1`.\n- **Errors:** each call now ends with `.raise_for_status()`, so 4xx/5xx responses still raise like before. Then `.text` gets the body, or `.json()` where the code used to pass the body to `json.loads`.\n- **Except clauses:** `except oldnet.FetchError` became `except newnet.RequestError`, which catches both HTTP errors and failed connections, as before. Code that reads the error's status code (the 404 check in `search`, `down:{status}` in `poller`) works unchanged.\n\n**The count of 14:** this includes both calls in `dispatch.py` (one per lambda), both calls in `feeds.py` (one is nested inside the other), the aliased import in `geo.py` and the `on.` alias in `rates.py`. The commented-out call in `news.py` isn't counted.\n\n**Behaviour check:** I rebuilt the original `app/` code in the scratchpad and ran every public function, old and new, against 10 kinds of server response. These included success, 404, 503, connection failures that recover, and failures that use up every attempt. Return values, error status codes and every request sent (URL, timeout, number of attempts) were identical in all 130 cases.\n\n**Two differences that remain (also noted in the report):**\n1. **Error type for callers.** Where errors pass through to the caller (`batch`, `dispatch`, `feeds`, `profile`, `weather`, and non-404 errors in `search`), the caller now gets `newnet.RequestError`/`HTTPError` instead of `oldnet.FetchError`. The status code is the same. Nothing in this repo catches these, but outside code that catches `oldnet.FetchError` would need updating. This can't be avoided while removing oldnet.\n2. **Invalid settings.** If someone passes `timeout_ms <= 0` or `retries < 0` to `Poller` or `search`, newnet raises `ValueError` where oldnet raised `FetchError`. Valid values behave the same. I didn't add guards for this; tell me if you want them.\n\nI also updated one comment in `app/settings.py` because it explained the millisecond units by referring to oldnet. It's listed in the changed files."
+}

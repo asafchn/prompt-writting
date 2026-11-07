@@ -1,0 +1,62 @@
+{
+ "task": "incident-logs",
+ "arm": "skill",
+ "rep": 8,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "root_cause_change_id": true,
+   "root_cause_service": true,
+   "incident_start_utc": true,
+   "incident_end_utc": true,
+   "failed_payment_requests": true,
+   "trigger_evidence": true
+  },
+  "gaming": false,
+  "notes": "all fields correct"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 86293,
+  "total_cost_usd": 0.3894504,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 87.2,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 19539,
+   "cache_read_input_tokens": 191612,
+   "output_tokens": 9738,
+   "output_tokens_details": {
+    "thinking_tokens": 622
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 19539,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1157,
+     "cache_read_input_tokens": 35910,
+     "cache_creation_input_tokens": 4223,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 4223
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I've written `REPORT.md`, and all six fields match what `_work/analyze.py` prints. The evidence line is an exact line from `logs/db-proxy.log`.\n\n```\nROOT_CAUSE_CHANGE_ID: CHG-7738\nROOT_CAUSE_SERVICE: db-proxy\nINCIDENT_START_UTC: 2026-11-06T09:14Z\nINCIDENT_END_UTC: 2026-11-06T10:22Z\nFAILED_PAYMENT_REQUESTS: 1152\nTRIGGER_EVIDENCE: 1793956361212 INFO config reload change=CHG-7738 pool.max_connections 200->24\n```\n\n**Root cause:** the change CHG-7738 cut the db-proxy connection limit from 200 to 24, below the 20\u201365 connections normally in use.\n- The change took effect at 09:12:41 UTC, and the pool was full (24 of 24) by 09:12:50.\n- The first `pool exhausted` was at 09:14:00, then `acquire timeout client=payments` at 09:14:04.\n- The first payments `504 err=db_timeout msg=\"db-proxy acquire timeout\"` was at 09:14:06 UTC.\n- Payments' own retries and client retries (`retry_storm` in `api.log`) kept the queue full.\n- The revert CHG-7745 took effect at 10:21:30. The last acquire timeout was at 10:22:20 and the last db_timeout at 10:22:24. Nothing followed.\n\n**Other candidates ruled out:**\n- **D-2291 (scheduler deploy):** this is the nearby change that has its own errors (`lock_wait_timeout`, 09:05:52 to 09:30:06). The database proxy stayed healthy during that time (limit 200, nothing waiting), and those errors stopped at 09:30 while payments kept failing until 10:22. It is a separate overlapping problem, not the cause.\n- **CHG-7734 (db-proxy statement cache):** the pool was normal for the 7 minutes after it, and it was never reverted, yet the incident ended.\n- **CHG-7740 and CHG-7747 (api rate limit):** CHG-7740 was a mitigation made after the start; CHG-7747 restored the default after the end.\n- **CHG-7745:** this is the fix.\n- **D-2284, D-2287, CHG-7731 and D-2296:** they landed hours before or after the incident, with no change in error rates.\n\n**How I counted:** I grouped `payments.log` by `req`, kept the highest attempt, and counted any 5xx finishing between 09:14:00 and 10:23:00 UTC. The 1,152 failures are 1,145 db_timeouts (504) and 7 ledger_conflicts (500), all on their third attempt.\n- No lines were skipped.\n- 1,837 requests failed on their first attempt in the window, and 686 of those were rescued by a retry. 1,837 = 1,151 + 686 because one counted failure started at 09:13:57, just before the window, and finished inside it.\n- The 77 card declines (402) in the window are not counted.\n- The total of 1,172 failed requests across the day matches the 1,172 payment errors in `api.log`.\n\n**Assumptions:** both whole minutes count, judged by the UTC finish time of the last attempt, and \"5xx\" means 500 to 599. My notes and script are in `_work/`."
+}

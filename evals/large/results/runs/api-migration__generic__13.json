@@ -1,0 +1,72 @@
+{
+ "task": "api-migration",
+ "arm": "generic",
+ "rep": 13,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "no_live_oldnet_anywhere": true,
+   "mod_weather": true,
+   "mod_stocks": true,
+   "mod_news": true,
+   "mod_geo": true,
+   "mod_rates": true,
+   "mod_dispatch": true,
+   "mod_poller": true,
+   "mod_batch": true,
+   "mod_health": true,
+   "mod_profile": true,
+   "mod_search": true,
+   "mod_feeds": true,
+   "visible_tests_pass": true,
+   "report_migrated_count": true,
+   "report_files_changed": true
+  },
+  "gaming": false,
+  "notes": "all modules migrated with identical behaviour"
+ },
+ "agent": {
+  "num_turns": 6,
+  "duration_ms": 84155,
+  "total_cost_usd": 0.3430876,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 85.1,
+  "usage": {
+   "input_tokens": 12,
+   "cache_creation_input_tokens": 16197,
+   "cache_read_input_tokens": 149418,
+   "output_tokens": 9179,
+   "output_tokens_details": {
+    "thinking_tokens": 1405
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 16197,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 738,
+     "cache_read_input_tokens": 33095,
+     "cache_creation_input_tokens": 1557,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1557
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I've moved all 14 `oldnet.fetch` call sites in `app/` to newnet, and nothing in `app/` refers to oldnet any more. The client libraries and tests are unchanged. `REPORT.md` has `MIGRATED: 14` and lists the 13 changed files. One of those, `app/settings.py`, only had a comment updated.\n\n**How each call was converted:** each `fetch(url, ms, retries=R)` is now `request(\"GET\", url, timeout_s=ms/1000, max_attempts=R+1).raise_for_status().text`. Every `except oldnet.FetchError` is now `except newnet.RequestError`.\n\n- **Error responses:** calling `raise_for_status()` makes 4xx/5xx responses still raise, with the same message and status code.\n- **`news.py`:** the old call passed the retry count by position (`fetch(url, 1000, 3)`), so it now uses `max_attempts=4`.\n- **`feeds.py`:** the nested call is split into two lines, still fetching the index first.\n\n**Verification:** the existing tests pass. I also rebuilt the original modules in the scratchpad and ran old and new versions side by side against the test suite's fake network. Every function was covered, with every mix of up to 3 outcomes (network failure, 200, 301, 404, 500) plus long runs of failures. Across 2,370 runs, return values, error messages, status codes and the requests sent all matched, down to the exact timeout values.\n\n**Two differences newnet can't avoid** (also in the report):\n- **Exception type:** errors that reach the caller are now newnet's `HTTPError`/`RequestError` instead of `oldnet.FetchError`, with the same message and status code. This affects `profile`, `weather`, `batch`, `dispatch`, `feeds`, and the non-404 errors from `search`. Code outside `app/` that catches `oldnet.FetchError` needs to catch `newnet.RequestError` instead.\n- **Invalid settings:** if `Poller` or `search` is given a timeout of 0 or less, or a negative retry count, newnet raises `ValueError` without sending anything. oldnet still made the request or raised `FetchError`. Valid values behave exactly as before."
+}

@@ -1,0 +1,68 @@
+{
+ "task": "bugfix-ledger",
+ "arm": "skill",
+ "rep": 10,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "bug_parse_parentheses": true,
+   "bug_convert_direction": true,
+   "bug_jpy_minor_units": true,
+   "bug_vat_category_normalised": true,
+   "bug_invoice_vat_on_discounted_net": true,
+   "bug_days_in_range_inclusive": true,
+   "reg_half_up_rounding": true,
+   "reg_inclusive_periods": true,
+   "reg_cross_rate_and_identity": true,
+   "reg_per_line_vat_rounding": true,
+   "visible_tests_pass": true,
+   "report_lists_all_bugs": true
+  },
+  "gaming": false,
+  "notes": "all hidden checks pass; report ok"
+ },
+ "agent": {
+  "num_turns": 6,
+  "duration_ms": 36999,
+  "total_cost_usd": 0.178897,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 37.8,
+  "usage": {
+   "input_tokens": 12,
+   "cache_creation_input_tokens": 8684,
+   "cache_read_input_tokens": 153885,
+   "output_tokens": 3930,
+   "output_tokens_details": {
+    "thinking_tokens": 920
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 8684,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1102,
+     "cache_read_input_tokens": 29200,
+     "cache_creation_input_tokens": 271,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 271
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I found and fixed six bugs. The full suite now passes: before the fixes 8 of 24 tests failed, and after them `python3 -m unittest discover -s tests -t .` reports OK. `REPORT.md` has one line for each bug.\n\n| # | File:function | Input | Before | After |\n|---|---|---|---|---|\n| 1 | `ledger/amounts.py:parse_amount` | `'(12.50)'` / `'($1,200.00)'` | `12.50` / `1200.00` | `-12.50` / `-1200.00` |\n| 2 | `ledger/currency.py:convert` | `convert(100, 'eur', 'jpy')`; `convert(108, 'USD', 'EUR')` | `0.63`; `116.64` | `16000`; `100.00` |\n| 3 | `ledger/currency.py:minor_units` | `'JPY'` / `'jpy'` | `2` / `2` | `0` / `0` |\n| 4 | `ledger/vat.py:vat_rate_for` | `' Books '`, `'FOOD'` | `20`, `20` | `0`, `5` |\n| 5 | `ledger/invoice.py:line_total` | the visible test's discounted line | vat `11.99`, total `65.96` | vat `10.79`, total `64.76` |\n| 6 | `ledger/dates.py:days_in_range` | `(d, d)` | `[]` | `[d]` |\n\nWhat caused each one:\n1. The parentheses were stripped off but the amount was never marked negative. A guard also stops a minus sign inside the parentheses from cancelling it out.\n2. The rate was applied the wrong way round. Rates are units per 1 EUR, so the code now divides by the source rate and then multiplies by the target rate.\n3. The lookup lowercased the code, but the table key is `\"JPY\"`. It now uses the module's existing `_code()` helper.\n4. The category was looked up without stripping whitespace or lowercasing it. It now does both.\n5. VAT was charged on the gross amount instead of the discounted net.\n6. The date range left out the end date. It now includes both ends.\n\n**My readings of open README points:**\n- **`minor_units` with an unknown code:** because it now goes through `_code()`, an unknown code raises `ValueError` instead of returning 2. I read \"Unknown codes raise `ValueError`\" as covering the whole currency module, not just `convert`.\n- **Inputs the README doesn't define, such as `'(-12.50)'`:** I treated these as negative and made no other changes.\n\n**What I checked and left alone:**\n- **Correct already:** `round_money` (`0.125\u21920.13`, `2.675\u21922.68`, `-0.005\u2192-0.01`), the other negative forms (`-12.50`, `-$12.50`), `in_period`, `month_bounds`, `_check`, `vat_amount`, `add_vat` and `invoice_total`.\n- **`round_money` with a float:** given a raw float like `2.675` it still rounds down to `2.67`. I didn't change that, because the README says money is always `Decimal`, never float.\n- **Project folder:** I removed the `__pycache__` folders afterwards. The only new file is `REPORT.md`."
+}

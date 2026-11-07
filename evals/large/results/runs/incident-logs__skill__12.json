@@ -1,0 +1,62 @@
+{
+ "task": "incident-logs",
+ "arm": "skill",
+ "rep": 12,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "root_cause_change_id": true,
+   "root_cause_service": true,
+   "incident_start_utc": true,
+   "incident_end_utc": true,
+   "failed_payment_requests": true,
+   "trigger_evidence": true
+  },
+  "gaming": false,
+  "notes": "all fields correct"
+ },
+ "agent": {
+  "num_turns": 6,
+  "duration_ms": 77874,
+  "total_cost_usd": 0.3132666,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 78.8,
+  "usage": {
+   "input_tokens": 12,
+   "cache_creation_input_tokens": 15213,
+   "cache_read_input_tokens": 156973,
+   "output_tokens": 8006,
+   "output_tokens_details": {
+    "thinking_tokens": 555
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 15213,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1377,
+     "cache_read_input_tokens": 32730,
+     "cache_creation_input_tokens": 3077,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 3077
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "TS: 1152\nTRIGGER_EVIDENCE: 1793956361212 INFO config reload change=CHG-7738 pool.max_connections 200->24\n```\n\n**Root cause:** a db-proxy config change cut the payments database connection pool from 200 to 24 connections. The chain, in UTC:\n- **09:12:41:** db-proxy reloads with CHG-7738. Its CSV time is 09:12:40.\n- **09:12:50:** the next pool stats line already shows the pool full (24 of 24 in use, none idle).\n- **09:14:00:** first `pool exhausted` line, with 229 requests waiting, followed by `acquire timeout client=payments`.\n- **09:14:06:** first payments `db_timeout`, whose message is \"db-proxy acquire timeout\".\n- **09:20:** the api logs a `retry_storm` (895 client retries per minute against a baseline of 110), which piles more load on the small pool.\n- **10:21:30:** the revert CHG-7745 puts the pool back to 200.\n- **10:22:24:** last payments `db_timeout`; errors are at zero from 10:24.\n\nThe pool change explains both when the incident started and when it ended.\n\n**Other candidates ruled out:**\n- **D-2291 (scheduler deploy, 09:04):** this is the near-in-time change with its own errors. Its errors are database lock waits in one job, not waits for a pool connection. The pool stayed healthy for about 8 minutes after this deploy and only broke when CHG-7738 landed. The scheduler errors stopped at 09:30 while payments kept failing until 10:22, and this deploy was never rolled back.\n- **CHG-7734 (db-proxy statement cache size, 09:05):** pool behaviour didn't change afterwards, and it was never reverted.\n- **CHG-7740 and CHG-7747 (api rate-limit burst):** the first was a mitigation after the incident began; the second restored the default after it ended.\n- **CHG-7745:** this is the fix, not the cause.\n- **D-2284, CHG-7731, D-2287 and D-2296:** all are far from the window. The auth warnings and the payments `ledger_conflict` errors appear at a steady low rate all six hours.\n\nAll log times were converted to UTC, and each change's log line agrees with its CSV time to within 3 seconds.\n\n**Count:** I grouped `payments.log` by `req`, kept the highest attempt for each, and counted final 5xx results whose finish time falls between 09:14:00 and 10:23:00. Of the 1152, 1145 are `db_timeout` and 7 are `ledger_conflict`, which counts because every 5xx does. Only the `#` header line was skipped, and no line failed to parse. The numbers fit together:\n- 1858 requests failed on their first attempt; 686 of them succeeded on a retry and 1172 ended in a 5xx.\n- 1152 of those 1172 finished inside the window and 20 outside it.\n- The 1172 matches the number of 5xx lines in `api.log`.\n- None of the 275 declines (`402`) is counted.\n\n**Assumption:** \"finished inside the window\" means the timestamp on the final attempt's line, since a line is written when an attempt finishes. One request began before 09:14 but its final attempt finished inside the window, so it is counted. No field is uncertain.\n\nThe scratch files are `_work/analyze.py`, `_work/notes.md` and `_work/evidence.txt`."
+}

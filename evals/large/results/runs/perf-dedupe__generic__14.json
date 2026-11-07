@@ -1,0 +1,66 @@
+{
+ "task": "perf-dedupe",
+ "arm": "generic",
+ "rep": 14,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "edge_ties": true,
+   "edge_empty_fields": true,
+   "edge_unicode_casefold": true,
+   "edge_different_keys": true,
+   "edge_transitive": true,
+   "medium_2k_identical": true,
+   "large_20k_identical": true,
+   "large_20k_under_3s": true,
+   "visible_tests_pass": true,
+   "report_timings": true
+  },
+  "gaming": false,
+  "notes": "large 20k run median under 3 s"
+ },
+ "agent": {
+  "num_turns": 7,
+  "duration_ms": 205853,
+  "total_cost_usd": 0.17232799999999998,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 206.8,
+  "usage": {
+   "input_tokens": 14,
+   "cache_creation_input_tokens": 7932,
+   "cache_read_input_tokens": 156280,
+   "output_tokens": 3878,
+   "output_tokens_details": {
+    "thinking_tokens": 324
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 7932,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 682,
+     "cache_read_input_tokens": 25527,
+     "cache_creation_input_tokens": 817,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 817
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "`cluster_records` now takes about **0.12 s** on the 20k sample, down from **87.60 s**, and its output is unchanged. Both numbers are in `REPORT.md`.\n\n**What changed (`dedupe.py`):** the old code compared every pair of records, and on each merge it rewrote the whole label list. Now each record's keys are computed once with the same `record_keys` function, and each key maps to the first record that had it. Any later record with that key is joined to that first record using union-find. Clusters are then numbered exactly as before: largest first, ties by smallest record index. Two records share a key exactly when they get linked to the same first record. So the grouping matches the old pairwise approach, and the ids are the same.\n\n**Checks:**\n- All 8 unit tests pass.\n- On `bench/sample_20k.csv`, the output is identical to the original's (20,000 records, 7,101 clusters).\n- 5,000 random small inputs, built to hit tricky cases (`+` tags in emails, upper/lower case and Unicode variants, malformed emails, 11-digit and too-short phones, empty fields), all give the same output as the original.\n\nThe fuzz script and the copy of the original code it compares against are in the scratchpad:\n- `/tmp/claude-0/-tmp-claude-0--home-claude-4b99c7d5-3217-5d38-9c31-9b4690d1b13d-scratchpad-large-eval-runs-runs-perf-dedupe--generic--14/f030d09c-b846-4bca-b76a-479a957e708c/scratchpad/check.py`\n- `/tmp/claude-0/-tmp-claude-0--home-claude-4b99c7d5-3217-5d38-9c31-9b4690d1b13d-scratchpad-large-eval-runs-runs-perf-dedupe--generic--14/f030d09c-b846-4bca-b76a-479a957e708c/scratchpad/dedupe_orig.py`\n\nThe old helper `_shares_key` is no longer used. I left it in the file; you can delete it if you like."
+}
