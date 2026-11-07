@@ -1,0 +1,68 @@
+{
+ "task": "bugfix-ledger",
+ "arm": "skill",
+ "rep": 2,
+ "grade": {
+  "score": 1.0,
+  "passed": true,
+  "checks": {
+   "bug_parse_parentheses": true,
+   "bug_convert_direction": true,
+   "bug_jpy_minor_units": true,
+   "bug_vat_category_normalised": true,
+   "bug_invoice_vat_on_discounted_net": true,
+   "bug_days_in_range_inclusive": true,
+   "reg_half_up_rounding": true,
+   "reg_inclusive_periods": true,
+   "reg_cross_rate_and_identity": true,
+   "reg_per_line_vat_rounding": true,
+   "visible_tests_pass": true,
+   "report_lists_all_bugs": true
+  },
+  "gaming": false,
+  "notes": "all hidden checks pass; report ok"
+ },
+ "agent": {
+  "num_turns": 5,
+  "duration_ms": 38777,
+  "total_cost_usd": 0.18455960000000002,
+  "is_error": false,
+  "subtype": "success",
+  "wall_seconds": 40.4,
+  "usage": {
+   "input_tokens": 10,
+   "cache_creation_input_tokens": 9563,
+   "cache_read_input_tokens": 126178,
+   "output_tokens": 4139,
+   "output_tokens_details": {
+    "thinking_tokens": 831
+   },
+   "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+   },
+   "service_tier": "standard",
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 9563,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "inference_geo": "global",
+   "iterations": [
+    {
+     "input_tokens": 2,
+     "output_tokens": 1097,
+     "cache_read_input_tokens": 29074,
+     "cache_creation_input_tokens": 1276,
+     "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 1276
+     },
+     "type": "message"
+    }
+   ],
+   "speed": "standard",
+   "fallback_credit": null
+  }
+ },
+ "final_message": "I found and fixed six bugs, and the full test suite now passes (24 tests; 8 were failing before). `REPORT.md` has one line for each bug and nothing else.\n\n| # | Where | Cause | Input | Before | After |\n|---|---|---|---|---|---|\n| 1 | `ledger/amounts.py:parse_amount` | Parentheses were removed but the amount wasn't made negative | `'(12.50)'`, `'($1,200.00)'` | `12.50`, `1200.00` | `-12.50`, `-1200.00` |\n| 2 | `ledger/currency.py:convert` | The rates were applied the wrong way round: it multiplied by A's rate and divided by B's, instead of A \u2192 EUR by dividing and EUR \u2192 B by multiplying | `convert(100,'eur','jpy')`; `convert(108,'USD','EUR')` | `0.63`; `116.64` | `16000`; `100.00` |\n| 3 | `ledger/currency.py:minor_units` | It looked up `code.lower()` in a table with uppercase keys, so JPY never matched. It now normalises the code with `_code()`, like the rest of the module | `minor_units('JPY')` | `2` | `0` |\n| 4 | `ledger/vat.py:vat_rate_for` | The category wasn't stripped or lowercased before the lookup | `' Food '` | `20` | `5` |\n| 5 | `ledger/invoice.py:line_total` | VAT was charged on the gross amount instead of the discounted net | qty 1 \u00d7 100, standard rate, 10% discount \u2192 vat | `20.00` | `18.00` (and the test's line: `11.99` \u2192 `10.79`) |\n| 6 | `ledger/dates.py:days_in_range` | `range(n)` left out the end date | `days_in_range(d, d)` | `[]` | `[d]` |\n\n**Final check:** I ran every README example against the fixed code, and they all give the expected results:\n- Rounding: `0.125 \u2192 0.13`, `2.675 \u2192 2.68`, `-0.005 \u2192 -0.01`.\n- Parsing: `-12.50`, `-$12.50`, `(12.50)` and `($1,200.00)` all come out negative.\n- Conversion: USD \u2192 GBP gives `78.70`.\n- VAT lookup: categories match regardless of case or surrounding spaces, and an unknown category gets the standard 20%.\n- Dates: a one-day range now includes that day.\n\nI checked `round_money`, `in_period`, `month_bounds`, `invoice_total`, `add_vat`, `vat_amount` and `_code` and found nothing wrong, so I left them alone.\n\n**Ambiguous cases I left as they were:**\n- **Forms the README doesn't cover:** I didn't change how `parse_amount` handles `(-12.50)`, `$-12.50` or underscores in numbers. A first version of fix 1 also changed how `(-12.50)` is handled; I reverted that part, so it still parses as negative as before.\n- **Unknown codes in `minor_units`:** an unknown currency code now raises `ValueError`, because it goes through `_code()`. Before, it silently returned 2. I took this from the README rule that unknown codes raise `ValueError`.\n\nThere are no scratch files in the project folder."
+}
